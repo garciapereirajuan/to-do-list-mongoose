@@ -1,0 +1,93 @@
+@import '../../../../sass/index.scss';
+
+.categories-tree {
+
+    .ant-tree-treenode {
+        background-color: $background-dark-light  !important;
+
+        span {
+            height: 60px;
+            font-size: 20px;
+            color: $font-light;
+            font-weight: bold;
+        }
+
+        &-selected {
+            // span {
+            //     color: $font-dark;
+            // }
+
+            // .category-title {
+            //     .anticon {
+            //         color: $font-light;
+            //     }
+
+            //     button {
+            //         background: $background-dark-light  !important;
+            //         border-color: $primary-color  !important;
+            //         box-shadow: none !important;
+            //     }
+            // }
+        }
+
+        &:hover {
+            span {
+                color: $font-dark;
+            }
+
+            .category-title {
+                .anticon {
+                    color: $font-light;
+                }
+            }
+        }
+
+        .ant-tree-node-content-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid rgba(0, 0, 0, .1);
+
+            .ant-tree-title {
+                width: 100%;
+                height: max-content;
+                margin-left: 8px;
+
+                .category-title {
+                    width: 100%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+
+                    button {
+                        background-color: $primary-color  !important;
+                        border-color: $primary-color;
+                        box-shadow: 0px 2px 10px rgba(0, 0, 0, .3);
+
+                        &:hover {
+                            background-color: $primary-color-hover  !important;
+                            border-color: $primary-color-hover;
+                        }
+                    }
+                }
+            }
+        }
+
+        .ant-tree-switcher {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            .anticon {
+                height: max-content;
+            }
+        }
+    }
+
+    .ant-tree.ant-tree-directory .ant-tree-treenode-selected:before,
+    .ant-tree.ant-tree-directory .ant-tree-treenode-selected:hover:before {
+        transition: all ease 0s;
+        background-color: rgba(255, 255, 255, .3) !important;
+
+    }
+}

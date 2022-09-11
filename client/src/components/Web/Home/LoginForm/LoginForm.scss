@@ -1,0 +1,90 @@
+@import '../../../../sass/index.scss';
+
+.login-form-div {
+    position: relative;
+    width: 30%;
+    padding: 20px 35px;
+    background-color: $background-dark;
+    border-radius: 10px;
+    box-shadow: 0px 0px 15px 10px #000;
+    -webkit-box-shadow: 0px 0px 15px 10px #000;
+    -moz-box-shadow: 0px 0px 15px 10px #000;
+    text-align: center;
+
+    &__header {
+        padding: 10px;
+
+        h3 {
+            font-size: $font-title-size;
+            color: $font-light;
+        }
+
+        h4 {
+            font-size: $font-subtitle-size;
+            color: $font-light;
+        }
+    }
+
+    .login-form {
+        width: 100%;
+
+        .ant-form-item {
+            margin-top: 10px;
+            margin-bottom: 10px;
+
+            input {
+                font-size: 1.1em;
+                height: 30px;
+            }
+
+            .ant-input-affix-wrapper:hover,
+            .ant-input-affix-wrapper-focused {
+                border-color: $primary-color-border  !important
+            }
+
+            .ant-input-prefix {
+                span {
+                    font-size: 1.1em;
+                    color: rgba(0, 0, 0, .30)
+                }
+            }
+        }
+
+        .btn-submit {
+            width: 100%;
+            height: 40px;
+            background: $primary-color ;
+            font-size: 1.1em;
+            text-transform: uppercase;
+            font-weight: bold;
+            border: 0;
+
+            &:hover {
+                background: $primary-color-hover;
+            }
+
+            &:after {
+                --antd-wave-shadow-color: #88d576 !important;
+            }
+
+            button {
+                height: 30px;
+            }
+        }
+
+        &__parraf {
+            margin-top: 50px;
+            color: $font-dark-light;
+        }
+
+        .btn-register {
+            width: 50%;
+            height: 35px;
+            background-color: transparent;
+            text-transform: uppercase;
+            font-weight: bold;
+            color: $font-light;
+            border-color: $primary-color;
+        }
+    }
+}

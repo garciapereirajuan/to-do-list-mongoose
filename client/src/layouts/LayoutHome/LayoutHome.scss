@@ -1,0 +1,27 @@
+@import "../../sass/index.scss";
+
+.layout-home {
+
+
+    &__header {
+        background: $background-dark  !important;
+    }
+
+    &__content {
+        background-image: url('../../assets/img/jpg/background-v1.jpg');
+        height: calc(100vh - 64px);
+        // min-height: calc(100vh - 64px);
+    }
+
+    &__footer {
+        position: absolute;
+        right: 0;
+        display: flex;
+        align-items: center;
+        height: 30px;
+        width: max-content;
+        bottom: 0;
+        background-color: transparent !important;
+        color: #fff !important;
+    }
+}

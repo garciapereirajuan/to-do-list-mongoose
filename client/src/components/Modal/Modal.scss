@@ -1,0 +1,125 @@
+@import '../../sass/index.scss';
+
+.ant-modal-content {
+    border: 2px solid $primary-color  !important;
+    background-color: $background-dark  !important;
+
+    .ant-modal-title {
+        font-weight: bold;
+        text-transform: uppercase;
+        color: $font-light;
+    }
+
+    .ant-modal-close-icon {
+        color: $font-light;
+    }
+
+    .ant-modal-header {
+        background: $background-dark;
+        border: 0 !important;
+    }
+
+    .ant-form-item {
+        margin-top: 10px;
+        margin-bottom: 10px;
+
+        input {
+            font-size: 1.1em;
+            height: 30px;
+        }
+
+        .ant-select-selector {
+            align-items: center;
+            flex-direction: row-reverse !important;
+            font-size: 1.1em;
+            height: 39px !important;
+        }
+
+        .ant-picker {
+            width: 100%;
+
+            .ant-picker-input {
+                flex-direction: row-reverse;
+
+                input {
+                    margin-left: 4px;
+                }
+
+                .ant-picker-suffix {
+                    margin-left: 0;
+                }
+            }
+        }
+
+        .ant-input-prefix {
+            span {
+                font-size: 1.1em;
+                color: rgba(0, 0, 0, .30)
+            }
+        }
+    }
+
+    .btn-submit {
+        width: 100%;
+        height: 40px;
+        background: $primary-color;
+        border-color: $primary-color;
+        font-size: 1.1em;
+        text-transform: uppercase;
+        font-weight: bold;
+        border: 0;
+
+        &:hover {
+            background: $primary-color-hover;
+            border-color: $primary-color;
+        }
+
+        &:focus {
+            background: $primary-color;
+            border-color: $primary-color;
+        }
+
+        &:after {
+            // --antd-wave-shadow-color: #88d576 !important;
+        }
+
+        button {
+            height: 30px;
+        }
+
+
+    }
+
+    .ant-modal-body {
+        .ant-modal-confirm-body-wrapper {
+            .ant-modal-confirm-body {
+
+                div,
+                .ant-modal-confirm-title {
+                    color: white;
+                }
+
+                .antincon {
+                    color: $warning;
+                }
+            }
+
+            .ant-modal-confirm-btns {
+
+                .ant-btn-default {
+                    &:hover {
+                        border-color: $primary-color  !important;
+                        color: $primary-color;
+                    }
+                }
+
+                .ant-btn-dangerous {
+                    &:hover {
+                        border-color: $error  !important;
+                        color: $error;
+                    }
+                }
+            }
+        }
+    }
+}

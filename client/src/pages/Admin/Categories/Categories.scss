@@ -1,0 +1,16 @@
+@import '../../../sass/index.scss';
+
+.categories {
+    &__header {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        padding: 20px 0;
+
+        &-btn-new-category {
+            button {
+                float: right;
+            }
+        }
+    }
+}

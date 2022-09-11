@@ -1,0 +1,62 @@
+@import '../../../sass/index.scss';
+
+.menu-top {
+    display: flex;
+    justify-content: center;
+    height: 65px;
+    background: $background-dark  !important;
+    // font-size: 1.2em;
+    border: 0 !important;
+
+    li {
+        a {
+            font-weight: bold;
+            color: #fff !important;
+
+
+            &:hover {
+                color: $primary-color-light  !important;
+            }
+        }
+    }
+
+    &__right {
+        position: absolute !important;
+        right: 0;
+
+        .ant-btn:focus {
+            background-color: $background-dark;
+            color: $primary-color-light;
+            border-color: #fff;
+        }
+
+        button {
+            background-color: $background-dark;
+            color: $primary-color-light;
+
+            &:hover {
+                background-color: $background-dark-light;
+                color: $primary-color-light  !important;
+                border-color: $primary-color-light  !important;
+            }
+        }
+
+
+    }
+
+    .ant-menu-item {
+        font-size: 15px;
+        text-transform: uppercase;
+    }
+
+
+
+    .ant-menu-item-selected:after,
+    .ant-menu-item-active:after {
+        border-bottom: 2px solid $primary-color  !important;
+    }
+
+    .ant-menu-item-selected span a {
+        color: $primary-color-light  !important;
+    }
+}

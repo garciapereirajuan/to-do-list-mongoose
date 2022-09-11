@@ -1,0 +1,44 @@
+@import '../../../sass/index.scss';
+
+.pagination {
+    display: flex;
+    position: absolute;
+    width: calc(100% - 60px); //padding x 2 de .tasks-list
+    justify-content: center;
+    align-items: center;
+    bottom: 20px;
+
+    .ant-pagination-item,
+    .ant-pagination-prev>button,
+    .ant-pagination-next>button {
+        background-color: $background-dark;
+        transition: all ease .2s;
+
+        a,
+        span {
+            color: $font-light;
+        }
+    }
+
+    .ant-pagination-prev>button,
+    .ant-pagination-next>button {
+        background-color: $background-dark-light;
+    }
+
+    .ant-pagination-item:hover,
+    .ant-pagination-item-active,
+    .ant-pagination-prev>button:hover,
+    .ant-pagination-prev>button:active,
+    .ant-pagination-next>button:hover,
+    .ant-pagination-next>button:active {
+
+        border-color: $primary-color-light;
+
+        a,
+        span {
+            color: $primary-color-light;
+            font-weight: bold;
+            transition: all ease .2s;
+        }
+    }
+}

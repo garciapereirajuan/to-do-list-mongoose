@@ -1,0 +1,132 @@
+@import '../../../../sass/index.scss';
+
+.tasks-list {
+    padding: 20px 30px;
+
+    &__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        &-switch {
+            display: flex;
+            align-items: center;
+
+            span {
+                font-size: 16px;
+                margin-left: 10px;
+                color: white;
+            }
+        }
+    }
+
+    &__item {
+        width: 100%;
+
+        .task {
+            border-bottom: 1px solid rgba(0, 0, 0, .1);
+            min-height: 100px;
+            height: max-content;
+            line-height: 20px;
+        }
+
+        .ant-checkbox-inner {
+            width: 30px !important;
+            height: 30px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+        }
+
+        .ant-checkbox-wrapper::after {
+            background: $background-dark  !important;
+            color: $primary-color  !important;
+        }
+
+        .ant-checkbox-inner::after {
+            width: 10px !important;
+            height: 20px !important;
+            top: 12px;
+        }
+
+        .List {
+            margin-top: 20px;
+            position: relative;
+            color: white;
+            background-color: $background-dark-light;
+
+            .ant-list-item-meta-title {
+                font-size: 22px;
+                color: $font-light;
+                margin-left: 20px;
+            }
+
+            .ant-list-item-meta-description {
+
+                display: flex;
+                flex-direction: column;
+
+                .anticon {
+                    margin-right: 6px;
+                }
+
+                .description-date-up {
+                    color: $font-dark-light;
+                    margin-left: 28px;
+                }
+
+                .description-date-down {
+                    color: $font-dark-light;
+                    margin-left: 28px;
+
+                    .no-date {
+                        color: $primary-color;
+                        font-weight: bold;
+                    }
+                }
+            }
+
+
+            .draggable {
+                width: 100%;
+                padding: 5px 20px;
+                background-color: $background-dark-light;
+
+                &.dragged {
+                    // border-bottom: 1px solid $primary-color-hover;
+                    box-shadow: 0px 2px 10px rgba($primary-color-hover, .5), 0px 2px 10px #000;
+                    -moz-box-shadow: 0px 2px 10px rgba($primary-color-hover, .5), 0px 2px 10px #000;
+                    -webkit-box-shadow: 0px 2px 10px rgba($primary-color-hover, .5), 0px 2px 10px #000;
+                    padding: 0 10px;
+                    opacity: .9;
+
+                }
+            }
+        }
+
+        // .task {
+        //     width: 100%;
+        //     padding: 10px;
+        //     color: white;
+        //     background-color: $background-dark-light;
+        //     border-bottom: 1px solid rgba(0, 0, 0, .1);
+        //     cursor: pointer;
+
+        //     .ant-list-item-meta-title {
+        //         font-size: 22px;
+        //         color: $font-light;
+        //     }
+
+        //     .ant-list-item-meta-description {
+        //         color: $font-dark-light;
+        //     }
+        // }
+
+        // .dragabble {}
+
+        // .dragged {
+        //     width: calc(100% - 100px);
+        //     opacity: .7;
+        // }
+    }
+}
