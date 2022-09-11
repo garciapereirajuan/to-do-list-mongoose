@@ -43,7 +43,7 @@ const Categories = () => {
                         <Button type='primary'>Nueva categoría</Button>
                     </div>
                 </div>
-                <CategoriesTree categories={categories} />
+                <CategoriesTree categories={categories} setReloadCategories={setReloadCategories} />
             </Col>
             <Col md={6} />
         </Row>

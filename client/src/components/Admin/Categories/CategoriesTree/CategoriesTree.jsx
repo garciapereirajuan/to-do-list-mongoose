@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Tree } from 'antd'
+import { Button, message, notification, Tree } from 'antd'
 import { EditFilled } from '@ant-design/icons'
+import { getAccessTokenApi } from '../../../../api/auth'
+import { addCategoryAndTasksApi, removeCategoryAndTasksApi } from '../../../../api/categoryAndTasks'
 
 import './CategoriesTree.scss'
 
 const { DirectoryTree } = Tree
 
-const CategoriesTree = ({ categories }) => {
+const CategoriesTree = ({ categories, setReloadCategories }) => {
     const [treeCategories, setTreeCategories] = useState([])
 
     useEffect(() => {
@@ -18,7 +20,7 @@ const CategoriesTree = ({ categories }) => {
             category.tasks.forEach(item => {
                 children.push({
                     title: item.title,
-                    key: `${category.title}-${item.title}`,
+                    key: `${category._id}-${item._id}`,
                     isLeaf: true,
                 })
             })
@@ -34,7 +36,7 @@ const CategoriesTree = ({ categories }) => {
 
                     </span>
                 ),
-                key: category.title,
+                key: category._id,
                 children: children,
             })
         })
@@ -66,14 +68,70 @@ const CategoriesTree = ({ categories }) => {
         console.log(keys, info)
     }
 
+    const onDragEnter = (info) => {
+        console.log(info.dragNode, info.node)
+    }
+
+    const onSelect = (keys, info) => {
+        console.log(keys, info)
+    }
+
+    const onDrop = (info) => {
+        const token = getAccessTokenApi()
+
+        const dragNode = info.dragNode.key.split('-')
+        const node = info.node.key.split('-')
+
+        const oldCategoryId = dragNode[0]
+        const newCategoryId = node[0]
+        const taskId = dragNode[1]
+
+
+        if (oldCategoryId !== newCategoryId) {
+            removeCategoryAndTasksApi(token, taskId, oldCategoryId)
+                .then(response => {
+                    if (response?.code !== 200 || !response.code) {
+                        notification['error']({
+                            message: response.message
+                        })
+                        return
+                    }
+
+                    addCategoryAndTasksApi(token, taskId, newCategoryId)
+                        .then(response => {
+                            if (response?.code !== 200 || !response.code) {
+                                notification['error']({
+                                    message: response.message
+                                })
+                                return
+                            }
+
+                            notification['success']({ message: response.message })
+                            setReloadCategories(true)
+                        })
+                        .catch(err => {
+                            notification['error']({ message: 'Se produjo un error. Intenta más tarde.' })
+                        })
+                })
+                .catch(err => {
+                    notification['error']({ message: 'Se produjo un error. Intenta más tarde.' })
+                })
+        }
+
+
+
+        console.log(info)
+
+    }
 
     return (
         <div className='categories-tree'>
             <DirectoryTree
                 multiple
-
-                // onSelect={}
-
+                draggable
+                onDragEnter={onDragEnter}
+                onSelect={onSelect}
+                onDrop={onDrop}
                 onExpand={onExpand}
                 treeData={treeCategories}
             />

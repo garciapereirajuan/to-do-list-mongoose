@@ -3,7 +3,8 @@ const router = express.Router()
 const CategoryAndTasksController = require('../controllers/categoryAndTasks')
 const md_auth = require('../middlewares/authenticated')
 
-router.route('/category-and-tasks/:id')
+router.route('/category-and-tasks/:categoryId')
     .post([md_auth.ensureAuth], CategoryAndTasksController.add)
+    .put([md_auth.ensureAuth], CategoryAndTasksController.remove) //actualiza el array 'tasks'
 
 module.exports = router
