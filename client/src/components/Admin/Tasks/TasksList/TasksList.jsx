@@ -11,7 +11,7 @@ import 'moment/locale/es'
 
 import './TasksList.scss'
 
-const TasksList = ({ tasks, editTask, deleteTask, getTasks, updateCheckTask }) => {
+const TasksList = ({ tasks, editTask, deleteTask, getTasks, setReloadTasks, updateCheckTask, categories }) => {
     const [listItems, setListItems] = useState([])
     const { user } = useAuth()
 
@@ -49,7 +49,7 @@ const TasksList = ({ tasks, editTask, deleteTask, getTasks, updateCheckTask }) =
                         console.log('Hubo un error con el drag.', response)
                         return
                     }
-                    if (order === 0) { //para que se ejecute una sola vez
+                    if (order === sortedList.length - 2) { //para que se ejecute una sola vez
                         updateSort()
 
                         // cree una función que renderice las tareas
@@ -57,6 +57,7 @@ const TasksList = ({ tasks, editTask, deleteTask, getTasks, updateCheckTask }) =
                         // dos veces seguidas
                         getTasks()
                     }
+
                 })
                 .catch(err => console.log('Error: ' + err))
         })

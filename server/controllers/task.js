@@ -5,7 +5,7 @@ const { message } = require('../utils')
 module.exports = {
     create: (req, res) => {
         const { title, author, dateUp, dateDown, order } = req.body
-        console.log(title, author)
+
         if (!title || !author) {
             message(res, 404, 'El título y el autor son requeridos.')
             return
@@ -46,14 +46,19 @@ module.exports = {
                         return  
                     }
 
-                    message(res, 200, 'Tarea creada correctamente.')
+                    message(res, 200, 'Tarea creada correctamente.', { task: taskStored })
                 })
             })
         }) 
     },
     index: (req, res) => {
-        const { page = 1, limit = 5, complete = false } = req.query
-        const { userId } = req.body
+        const { page = 1, limit = 5, checked = false } = req.query
+        const { userId, pagination = true } = req.body
+
+        if (pagination === false) {
+            indexWithoutPagination(req, res)
+            return
+        }
 
         User.findOne({ _id: userId }, (err, user) => {
             if (err) {
@@ -71,7 +76,7 @@ module.exports = {
                 sort: user.sort
             }
 
-            Task.paginate({ author: userId, checked: complete }, options, (err, tasks) => {
+            Task.paginate({ author: userId, checked: checked }, options, (err, tasks) => {
                 if (err) {
                     message(res, 500, 'Error del servidor.')
                     return
@@ -142,4 +147,34 @@ module.exports = {
             })
         })
     }
+}
+
+const indexWithoutPagination = (req, res) => {
+    const { checked = false } = req.query
+    const { userId } = req.body
+
+    User.findOne({ _id: userId }, (err, user) => {
+        if (err) {
+            message(res, 500, 'Se produjo un error interno.')
+            return
+        }
+        if (!user) {
+            message(res, 404, 'Necesitas registrarte para obtener tus tareas.')
+            return
+        }
+
+        Task.find({ author: userId, checked: checked }, (err, tasks) => {
+            if (err) {
+                message(res, 500, 'Error del servidor.')
+                return
+            }
+            if (!tasks) {
+                message(res, 404, 'No se encontró ninguna tarea')
+                return
+            }
+            if (tasks) {
+                message(res, 200, '', { tasks: tasks })
+            }
+        })
+    })
 }

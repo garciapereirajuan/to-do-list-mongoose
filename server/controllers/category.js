@@ -15,22 +15,22 @@ module.exports = {
             message(res, 404, 'El autor de la categoría es requerido.')
             return
         }
-
         category.save((err, category) => {
-            if (err?.errors.author.name === 'CastError') {
-                message(res, 404, 'El Id del autor no existe.', {err})
+            if (err) {
+                message(res, 404, 'El nombre de la categoría ya existe.', {err})
                 return
             } 
-            if (err) {
-                message(res, 500, 'Se produjo un error interno, intent más tarde.')
-                return
-            }
             if (!category) {
                 message(res, 500, 'Se produjo un error al guardar la categoría.')
                 return
             }
 
             User.findOne({ _id: data.author }, (err, user) => {
+                if (err) {
+                    message(res, 404, 'El autor no existe.', { err })
+                    return
+                }
+                
                 let categories = user.categories
                 categories.push(category._id) 
 
@@ -51,7 +51,6 @@ module.exports = {
         const { id } = req.params
 
         Category.find({ author: id }).populate('tasks').then((categories) => {
-            
             if (categories.length === 0) {
                 message(res, 404, 'No se encontró ninguna categoría.')
                 return

@@ -25,7 +25,24 @@ export const removeCategoryAndTasksApi = (token, taskId, categoryId) => {
             'Content-Type': 'application/json',
             Authorization: token,
         },
-        body: JSON.stringify({ taskId: taskId })
+        body: JSON.stringify({ taskId: taskId, position: null })
+    }
+
+    return fetch(url, params)
+        .then(response => response.json())
+        .then(result => result)
+        .catch(err => err)
+}
+
+export const positionCategoryAndTasksApi = (token, taskId, categoryId, position) => {
+    const url = `${basePath}/${apiVersion}/category-and-tasks/${categoryId}`
+    const params = {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: token,
+        },
+        body: JSON.stringify({ taskId: taskId, position: position })
     }
 
     return fetch(url, params)

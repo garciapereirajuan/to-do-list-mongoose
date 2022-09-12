@@ -2,7 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { Button, message, notification, Tree } from 'antd'
 import { EditFilled } from '@ant-design/icons'
 import { getAccessTokenApi } from '../../../../api/auth'
-import { addCategoryAndTasksApi, removeCategoryAndTasksApi } from '../../../../api/categoryAndTasks'
+import {
+    addCategoryAndTasksApi,
+    removeCategoryAndTasksApi,
+    positionCategoryAndTasksApi
+} from '../../../../api/categoryAndTasks'
 
 import './CategoriesTree.scss'
 
@@ -10,6 +14,7 @@ const { DirectoryTree } = Tree
 
 const CategoriesTree = ({ categories, setReloadCategories }) => {
     const [treeCategories, setTreeCategories] = useState([])
+    const [position, setPosition] = useState(0)
 
     useEffect(() => {
         let treeCategoriesArray = []
@@ -69,7 +74,10 @@ const CategoriesTree = ({ categories, setReloadCategories }) => {
     }
 
     const onDragEnter = (info) => {
-        console.log(info.dragNode, info.node)
+        const pos = info.node.pos.split('-')
+
+        setPosition(pos[2])
+        console.log(info)
     }
 
     const onSelect = (keys, info) => {
@@ -81,45 +89,63 @@ const CategoriesTree = ({ categories, setReloadCategories }) => {
 
         const dragNode = info.dragNode.key.split('-')
         const node = info.node.key.split('-')
+        const pos = info.dragNode.pos.split('-')
 
         const oldCategoryId = dragNode[0]
         const newCategoryId = node[0]
         const taskId = dragNode[1]
+        // const position = pos[2]
 
-
-        if (oldCategoryId !== newCategoryId) {
-            removeCategoryAndTasksApi(token, taskId, oldCategoryId)
+        if (oldCategoryId === newCategoryId) {
+            console.log(taskId, position)
+            positionCategoryAndTasksApi(token, taskId, oldCategoryId, position)
                 .then(response => {
                     if (response?.code !== 200 || !response.code) {
-                        notification['error']({
-                            message: response.message
-                        })
+                        notification['error']({ message: 'Se produjo un error al mover la tarea.' })
                         return
                     }
 
-                    addCategoryAndTasksApi(token, taskId, newCategoryId)
-                        .then(response => {
-                            if (response?.code !== 200 || !response.code) {
-                                notification['error']({
-                                    message: response.message
-                                })
-                                return
-                            }
-
-                            notification['success']({ message: response.message })
-                            setReloadCategories(true)
-                        })
-                        .catch(err => {
-                            notification['error']({ message: 'Se produjo un error. Intenta más tarde.' })
-                        })
+                    // notification['success']({ message: response.message })
+                    setReloadCategories(true)
                 })
                 .catch(err => {
-                    notification['error']({ message: 'Se produjo un error. Intenta más tarde.' })
+                    notification['error']({ message: 'Se produjo un error al mover la tarea.' })
                 })
+            return
         }
 
+        removeCategoryAndTasksApi(token, taskId, oldCategoryId)
+            .then(response => {
+                if (response?.code !== 200 || !response.code) {
+                    notification['error']({
+                        message: response.message
+                    })
+                    return
+                }
+
+                addCategoryAndTasksApi(token, taskId, newCategoryId)
+                    .then(response => {
+                        if (response?.code !== 200 || !response.code) {
+                            notification['error']({
+                                message: response.message
+                            })
+                            return
+                        }
+
+                        notification['success']({ message: response.message })
+                        setReloadCategories(true)
+                    })
+                    .catch(err => {
+                        notification['error']({ message: 'Se produjo un error. Intenta más tarde.' })
+                    })
+            })
+            .catch(err => {
+                notification['error']({ message: 'Se produjo un error. Intenta más tarde.' })
+            })
 
 
+
+        console.log('position', position)
         console.log(info)
 
     }

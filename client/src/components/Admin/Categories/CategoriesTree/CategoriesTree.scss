@@ -12,6 +12,10 @@
             font-weight: bold;
         }
 
+        .ant-tree-draggable-icon {
+            display: none !important;
+        }
+
         &-selected {
             // span {
             //     color: $font-dark;

@@ -1,26 +1,72 @@
 import React, { useState, useEffect } from 'react'
 import { Form, Input, Button, DatePicker, Select, notification, message } from 'antd'
-import { FontSizeOutlined, UnorderedListOutlined } from '@ant-design/icons'
-import { createTaskApi, updateTaskApi } from '../../../../api/task'
+import { FontSizeOutlined } from '@ant-design/icons'
 import { getAccessTokenApi } from '../../../../api/auth'
+import { createTaskApi, updateTaskApi } from '../../../../api/task'
+import {
+    addCategoryAndTasksApi,
+    removeCategoryAndTasksApi
+} from '../../../../api/categoryAndTasks'
 import useAuth from '../../../../hooks/useAuth'
 import moment from 'moment'
 import 'moment/locale/es'
 
 import './AddEditForm.scss'
 
-const AddEditForm = ({ task, newOrder, categories, setIsVisibleModal, setReloadTasks }) => {
+const AddEditForm = ({ task, newOrder, categories, setIsVisibleModal, setReloadTasks, setReloadCategories }) => {
     const [taskData, setTaskData] = useState({})
+    const [oldCategoryId, setOldCategoryId] = useState(null)
     const { user } = useAuth()
-    const { Option } = Select
 
     useEffect(() => {
         if (task) {
             setTaskData(task)
+            setOldCategoryId(task.category)
         }
-
+        if (!task) {
+            setTaskData({})
+            setOldCategoryId(null)
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [task])
+
+    const updateCategoryAndTasks = (token, taskId) => {
+
+        const add = () => {
+            addCategoryAndTasksApi(token, taskId, taskData.category)
+                .then(response => {
+                    if (response?.code !== 200 || !response.code) {
+                        notification['error']({
+                            message: response.message
+                        })
+                        return
+                    }
+
+                    oldCategoryId && notification['success']({ message: response.message })
+                    setReloadCategories(true)
+                })
+                .catch(err => {
+                    notification['error']({ message: 'Se produjo un error. Intenta más tarde.' })
+                })
+        }
+
+        if (oldCategoryId) {
+            removeCategoryAndTasksApi(token, taskId, oldCategoryId)
+                .then(response => {
+                    if (response?.code !== 200 || !response.code) {
+                        console.log('Error: ' + response)
+                        return
+                    }
+
+                    add()
+                })
+                .catch(err => {
+                    notification['error']({ message: 'Se produjo un error. Intenta más tarde.' })
+                })
+        }
+
+        !oldCategoryId && add()
+    }
 
     const addTask = () => {
 
@@ -33,8 +79,6 @@ const AddEditForm = ({ task, newOrder, categories, setIsVisibleModal, setReloadT
             return
         }
 
-        const token = getAccessTokenApi()
-
         const data = {
             title: title,
             author: user.id,
@@ -42,8 +86,11 @@ const AddEditForm = ({ task, newOrder, categories, setIsVisibleModal, setReloadT
             dateUp: dateUp ? dateUp : new Date().toISOString(),
             dateDown: dateDown ? dateDown : null,
             dateUpdate: dateUpdate ? dateUpdate : new Date().toISOString(),
+            category: category ? category : null,
             order: parseInt(newOrder)
         }
+
+        const token = getAccessTokenApi()
 
         user && createTaskApi(token, data)
             .then(response => {
@@ -56,9 +103,12 @@ const AddEditForm = ({ task, newOrder, categories, setIsVisibleModal, setReloadT
                     return
                 }
                 notification['success']({ message: response.message })
+
                 setIsVisibleModal(false)
                 setReloadTasks(true)
                 setTaskData({})
+
+                category && updateCategoryAndTasks(token, response.task._id)
             })
             .catch(err => {
                 notification['error']({ message: 'Se produjo un error inesperado.' })
@@ -66,7 +116,7 @@ const AddEditForm = ({ task, newOrder, categories, setIsVisibleModal, setReloadT
     }
 
     const updateTask = () => {
-        const { title, dateDown, category } = taskData
+        const { category } = taskData
 
         const token = getAccessTokenApi()
 
@@ -80,14 +130,56 @@ const AddEditForm = ({ task, newOrder, categories, setIsVisibleModal, setReloadT
                 }
 
                 notification['success']({ message: response.message })
+
                 setIsVisibleModal(false)
                 setReloadTasks(true)
                 setTaskData({})
+
+                if (oldCategoryId !== category) {
+                    updateCategoryAndTasks(token, task._id)
+                }
             })
             .catch(err => {
                 notification['error']({ message: 'Se produjo un error inesperado.' })
             })
     }
+
+    return (
+        <FormTask
+            taskData={taskData}
+            setTaskData={setTaskData}
+            categories={categories}
+            task={task}
+            updateTask={updateTask}
+            addTask={addTask}
+        />
+    )
+
+}
+
+const FormTask = ({ taskData, setTaskData, categories, task, updateTask, addTask }) => {
+    const { Option } = Select
+
+    const getOptions = () => {
+        return categories.map(category => (
+            <Option key={category.title}>{category.title}</Option>
+        ))
+    }
+
+    const getTitleCategory = (category) => {
+        let element = categories.filter(item => {
+            return item._id === category
+        })
+        return element.length !== 0 ? element[0].title : category
+    }
+
+    const getCategoryByTitle = (category) => {
+        const element = categories.filter(item => {
+            return item.title === category
+        })
+        return element.length !== 0 ? element[0]._id : category
+    }
+
 
     return (
         <Form onFinish={task ? updateTask : addTask}>
@@ -115,12 +207,16 @@ const AddEditForm = ({ task, newOrder, categories, setIsVisibleModal, setReloadT
                 <Select
                     placeholder={categories ? 'Selecciona una categoría (opcional)' : 'Selecciona una categoría (aún no tienes categorías)'}
                     disabled={categories ? false : true}
-                    value={taskData.category}
-                    onChange={e => setTaskData({ ...taskData, category: e })}
+                    value={taskData.category && getTitleCategory(taskData.category)}
+                    onChange={e => {
+                        setTaskData({ ...taskData, category: getCategoryByTitle(e) })
+                    }}
                 >
-                    <Option value='category-1'>Category 1</Option>
-                    <Option value='category-2'>Category 2</Option>
-                    <Option value='category-3'>Category 3</Option>
+                    {
+                        categories
+                            ? getOptions(categories)
+                            : null
+                    }
                 </Select>
             </Form.Item>
 

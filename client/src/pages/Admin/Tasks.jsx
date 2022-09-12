@@ -3,7 +3,8 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import useAuth from '../../hooks/useAuth'
 import { Row, Col, Button, Switch, Modal as ModalAntd, notification } from 'antd'
 import { getAccessTokenApi } from '../../api/auth'
-import { deleteTaskApi, indexTaskApi, updateTaskApi } from '../../api/task'
+import { deleteTaskApi, indexTasksApi, updateTaskApi } from '../../api/task'
+import { indexCategoriesApi } from '../../api/category'
 import TasksList from '../../components/Admin/Tasks/TasksList'
 import AddEditForm from '../../components/Admin/Tasks/AddEditForm'
 import Pagination from '../../components/Admin/Pagination'
@@ -13,10 +14,12 @@ import Modal from '../../components/Modal'
 const Tasks = () => {
     const [tasks, setTasks] = useState(null)
     const [reloadTasks, setReloadTasks] = useState(false)
+    const [categories, setCategories] = useState(null)
+    const [reloadCategories, setReloadCategories] = useState(false)
     const [isVisibleModal, setIsVisibleModal] = useState(false)
     const [modalTitle, setModalTitle] = useState('')
     const [modalContent, setModalContent] = useState(null)
-    const [complete, setComplete] = useState(false)
+    const [checked, setChecked] = useState(false)
     const { user } = useAuth()
 
     const { confirm } = ModalAntd
@@ -31,23 +34,44 @@ const Tasks = () => {
         getTasks()
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [limit, page, reloadTasks, complete])
+    }, [limit, page, reloadTasks, checked])
+
+    useEffect(() => {
+        getCategories()
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [reloadCategories])
 
     const getTasks = () => {
         const token = getAccessTokenApi()
 
-        indexTaskApi(token, page, limit, complete, user.id)
+        indexTasksApi(token, page, limit, checked, user.id)
             .then(response => {
-                if (response?.code !== 200) {
-                    notification['warning']({ message: response.message })
+                if ((response?.code !== 200 && response?.code !== 404) || !response.code) {
+                    notification['error']({ message: 'Se produjo un error al cargar las tareas.' })
                     return
                 }
-                if (!response.code) {
-                    notification['error']({ message: 'Se produjo un error inesperado.' })
-                    return
-                }
+
                 setTasks(response.tasks)
                 setReloadTasks(false)
+            })
+            .catch(err => {
+                notification['error']({ message: 'Error en el servidor.' })
+            })
+    }
+
+    const getCategories = () => {
+        const token = getAccessTokenApi()
+
+        indexCategoriesApi(token, user.id)
+            .then(response => {
+                if ((response?.code !== 200 && response?.code !== 404) || !response.code) {
+                    notification['error']({ message: 'Se produjo un error al cargar las categorías.' })
+                    return
+                }
+
+                setCategories(response.categories)
+                setReloadCategories(false)
             })
             .catch(err => {
                 notification['error']({ message: 'Error en el servidor.' })
@@ -61,8 +85,10 @@ const Tasks = () => {
             <AddEditForm
                 task={null}
                 newOrder={tasks.total}
+                categories={categories}
                 setIsVisibleModal={setIsVisibleModal}
                 setReloadTasks={setReloadTasks}
+                setReloadCategories={setReloadCategories}
             />
         )
     }
@@ -74,8 +100,10 @@ const Tasks = () => {
             <AddEditForm
                 task={task}
                 newOrder={null}
+                categories={categories}
                 setIsVisibleModal={setIsVisibleModal}
                 setReloadTasks={setReloadTasks}
+                setReloadCategories={setReloadCategories}
             />
         )
     }
@@ -92,12 +120,8 @@ const Tasks = () => {
 
                 deleteTaskApi(token, task._id)
                     .then(response => {
-                        if (response?.code !== 200) {
-                            notification['error']({ message: response.message })
-                            return
-                        }
-                        if (!response) {
-                            notification['error']({ message: 'Se produjo un error inesperado.' })
+                        if (response?.code !== 200 || !response.code) {
+                            notification['error']({ message: 'Se produjo un error al eliminar.' })
                             return
                         }
 
@@ -118,7 +142,7 @@ const Tasks = () => {
         updateTaskApi(token, task._id, { checked })
             .then(response => {
                 if (response?.code !== 200 || !response.code) {
-                    notification['error']({ message: 'Se produjo un error interno, inténtalo más tarde.' })
+                    notification['error']({ message: 'Se produjo un error al actualizar.' })
                     return
                 }
 
@@ -143,11 +167,11 @@ const Tasks = () => {
                     <div className='tasks-list__header-switch'>
                         <Switch
                             defaultChecked={false}
-                            onChange={e => setComplete(e)}
+                            onChange={e => setChecked(e)}
                         />
                         <span>
                             {
-                                complete
+                                checked
                                     ? `Tareas completadas: ${tasks.total}`
                                     : `Tareas incompletas: ${tasks.total}`
                             }
@@ -167,6 +191,7 @@ const Tasks = () => {
                         setReloadTasks={setReloadTasks}
                         getTasks={getTasks}
                         updateCheckTask={updateCheckTask}
+                        categories={categories}
                     />
                 </div>
             </Col>

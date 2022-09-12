@@ -44,15 +44,77 @@ const add = (req, res) => {
                     return
                 }
                 
-                message(res, 200, `Tarea agregada a categoría "${category.title}"`)
+                message(res, 200, `Tarea agregada a la categoría "${category.title}"`)
             })
         })
     })
 }
 
-const remove = (req, res) => {
+const update = (req, res) => {
+    const { categoryId } = req.params
+    const { taskId, position } = req.body
+
+    if (position === null) {
+        changeCategory(req, res)
+        return
+    }
+
+    if (!position) {
+        // message(res, 404, 'Error!!!!')
+        return
+    }
+
+    Category.findOne({ _id: categoryId }, (err, category) => {
+        if (err) {
+            message(res, 500, 'Se produjo un error.', { err })
+            return
+        } 
+        if (!category) {
+            message(res, 404, 'No se encontró la categoría.')
+            return
+        }
+        
+        let tasks = category.tasks
+        let index = tasks.findIndex(element => element == taskId)
+        let element = tasks.splice(index, index == 0 ? 1 : index)
+        tasks.push(element)
+
+        let newTasks = []
+
+        tasks.map((item, index) => {
+            if (index == position){
+                newTasks.push(taskId)
+            }
+            if (item != taskId) {
+                newTasks.push(item)
+            }
+        })       
+        
+        Category.findByIdAndUpdate(categoryId, { tasks: newTasks }, (err, category) => {
+            if (err) {
+                message(res, 500, 'Se produjo un error.', { err })
+                return
+            } 
+            if (!category) {
+                message(res, 404, 'No se encontró la categoría.')
+                return
+            }
+
+            message(res, 200, 'Posición actualizada correctamente.')
+        })
+    })
+}
+
+//se ejecuta en 'update' si !position
+const changeCategory = (req, res) => {
+
     const { categoryId } = req.params
     const { taskId } = req.body
+
+    if (!taskId) {
+        message(res, 404, 'Solo puedes mover las tareas.')
+        return
+    }
 
     if (!categoryId || !taskId) {
         message(res, 404, 'El Id de la tarea y de la categoría es requerido.')
@@ -98,27 +160,16 @@ const remove = (req, res) => {
                     message(res, 404, 'La tarea que intentas actualizar no existe.')
                     return
                 }
-
+                
                 message(res, 200, 'Tarea actualizada correctamente.')
             })
         })
     })
 }
 
+
+
 module.exports = {
     add,
-    remove
-
-        // Task.findByIdAndUpdate(taskId, { category: newCategoryId }, (err, task) => {
-        //     if (err) {
-        //         message(res, 500, 'Se produjo un error.', { err })
-        //         return
-        //     }
-        //     if (!task) {
-        //         message(res, 404, 'La tarea que intentas actualizar no existe.')
-        //         return
-        //     }
-
-        //     removeTaskIdOfOldCategory()
-        // })
+    update
 }
