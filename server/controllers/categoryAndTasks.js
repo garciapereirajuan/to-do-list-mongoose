@@ -55,11 +55,13 @@ const update = (req, res) => {
     const { taskId, position } = req.body
 
     if (position === null) {
+        console.log('Position es null')
         changeCategory(req, res)
         return
     }
 
     if (!position) {
+        console.log('error !position', position)
         // message(res, 404, 'Error!!!!')
         return
     }
@@ -73,24 +75,57 @@ const update = (req, res) => {
             message(res, 404, 'No se encontró la categoría.')
             return
         }
-        
+
+        console.log('Acá llega')
+
         let tasks = category.tasks
-        let index = tasks.findIndex(element => element == taskId)
-        let element = tasks.splice(index, index == 0 ? 1 : index)
-        tasks.push(element)
+        let string  = tasks.toString()
+        tasks = string.replace(taskId, '').split(',').filter(Boolean)
+        tasks.splice(position, 0, taskId)
+        console.log(tasks)
+        // let index = tasks.findIndex(element => element == taskId)
+        // let element = tasks.splice(index, index == 0 ? 1 : index)
+        // // if (element.length >= 2 && category.tasks.length == 2){
+        // //     element = element[0]
+        // // }
+        // // tasks.push(element)
+        // // console.log(tasks)
 
-        let newTasks = []
+        // let newTasks = []
 
-        tasks.map((item, index) => {
-            if (index == position){
-                newTasks.push(taskId)
-            }
-            if (item != taskId) {
-                newTasks.push(item)
-            }
-        })       
+        // // tasks.map((item, index) => {
+        // //     console.log(item.length)
+        // //     return
+        // //     if (typeof item === 'object') {
+        // //     //   if (index == position){
+        // //     //     newTasks.push(taskId)
+        // //     //   }
+        // //     //   if (item != taskId) {
+        // //     //     console.log('item', item, 'taskId', taskId)
+        // //     //     newTasks.push(item)
+        // //     //   }
+        // //     // } else {
+        // //     //   item.map(subitem => {
+        // //     //     // console.log( subitem, taskId)
+        // //     //     if (subitem != taskId) {
+        // //     //       newTasks.push(subitem)
+        // //     //     }
+        // //     //   })
+        // //     }
+        // //   }) 
+
+        // tasks.map((item, index) => {
+        //     if (index == position){
+        //         newTasks.push(taskId)
+        //     }
+        //     if (item != taskId) {
+        //         newTasks.push(item)
+        //     }
+        // })     
         
-        Category.findByIdAndUpdate(categoryId, { tasks: newTasks }, (err, category) => {
+        // console.log(newTasks)
+
+        Category.findByIdAndUpdate(categoryId, { tasks }, (err, category) => {
             if (err) {
                 message(res, 500, 'Se produjo un error.', { err })
                 return
@@ -134,7 +169,8 @@ const changeCategory = (req, res) => {
         let tasks = category.tasks
         let index = tasks.findIndex(item => item == taskId)
 
-        tasks.splice(index, index === 0 ? 1 : index)
+        // tasks.splice(index, index === 0 ? 1 : index)
+        tasks = tasks.toString().replace(tasks[index], '').split(',').filter(Boolean)
 
         if (index === -1) {
             message(res, 404, 'La tarea no existe o no está asociada a esta categoría.')

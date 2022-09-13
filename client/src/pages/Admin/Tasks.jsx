@@ -28,7 +28,8 @@ const Tasks = () => {
     const navigate = useNavigate()
 
     const { page = 1 } = queryString.parse(location.search)
-    const limit = (window.innerHeight / 110) - 1.5
+    const limit = 6
+    // const limit = (window.innerHeight / 110) - 1.5
 
     useEffect(() => {
         getTasks()
@@ -84,7 +85,7 @@ const Tasks = () => {
         setModalContent(
             <AddEditForm
                 task={null}
-                newOrder={tasks.total}
+                newOrder={tasks ? tasks.total : 0}
                 categories={categories}
                 setIsVisibleModal={setIsVisibleModal}
                 setReloadTasks={setReloadTasks}
@@ -155,10 +156,6 @@ const Tasks = () => {
 
     }
 
-    if (!tasks) {
-        return null
-    }
-
     return (
         <Row className='tasks-list'>
             <Col sm={0} md={4} />
@@ -172,8 +169,8 @@ const Tasks = () => {
                         <span>
                             {
                                 checked
-                                    ? `Tareas completadas: ${tasks.total}`
-                                    : `Tareas incompletas: ${tasks.total}`
+                                    ? `Tareas completadas: ${tasks ? tasks.total : '0'}`
+                                    : `Tareas incompletas: ${tasks ? tasks.total : '0'}`
                             }
                         </span>
                     </div>
@@ -185,7 +182,7 @@ const Tasks = () => {
                 </div>
                 <div>
                     <TasksList
-                        tasks={tasks}
+                        tasks={tasks ? tasks : []}
                         editTask={editTask}
                         deleteTask={deleteTask}
                         setReloadTasks={setReloadTasks}
@@ -196,8 +193,10 @@ const Tasks = () => {
                 </div>
             </Col>
             {
-                tasks.docs.length !== 0
-                && <Pagination tasks={tasks} location={location} navigate={navigate} />
+                tasks
+                    ? tasks.docs.length !== 0
+                    && <Pagination tasks={tasks} location={location} navigate={navigate} />
+                    : null
             }
             <Modal
                 modalTitle={modalTitle}

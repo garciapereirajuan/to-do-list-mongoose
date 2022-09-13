@@ -64,8 +64,10 @@ const Categories = () => {
             <AddEditForm
                 category={null}
                 tasks={tasks}
+                categories={categories}
                 setReloadCategories={setReloadCategories}
-                setIsVisibleModal={isVisibleModal}
+                setReloadTasks={setReloadTasks}
+                setIsVisibleModal={setIsVisibleModal}
             />
         )
     }
@@ -91,6 +93,7 @@ const Categories = () => {
                 modalTitle={modalTitle}
                 isVisibleModal={isVisibleModal}
                 setIsVisibleModal={setIsVisibleModal}
+                width='600px'
             >
                 {modalContent}
             </Modal>

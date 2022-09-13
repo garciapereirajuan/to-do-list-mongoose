@@ -2,7 +2,7 @@ import { Modal as ModalAntd } from 'antd'
 
 import './Modal.scss'
 
-const Modal = ({ modalTitle, isVisibleModal, setIsVisibleModal, children }) => {
+const Modal = ({ modalTitle, isVisibleModal, setIsVisibleModal, width, children }) => {
     return (
         <ModalAntd
             title={modalTitle}
@@ -10,6 +10,7 @@ const Modal = ({ modalTitle, isVisibleModal, setIsVisibleModal, children }) => {
             visible={isVisibleModal}
             onCancel={() => setIsVisibleModal(false)}
             footer={false}
+            width={width}
         >
             {children}
         </ModalAntd>

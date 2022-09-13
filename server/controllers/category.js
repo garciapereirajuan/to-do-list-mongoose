@@ -40,7 +40,7 @@ module.exports = {
                         return
                     }
 
-                    message(res, 200, 'Categoría creada correctamente.')
+                    message(res, 200, 'Categoría creada correctamente.', { category: category})
                 })
 
             })

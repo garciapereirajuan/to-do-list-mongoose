@@ -52,7 +52,7 @@ module.exports = {
         }) 
     },
     index: (req, res) => {
-        const { page = 1, limit = 5, checked = false } = req.query
+        const { page = 1, limit = 8, checked = false } = req.query
         const { userId, pagination = true } = req.body
 
         if (pagination === false) {

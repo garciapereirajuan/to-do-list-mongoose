@@ -3,10 +3,7 @@ import { Form, Input, Button, DatePicker, Select, notification, message } from '
 import { FontSizeOutlined } from '@ant-design/icons'
 import { getAccessTokenApi } from '../../../../api/auth'
 import { createTaskApi, updateTaskApi } from '../../../../api/task'
-import {
-    addCategoryAndTasksApi,
-    removeCategoryAndTasksApi
-} from '../../../../api/categoryAndTasks'
+import { updateCategoryAndTasks } from '../../../../utils/categoryAndTasksManager'
 import useAuth from '../../../../hooks/useAuth'
 import moment from 'moment'
 import 'moment/locale/es'
@@ -30,43 +27,9 @@ const AddEditForm = ({ task, newOrder, categories, setIsVisibleModal, setReloadT
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [task])
 
-    const updateCategoryAndTasks = (token, taskId) => {
 
-        const add = () => {
-            addCategoryAndTasksApi(token, taskId, taskData.category)
-                .then(response => {
-                    if (response?.code !== 200 || !response.code) {
-                        notification['error']({
-                            message: response.message
-                        })
-                        return
-                    }
 
-                    oldCategoryId && notification['success']({ message: response.message })
-                    setReloadCategories(true)
-                })
-                .catch(err => {
-                    notification['error']({ message: 'Se produjo un error. Intenta más tarde.' })
-                })
-        }
 
-        if (oldCategoryId) {
-            removeCategoryAndTasksApi(token, taskId, oldCategoryId)
-                .then(response => {
-                    if (response?.code !== 200 || !response.code) {
-                        console.log('Error: ' + response)
-                        return
-                    }
-
-                    add()
-                })
-                .catch(err => {
-                    notification['error']({ message: 'Se produjo un error. Intenta más tarde.' })
-                })
-        }
-
-        !oldCategoryId && add()
-    }
 
     const addTask = () => {
 
@@ -108,7 +71,7 @@ const AddEditForm = ({ task, newOrder, categories, setIsVisibleModal, setReloadT
                 setReloadTasks(true)
                 setTaskData({})
 
-                category && updateCategoryAndTasks(token, response.task._id)
+                category && updateCategoryAndTasks(token, response.task._id, category, null, setReloadCategories)
             })
             .catch(err => {
                 notification['error']({ message: 'Se produjo un error inesperado.' })
@@ -136,7 +99,7 @@ const AddEditForm = ({ task, newOrder, categories, setIsVisibleModal, setReloadT
                 setTaskData({})
 
                 if (oldCategoryId !== category) {
-                    updateCategoryAndTasks(token, task._id)
+                    updateCategoryAndTasks(token, task._id, category, oldCategoryId, setReloadCategories)
                 }
             })
             .catch(err => {

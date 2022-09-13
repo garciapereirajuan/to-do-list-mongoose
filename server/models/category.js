@@ -6,6 +6,9 @@ const CategorySchema = Schema({
         type: String,
         unique: true,
     },
+    color: String,
+    dateUp: Date,
+    dateUpdate: Date,
     author: { type: Schema.Types.ObjectId, ref: 'User' },
     tasks: [{ type: Schema.Types.ObjectId, ref: 'Task' }],
 })

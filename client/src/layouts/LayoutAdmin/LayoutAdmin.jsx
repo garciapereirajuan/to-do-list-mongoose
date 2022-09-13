@@ -14,18 +14,18 @@ const LayoutAdmin = () => {
     const { Header, Content, Footer } = Layout
 
     return (
-        <Layout className="layout-home">
-            <Header className="layout-home__header">
+        <Layout className="layout-admin">
+            <Header className="layout-admin__header">
                 <MenuTop />
             </Header>
-            <Content className="layout-home__content">
+            <Content className="layout-admin__content">
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/tasks" element={user && <Tasks />} />
                     <Route path="/categories" element={user && <Categories />} />
                 </Routes>
             </Content>
-            <Footer className="layout-home__footer">&#169; 2022 - JUAN G.P.</Footer>
+            <Footer className="layout-admin__footer">&#169; 2022 - JUAN G.P.</Footer>
         </Layout>
     )
 }

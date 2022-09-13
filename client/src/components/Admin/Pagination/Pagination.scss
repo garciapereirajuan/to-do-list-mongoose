@@ -2,11 +2,11 @@
 
 .pagination {
     display: flex;
-    position: absolute;
+    position: relative;
     width: calc(100% - 60px); //padding x 2 de .tasks-list
     justify-content: center;
     align-items: center;
-    bottom: 20px;
+    top: 40px;
 
     .ant-pagination-item,
     .ant-pagination-prev>button,

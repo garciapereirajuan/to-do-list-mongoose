@@ -1,3 +1,31 @@
 @import '../../sass/index.scss';
 
-.layout-admin {}
+@import "../../sass/index.scss";
+
+.layout-admin {
+    height: max-content !important;
+
+    &__header {
+        background: $background-dark  !important;
+    }
+
+    &__content {
+        background-image: url('../../assets/img/jpg/background-v1.jpg');
+        // height: calc(100vh - 64px);
+        height: max-content;
+        padding-bottom: 64px;
+        min-height: calc(100vh - 64px) !important;
+    }
+
+    &__footer {
+        // position: absolute;
+        right: 0;
+        display: flex;
+        align-items: center;
+        height: 30px;
+        width: 100%;
+        bottom: 0;
+        background-color: $background-dark  !important;
+        color: #fff !important;
+    }
+}

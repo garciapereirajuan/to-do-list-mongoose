@@ -2,11 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { Button, message, notification, Tree } from 'antd'
 import { EditFilled } from '@ant-design/icons'
 import { getAccessTokenApi } from '../../../../api/auth'
-import {
-    addCategoryAndTasksApi,
-    removeCategoryAndTasksApi,
-    positionCategoryAndTasksApi
-} from '../../../../api/categoryAndTasks'
+import { positionCategoryAndTasksApi } from '../../../../api/categoryAndTasks'
+import { updateCategoryAndTasks } from '../../../../utils/categoryAndTasksManager'
 
 import './CategoriesTree.scss'
 
@@ -50,38 +47,20 @@ const CategoriesTree = ({ categories, setReloadCategories }) => {
 
     }, [categories])
 
-    const treeData = [
-        {
-            title: `Casa`,
-            key: '0-0',
-            children: [
-                { title: 'Cortar el pasto', key: '0-0-0', isLeaf: true },
-                { title: 'Limpiar el baño', key: '0-0-1', isLeaf: true },
-            ],
-        },
-        {
-            title: 'Trabajo',
-            key: '0-1',
-            children: [
-                { title: 'Terminar el informe', key: '0-1-0', isLeaf: true },
-                { title: 'Leer la documentación del lunes', key: '0-1-1', isLeaf: true },
-            ],
-        },
-    ];
-
     const onExpand = (keys, info) => {
-        console.log(keys, info)
+        // console.log(keys, info)
     }
 
     const onDragEnter = (info) => {
         const pos = info.node.pos.split('-')
-
         setPosition(pos[2])
-        console.log(info)
+        // console.log(info)
     }
 
     const onSelect = (keys, info) => {
-        console.log(keys, info)
+        const pos = info.node.pos.split('-')
+        setPosition(pos[2])
+        // console.log(keys, info)
     }
 
     const onDrop = (info) => {
@@ -89,19 +68,17 @@ const CategoriesTree = ({ categories, setReloadCategories }) => {
 
         const dragNode = info.dragNode.key.split('-')
         const node = info.node.key.split('-')
-        const pos = info.dragNode.pos.split('-')
 
         const oldCategoryId = dragNode[0]
         const newCategoryId = node[0]
         const taskId = dragNode[1]
-        // const position = pos[2]
 
         if (oldCategoryId === newCategoryId) {
             console.log(taskId, position)
             positionCategoryAndTasksApi(token, taskId, oldCategoryId, position)
                 .then(response => {
                     if (response?.code !== 200 || !response.code) {
-                        notification['error']({ message: 'Se produjo un error al mover la tarea.' })
+                        // notification['error']({ message: 'Se produjo un error al mover la tarea.' })
                         return
                     }
 
@@ -114,39 +91,45 @@ const CategoriesTree = ({ categories, setReloadCategories }) => {
             return
         }
 
-        removeCategoryAndTasksApi(token, taskId, oldCategoryId)
-            .then(response => {
-                if (response?.code !== 200 || !response.code) {
-                    notification['error']({
-                        message: response.message
-                    })
-                    return
-                }
+        const finish = () => {
+            setReloadCategories(true)
+        }
 
-                addCategoryAndTasksApi(token, taskId, newCategoryId)
-                    .then(response => {
-                        if (response?.code !== 200 || !response.code) {
-                            notification['error']({
-                                message: response.message
-                            })
-                            return
-                        }
+        updateCategoryAndTasks(token, taskId, newCategoryId, oldCategoryId, finish)
 
-                        notification['success']({ message: response.message })
-                        setReloadCategories(true)
-                    })
-                    .catch(err => {
-                        notification['error']({ message: 'Se produjo un error. Intenta más tarde.' })
-                    })
-            })
-            .catch(err => {
-                notification['error']({ message: 'Se produjo un error. Intenta más tarde.' })
-            })
+        // removeCategoryAndTasksApi(token, taskId, oldCategoryId)
+        //     .then(response => {
+        //         if (response?.code !== 200 || !response.code) {
+        //             notification['error']({
+        //                 message: response.message
+        //             })
+        //             return
+        //         }
+
+        //         addCategoryAndTasksApi(token, taskId, newCategoryId)
+        //             .then(response => {
+        //                 if (response?.code !== 200 || !response.code) {
+        //                     notification['error']({
+        //                         message: response.message
+        //                     })
+        //                     return
+        //                 }
+
+        //                 // notification['success']({ message: response.message })
+        //                 setReloadCategories(true)
+        //             })
+        //             .catch(err => {
+        //                 notification['error']({ message: 'Se produjo un error. Intenta más tarde.' })
+        //             })
+        //     })
+        //     .catch(err => {
+        //         notification['error']({ message: 'Se produjo un error. Intenta más tarde.' })
+        //     })
 
 
 
-        console.log('position', position)
-        console.log(info)
+        // console.log('position', position)
+        // console.log(info)
 
     }
 

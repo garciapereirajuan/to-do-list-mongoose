@@ -19,7 +19,7 @@ export const createCategoryApi = (token, categoryData) => {
     const url = `${basePath}/${apiVersion}/category`
     const params = {
         method: 'POST',
-        hedaers: {
+        headers: {
             'Content-Type': 'application/json',
             Authorization: token,
         },
