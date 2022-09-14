@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Form, Input, Select, Button, notification } from 'antd'
 import useAuth from '../../../../hooks/useAuth'
 import { getAccessTokenApi } from '../../../../api/auth'
-import { addCategoryAndTasksApi } from '../../../../api/categoryAndTasks'
-import { createCategoryApi } from '../../../../api/category'
+import { createCategoryApi, updateCategoryApi } from '../../../../api/category'
 import colors from '../../../../utils/colors'
 import { updateCategoryAndTasks } from '../../../../utils/categoryAndTasksManager'
 import { FontSizeOutlined, BgColorsOutlined, UnorderedListOutlined } from '@ant-design/icons'
@@ -16,8 +15,18 @@ const AddEditForm = ({ category, tasks, categories, setIsVisibleModal, setReload
     const { user } = useAuth()
 
     useEffect(() => {
+        if (category) {
+            setCategoryData(category)
+            if (category.tasks) {
+                const keys = category.tasks.map(item => {
+                    return `${item._id}-${item.category ? item.category : 'no_category'}-${item.title}`
+                })
+                setTasksArray(keys)
+            }
+        }
         if (!category) {
             setCategoryData({})
+            setTasksArray([])
         }
     }, [category])
 
@@ -47,6 +56,8 @@ const AddEditForm = ({ category, tasks, categories, setIsVisibleModal, setReload
                     return
                 }
 
+                notification['success']({ message: 'Categoría creada correctamente.' })
+
                 const newCategoryId = response.category._id
                 const tasks = [...tasksArray]
 
@@ -55,20 +66,102 @@ const AddEditForm = ({ category, tasks, categories, setIsVisibleModal, setReload
                     setReloadCategories(true)
                     setIsVisibleModal(false)
                     setCategoryData({})
+                    setTasksArray([])
                 }
 
-                updateCategoryAndTasks(
-                    token, tasks, newCategoryId, null, finish)
+                if (tasks.length !== 0) {
+                    updateCategoryAndTasks(token, tasks, newCategoryId, null, false, finish)
+                } else {
+                    finish()
+                }
             })
             .catch(err => {
                 notification['error']({ message: 'Se produjo un error al crear la categoría.' })
                 console.log('Error al crear la categoría: ' + err)
             })
     }
-    const editCategory = () => { }
+
+    const editCategory = () => {
+        const token = getAccessTokenApi()
+
+        if (!categoryData.title) {
+            notification['error']({ message: 'Escribe el título de la categoría.' })
+        }
+
+        let data = user && {
+            title: categoryData.title,
+            color: categoryData.color,
+            dateUp: categoryData.dateUp ? categoryData.dateUp : new Date(),
+            dateUpdate: new Date(),
+            author: user.id,
+        }
+
+        let verifNewTasks = () => {
+            let changes = []
+
+            tasksArray.forEach(item => {
+                item = item.split('-')[0]
+                category.tasks.forEach(subitem => {
+                    if (item === subitem._id) {
+                        changes.push(subitem._id)
+                    } else {
+                        changes.push(false)
+                    }
+                })
+            })
+
+            changes = changes.filter(Boolean)
+
+            if (tasksArray.length === category.tasks.length
+                && category.tasks.length === changes.length
+            ) {
+                return false
+            } else {
+                return true
+            }
+        }
+
+
+
+
+
+        user && updateCategoryApi(token, category._id, data)
+            .then(response => {
+                if ((response?.code !== 200 && response?.code !== 404) || !response.code) {
+                    notification['error']({ message: response.message })
+                    console.log('Error al crear la categoría: ' + JSON.stringify(response))
+                    return
+                }
+
+                notification['success']({ message: 'Categoría actualizada correctamente.' })
+
+                if (verifNewTasks()) {
+                    const newCategoryId = category._id
+                    const tasks = [...tasksArray]
+
+                    const finish = () => {
+                        setReloadTasks(true)
+                        setReloadCategories(true)
+                        setIsVisibleModal(false)
+                        setCategoryData({})
+                        setTasksArray([])
+                    }
+
+                    updateCategoryAndTasks(token, tasks, newCategoryId, null, false, finish)
+                    return
+                }
+
+                setReloadTasks(true)
+                setReloadCategories(true)
+                setIsVisibleModal(false)
+                setCategoryData({})
+                setTasksArray([])
+            })
+    }
 
     return (
         <FormCategory
+            category={category}
             categoryData={categoryData}
             setCategoryData={setCategoryData}
             addCategory={addCategory}
@@ -222,7 +315,11 @@ const FormCategory = (props) => {
             </Form.Item>
             <Form.Item>
                 <Button type='primary' htmlType='submit' className='btn-submit'>
-                    Crear categoría
+                    {
+                        !category
+                            ? "Crear categoría"
+                            : "Actualizar categoría"
+                    }
                 </Button>
             </Form.Item>
         </Form >

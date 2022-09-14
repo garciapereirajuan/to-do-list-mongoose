@@ -27,10 +27,6 @@ const AddEditForm = ({ task, newOrder, categories, setIsVisibleModal, setReloadT
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [task])
 
-
-
-
-
     const addTask = () => {
 
         const { title, dateDown, dateUp, dateUpdate, category } = taskData
@@ -67,11 +63,25 @@ const AddEditForm = ({ task, newOrder, categories, setIsVisibleModal, setReloadT
                 }
                 notification['success']({ message: response.message })
 
-                setIsVisibleModal(false)
-                setReloadTasks(true)
-                setTaskData({})
+                const finish = () => {
+                    setIsVisibleModal(false)
+                    setReloadTasks(true)
+                    setReloadCategories(true)
+                    setTaskData({})
+                }
 
-                category && updateCategoryAndTasks(token, response.task._id, category, null, setReloadCategories)
+                if (category) {
+                    updateCategoryAndTasks(
+                        token,
+                        response.task._id,
+                        category,
+                        null,
+                        true,
+                        finish
+                    )
+                } else {
+                    finish()
+                }
             })
             .catch(err => {
                 notification['error']({ message: 'Se produjo un error inesperado.' })
@@ -94,12 +104,26 @@ const AddEditForm = ({ task, newOrder, categories, setIsVisibleModal, setReloadT
 
                 notification['success']({ message: response.message })
 
-                setIsVisibleModal(false)
-                setReloadTasks(true)
-                setTaskData({})
+                const finish = () => {
+                    setIsVisibleModal(false)
+                    setReloadTasks(true)
+                    setReloadCategories(true)
+                    setTaskData({})
+                }
 
-                if (oldCategoryId !== category) {
-                    updateCategoryAndTasks(token, task._id, category, oldCategoryId, setReloadCategories)
+                if (category) {
+                    if (oldCategoryId !== category) {
+                        updateCategoryAndTasks(
+                            token,
+                            task._id,
+                            category,
+                            oldCategoryId,
+                            true,
+                            finish
+                        )
+                    }
+                } else {
+                    finish()
                 }
             })
             .catch(err => {

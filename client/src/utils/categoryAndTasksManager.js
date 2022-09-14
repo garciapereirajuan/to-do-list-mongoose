@@ -17,19 +17,16 @@ import {
 } from '../api/categoryAndTasks'
 import { notification } from 'antd'
 
-export const updateCategoryAndTasks = (
-    token, taskId, newCategoryId, oldCategoryId, finish) => {
+export const updateCategoryAndTasks = (token, taskId, newCategoryId, oldCategoryId, msj, finish) => {
 
     if (!token || !taskId || !finish) {
         console.log('Token, taskId, y la función "finish" son requeridos.')
-        notification['error']({ message: 'Se produjo un error.'})
+        notification['info']({ message: 'Sólo puedes mover las tareas. 😀'})
         return
     }
 
-    // return new Promise ((resolve, reject) => {
-
     const update = (unique, taskId, newCategoryId, oldCategoryId) => {
-        // token y setReloadCategories lo recibe de la función padre
+        // token y finish lo recibe de la función padre
         return new Promise((res, rej) => {
             const add = async () => {
                 await addCategoryAndTasksManager(
@@ -38,6 +35,7 @@ export const updateCategoryAndTasks = (
                     taskId,
                     newCategoryId,
                     oldCategoryId,
+                    msj,
                     finish
                 ).then(response => response.code === 200 && res(response))
             }
@@ -78,7 +76,7 @@ export const updateCategoryAndTasks = (
 
             await update(unique, itemTaskId, newCategoryId, itemOldCategoryId)
                 .then(response => {
-                    response.code === 200 && i++
+                    i++
                     if (i === length) {
                         finish()
                     }
@@ -129,7 +127,7 @@ export const updateCategoryAndTasks = (
     // })   
 }
 
-const addCategoryAndTasksManager = (unique, token, taskId, categoryId, oldCategoryId, finish) => {
+const addCategoryAndTasksManager = (unique, token, taskId, categoryId, oldCategoryId, msj, finish) => {
 
     // console.log('agregó taskID: ', JSON.stringify(taskId))
         
@@ -143,7 +141,9 @@ const addCategoryAndTasksManager = (unique, token, taskId, categoryId, oldCatego
                     })
                     return
                 }
-                oldCategoryId && notification['success']({ message: response.message })
+                if (msj) {
+                    notification['success']({ message: response.message })
+                }
                 if (!oldCategoryId || unique) {
                     finish()
                 }

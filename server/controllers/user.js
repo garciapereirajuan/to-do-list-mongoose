@@ -114,14 +114,11 @@ module.exports = {
         function updateUser(){
             User.findByIdAndUpdate(id, req.body, (err, userStored) => {
                 if (err) {
-                    if (err.codeName === "DuplicateKey")
-                        message(res, 404, 'Ese nombre de usuario ya está en uso, prueba otro.')
-                    else {
-                        message(res, 404, 'El usuario que intentas actualizar no existe.')
-                    }
+                    message(res, 404, 'El usuario que intentas actualizar no existe.', { err })
+                    
                 } else {
                     if (!userStored) {
-                        message(res, 404, 'Ese nombre de usuario ya está en uso, prueba otro.')
+                        message(res, 404, 'El usuario que intentas actualizar no existe.')
                     } else {
                         message(res, 200, 'El usuario ha sido actualizado.', { user: userStored })
                     }

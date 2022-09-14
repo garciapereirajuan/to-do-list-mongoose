@@ -59,5 +59,22 @@ module.exports = {
                 message(res, 200, '', { categories })
             }
         })
+    },
+    update: (req, res) => {
+        const { id } = req.params
+        const data = req.body
+        
+        Category.findByIdAndUpdate(id, data, (err, category) => {
+            if (err) {
+                message(res, 404, 'El nombre de la categoría ya existe.', {err})
+                return
+            } 
+            if (!category) {
+                message(res, 404, 'El nombre de la categoría ya existe.')
+                return
+            }
+
+            message(res, 200, 'Categoria actualizada correctamente.')
+        })
     }
 }

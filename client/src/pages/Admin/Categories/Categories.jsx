@@ -72,8 +72,19 @@ const Categories = () => {
         )
     }
 
-    const editCategory = () => {
-
+    const editCategory = (category) => {
+        setIsVisibleModal(true)
+        setModalTitle('Editar categoría')
+        setModalContent(
+            <AddEditForm
+                category={category}
+                tasks={tasks}
+                categories={categories}
+                setReloadCategories={setReloadCategories}
+                setReloadTasks={setReloadTasks}
+                setIsVisibleModal={setIsVisibleModal}
+            />
+        )
     }
 
     return (
@@ -85,7 +96,11 @@ const Categories = () => {
                         <Button type='primary' onClick={addCategory}>Nueva categoría</Button>
                     </div>
                 </div>
-                <CategoriesTree categories={categories} setReloadCategories={setReloadCategories} />
+                <CategoriesTree
+                    categories={categories}
+                    setReloadCategories={setReloadCategories}
+                    editCategory={editCategory}
+                />
             </Col>
             <Col md={6} />
 
@@ -93,7 +108,7 @@ const Categories = () => {
                 modalTitle={modalTitle}
                 isVisibleModal={isVisibleModal}
                 setIsVisibleModal={setIsVisibleModal}
-                width='600px'
+                width='700px'
             >
                 {modalContent}
             </Modal>

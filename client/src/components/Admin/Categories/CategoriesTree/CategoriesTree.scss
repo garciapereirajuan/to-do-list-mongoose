@@ -63,14 +63,32 @@
                     align-items: center;
                     justify-content: space-between;
 
-                    button {
-                        background-color: $primary-color  !important;
-                        border-color: $primary-color;
-                        box-shadow: 0px 2px 10px rgba(0, 0, 0, .3);
+                    div {
+                        width: 130px;
+                        display: flex;
+                        justify-content: space-around;
 
-                        &:hover {
-                            background-color: $primary-color-hover  !important;
-                            border-color: $primary-color-hover;
+                        button {
+                            display: flex;
+                            justify-content: center;
+                            align-items: flex-start;
+                            height: 30px;
+                            width: 46px;
+                            // background-color: $background-dark-light  !important;
+                            // border-color: $font-light;
+                            box-shadow: 0px 2px 10px rgba(0, 0, 0, .3);
+
+                            span {
+                                svg {
+                                    height: 15px;
+                                    // fill: red;
+                                }
+                            }
+
+                            // &:hover {
+                            //     background-color: $primary-color-hover  !important;
+                            //     border-color: $primary-color-hover;
+                            // }
                         }
                     }
                 }

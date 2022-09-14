@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Button, message, notification, Tree } from 'antd'
-import { EditFilled } from '@ant-design/icons'
+import { EditFilled, DeleteFilled } from '@ant-design/icons'
 import { getAccessTokenApi } from '../../../../api/auth'
 import { positionCategoryAndTasksApi } from '../../../../api/categoryAndTasks'
 import { updateCategoryAndTasks } from '../../../../utils/categoryAndTasksManager'
@@ -9,7 +9,7 @@ import './CategoriesTree.scss'
 
 const { DirectoryTree } = Tree
 
-const CategoriesTree = ({ categories, setReloadCategories }) => {
+const CategoriesTree = ({ categories, setReloadCategories, editCategory }) => {
     const [treeCategories, setTreeCategories] = useState([])
     const [position, setPosition] = useState(0)
 
@@ -31,11 +31,14 @@ const CategoriesTree = ({ categories, setReloadCategories }) => {
                 title: (
                     <span className='category-title'>
                         {category.title}
-
-                        <Button type='primary' onClick={() => console.log('Editar categoría')}>
-                            <EditFilled />
-                        </Button>
-
+                        <div>
+                            <Button type='primary' onClick={() => editCategory(category)}>
+                                <EditFilled />
+                            </Button>
+                            <Button type='danger' onClick={() => console.log('Eliminar categoría')}>
+                                <DeleteFilled />
+                            </Button>
+                        </div>
                     </span>
                 ),
                 key: category._id,
@@ -45,7 +48,7 @@ const CategoriesTree = ({ categories, setReloadCategories }) => {
 
         setTreeCategories(treeCategoriesArray)
 
-    }, [categories])
+    }, [categories, editCategory])
 
     const onExpand = (keys, info) => {
         // console.log(keys, info)
@@ -95,7 +98,7 @@ const CategoriesTree = ({ categories, setReloadCategories }) => {
             setReloadCategories(true)
         }
 
-        updateCategoryAndTasks(token, taskId, newCategoryId, oldCategoryId, finish)
+        updateCategoryAndTasks(token, taskId, newCategoryId, oldCategoryId, true, finish)
 
         // removeCategoryAndTasksApi(token, taskId, oldCategoryId)
         //     .then(response => {

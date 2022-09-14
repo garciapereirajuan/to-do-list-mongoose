@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { List, Button, Checkbox } from 'antd'
 import DragSortableList from 'react-drag-sortable'
-import { DeleteOutlined, EditOutlined, ArrowUpOutlined, ClockCircleOutlined, ConsoleSqlOutlined } from '@ant-design/icons'
+import { DeleteFilled, EditFilled, ArrowUpOutlined, ClockCircleOutlined, ConsoleSqlOutlined } from '@ant-design/icons'
 import useAuth from '../../../../hooks/useAuth'
 import { getAccessTokenApi } from '../../../../api/auth'
 import { updateTaskApi } from '../../../../api/task'
@@ -21,16 +21,14 @@ const TasksList = ({ tasks, editTask, deleteTask, getTasks, setReloadTasks, upda
         const listItemsArray = []
 
         docs && docs.forEach(task => {
-            listItemsArray.push({
-                content: (
-                    <TaskItem
-                        task={task}
-                        editTask={editTask}
-                        deleteTask={deleteTask}
-                        updateCheckTask={updateCheckTask}
-                    />
-                )
-            })
+            listItemsArray.push(
+                <TaskItem
+                    task={task}
+                    editTask={editTask}
+                    deleteTask={deleteTask}
+                    updateCheckTask={updateCheckTask}
+                />
+            )
         })
 
         setListItems(listItemsArray)
@@ -76,7 +74,12 @@ const TasksList = ({ tasks, editTask, deleteTask, getTasks, setReloadTasks, upda
 
     return (
         <div className='tasks-list__item'>
-            <DragSortableList items={listItems} onSort={onSort} dropBackTransitionDuration={0.3} type='vertical' />
+            <List className='List'>
+                {
+                    listItems.map(task => task)
+                }
+            </List>
+            {/* <DragSortableList items={listItems} onSort={onSort} dropBackTransitionDuration={0.3} type='vertical' /> */}
         </div>
     )
 }
@@ -101,10 +104,10 @@ const TaskItem = ({ task, editTask, deleteTask, updateCheckTask }) => {
             className='task'
             actions={[
                 <Button type='primary' onClick={() => editTask(task)}>
-                    <EditOutlined />
+                    <EditFilled />
                 </Button>,
                 <Button type='danger' onClick={() => deleteTask(task)}>
-                    <DeleteOutlined />
+                    <DeleteFilled />
                 </Button>
             ]}
         >

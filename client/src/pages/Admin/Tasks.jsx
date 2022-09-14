@@ -207,7 +207,6 @@ const Tasks = () => {
             </Modal>
             <Col sm={0} md={4} />
         </Row>
-
     )
 }
 
