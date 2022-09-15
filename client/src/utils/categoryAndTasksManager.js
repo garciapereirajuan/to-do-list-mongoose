@@ -9,6 +9,9 @@
     * 
     * Para solamente eliminar una categoría a una tarea:
     *   - updateCategoryAndTasks(token, taskId, null, oldCategoryId, setReloadCategories)
+    
+    * NOTA: Si taskId es un array entra en un bucle asyncrono que permite enviar peticiones
+            a medida que se vaya obteniendo repuesta de la petición anterior
 */
 
 import { 
@@ -29,7 +32,7 @@ export const updateCategoryAndTasks = (token, taskId, newCategoryId, oldCategory
     }
 
     if (!token || !taskId || !finish) {
-        console.log('Token, taskId, y la función "finish" son requeridos.')
+        // console.log('Token, taskId, y la función "finish" son requeridos.')
         notification['info']({ message: 'Sólo puedes mover las tareas. 😀'})
         return
     }
@@ -38,15 +41,19 @@ export const updateCategoryAndTasks = (token, taskId, newCategoryId, oldCategory
         // token y finish lo recibe de la función padre
         return new Promise((res, rej) => {
             const add = async () => {
-                await addCategoryAndTasksManager(
-                    unique,
-                    token,
-                    taskId,
-                    newCategoryId,
-                    oldCategoryId,
-                    msj,
-                    finish
-                ).then(response => response.code === 200 && res(response))
+                if (newCategoryId) {
+                    await addCategoryAndTasksManager(
+                        unique,
+                        token,
+                        taskId,
+                        newCategoryId,
+                        oldCategoryId,
+                        msj,
+                        finish
+                    ).then(response => response.code === 200 && res(response))
+                } else {
+                    finish()
+                }
             }
 
             const remove = async () => {
@@ -56,7 +63,16 @@ export const updateCategoryAndTasks = (token, taskId, newCategoryId, oldCategory
                     taskId, 
                     oldCategoryId
                 )
-                .then(response => response?.code === 200 && add())
+                .then(response => {
+                    if (response?.code === 200 && newCategoryId) {
+                        add()
+                        return
+                    }
+                    if (response?.code === 200 && !newCategoryId) {
+                        res(response)
+                        finish()
+                    }
+                })
             }
 
             if (oldCategoryId) {
@@ -72,16 +88,29 @@ export const updateCategoryAndTasks = (token, taskId, newCategoryId, oldCategory
         update(unique, taskId, newCategoryId, oldCategoryId)
         return
     }
+
     if (typeof taskId === 'object') {
         let unique = false
         let length = taskId.length
         let i = 0
 
-        const  bucleAsync = async () => {
-            const item = taskId[i]
-            const itemArray = item.split('-')
-            const itemTaskId = itemArray[0] 
-            const itemOldCategoryId = itemArray[1] !== 'no_category' ? itemArray[1] : null 
+        const  bucleAsync = async () => { 
+            let itemTaskId = ''
+            let itemOldCategoryId = ''
+
+            if (typeof taskId[i] === 'string') {
+
+                const item = taskId[i]
+                const itemArray = item.split('-')
+                itemTaskId = itemArray[0] 
+                itemOldCategoryId = itemArray[1] !== 'no_category' ? itemArray[1] : null
+
+            } else {
+                console.log('Entra acá porque es un objeto')
+                itemTaskId = taskId[i]._id
+                itemOldCategoryId = oldCategoryId
+
+            }
 
             await update(unique, itemTaskId, newCategoryId, itemOldCategoryId)
                 .then(response => {
@@ -94,7 +123,9 @@ export const updateCategoryAndTasks = (token, taskId, newCategoryId, oldCategory
             i < length && bucleAsync()
         } 
 
-        bucleAsync()  
+        bucleAsync()
+
+          
     }
 
         // const  funcAsync = async () => {

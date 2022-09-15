@@ -9,7 +9,7 @@ import './CategoriesTree.scss'
 
 const { DirectoryTree } = Tree
 
-const CategoriesTree = ({ categories, setReloadCategories, editCategory }) => {
+const CategoriesTree = ({ categories, setReloadCategories, setReloadTasks, editCategory }) => {
     const [treeCategories, setTreeCategories] = useState([])
     const [position, setPosition] = useState(0)
 
@@ -87,6 +87,7 @@ const CategoriesTree = ({ categories, setReloadCategories, editCategory }) => {
 
                     // notification['success']({ message: response.message })
                     setReloadCategories(true)
+                    setReloadTasks(true)
                 })
                 .catch(err => {
                     notification['error']({ message: 'Se produjo un error al mover la tarea.' })
@@ -96,6 +97,7 @@ const CategoriesTree = ({ categories, setReloadCategories, editCategory }) => {
 
         const finish = () => {
             setReloadCategories(true)
+            setReloadTasks(true)
         }
 
         updateCategoryAndTasks(token, taskId, newCategoryId, oldCategoryId, true, finish)

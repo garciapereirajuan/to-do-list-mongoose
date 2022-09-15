@@ -106,6 +106,7 @@ const Categories = ({ setExpireToken }) => {
                 <CategoriesTree
                     categories={categories}
                     setReloadCategories={setReloadCategories}
+                    setReloadTasks={setReloadTasks}
                     editCategory={editCategory}
                 />
             </Col>

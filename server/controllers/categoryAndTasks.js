@@ -79,10 +79,15 @@ const update = (req, res) => {
         console.log('Acá llega')
 
         let tasks = category.tasks
-        let string  = tasks.toString()
-        tasks = string.replace(taskId, '').split(',').filter(Boolean)
-        tasks.splice(position, 0, taskId)
-        console.log(tasks)
+
+        if (tasks.length !== 0) {
+            let string  = tasks.toString()
+            tasks = string.replace(taskId, '').split(',').filter(Boolean)
+            tasks.splice(position, 0, taskId)
+            console.log(tasks)
+        } else {
+            tasks = []
+        }
         // let index = tasks.findIndex(element => element == taskId)
         // let element = tasks.splice(index, index == 0 ? 1 : index)
         // // if (element.length >= 2 && category.tasks.length == 2){

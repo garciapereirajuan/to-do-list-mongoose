@@ -23,6 +23,7 @@ const TasksList = ({ tasks, editTask, deleteTask, getTasks, updateCheckTask }) =
         docs && docs.forEach(task => {
             listItemsArray.push(
                 <TaskItem
+                    key={task._id}
                     task={task}
                     editTask={editTask}
                     deleteTask={deleteTask}
@@ -99,9 +100,12 @@ const TaskItem = ({ task, editTask, deleteTask, updateCheckTask }) => {
         return `${day} de ${month} de ${year}`
     }
 
+    console.log(task._id)
+
     return (
         <List.Item
             className='task'
+            key={task._id}
             actions={[
                 <Button type='primary' onClick={() => editTask(task)}>
                     <EditFilled />

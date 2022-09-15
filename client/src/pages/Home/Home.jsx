@@ -14,10 +14,6 @@ const Home = ({ setExpireToken }) => {
     // const [modalContent, setModalContent] = useState(null)
     const { user, isLoading } = useAuth()
 
-    useEffect(() => {
-        verifyExpireTokenInWeb(setExpireToken)
-    }, [setExpireToken])
-
     return (
         <div className="home">
             {

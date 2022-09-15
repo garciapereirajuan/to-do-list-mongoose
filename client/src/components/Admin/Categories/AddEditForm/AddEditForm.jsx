@@ -108,8 +108,12 @@ const AddEditForm = (props) => {
             author: user.id,
         }
 
-        let verifNewTasks = () => {
+        let verifyNewTasks = () => {
             let changes = []
+
+            if (tasksArray.length === 0) {
+                return false
+            }
 
             tasksArray.forEach(item => {
                 item = item.split('-')[0]
@@ -127,15 +131,43 @@ const AddEditForm = (props) => {
             if (tasksArray.length === category.tasks.length
                 && category.tasks.length === changes.length
             ) {
+                console.log('Entra en false')
                 return false
             } else {
+                console.log('Entra en true')
+                console.log('TasksArray', category.tasks)
+
                 return true
             }
         }
 
+        let verifyOldTasks = () => {
+            if (category.tasks.length === 0) {
+                return []
+            }
 
+            let currentTasks = tasksArray.map(item => item.split('-')[0])
+            let remove = []
+            let noRemove = []
 
+            category.tasks.forEach(subitem => {
+                if (!currentTasks.includes(subitem._id)) {
+                    remove.push(subitem)
+                }
+                if (currentTasks.includes(subitem._id))
+                    noRemove.push(subitem)
+            })
 
+            // noRemove = category.tasks.filter(subitem => {
+            //     return currentTasks.includes(subitem._id)
+            // })
+
+            category.tasks = [...noRemove]
+
+            console.log(category.tasks)
+
+            return remove
+        }
 
         user && updateCategoryApi(token, category._id, data)
             .then(response => {
@@ -154,27 +186,31 @@ const AddEditForm = (props) => {
 
                 notification['success']({ message: 'Categoría actualizada correctamente.' })
 
-                if (verifNewTasks()) {
+                const finish = () => {
+                    setReloadTasks(true)
+                    setReloadCategories(true)
+                    setIsVisibleModal(false)
+                    setCategoryData({})
+                    setTasksArray([])
+                }
+
+                const oldTasks = verifyOldTasks()
+
+                if (oldTasks.length !== 0) {
+                    const oldCategoryId = category._id
+                    const tasks = oldTasks
+                    updateCategoryAndTasks(token, tasks, null, oldCategoryId, false, finish)
+                }
+
+                if (verifyNewTasks()) {
                     const newCategoryId = category._id
                     const tasks = [...tasksArray]
-
-                    const finish = () => {
-                        setReloadTasks(true)
-                        setReloadCategories(true)
-                        setIsVisibleModal(false)
-                        setCategoryData({})
-                        setTasksArray([])
-                    }
 
                     updateCategoryAndTasks(token, tasks, newCategoryId, null, false, finish)
                     return
                 }
 
-                setReloadTasks(true)
-                setReloadCategories(true)
-                setIsVisibleModal(false)
-                setCategoryData({})
-                setTasksArray([])
+                finish()
             })
     }
 

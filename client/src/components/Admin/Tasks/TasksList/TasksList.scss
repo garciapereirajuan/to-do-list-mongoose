@@ -3,23 +3,6 @@
 .tasks-list {
     padding: 20px 30px;
 
-    &__header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-
-        &-switch {
-            display: flex;
-            align-items: center;
-
-            span {
-                font-size: 16px;
-                margin-left: 10px;
-                color: white;
-            }
-        }
-    }
-
     &__item {
         width: 100%;
 

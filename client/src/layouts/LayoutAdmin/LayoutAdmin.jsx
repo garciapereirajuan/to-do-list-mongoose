@@ -7,7 +7,6 @@ import Home from '../../pages/Home'
 import Tasks from '../../pages/Admin/Tasks'
 import Categories from '../../pages/Admin/Categories'
 import useAuth from '../../hooks/useAuth'
-import { willExpireToken } from '../../api/auth'
 
 import './LayoutAdmin.scss'
 

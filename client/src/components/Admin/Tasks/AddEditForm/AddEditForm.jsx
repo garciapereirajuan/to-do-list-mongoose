@@ -101,11 +101,29 @@ const AddEditForm = (props) => {
     }
 
     const updateTask = () => {
-        const { category } = taskData
-
         const token = getAccessTokenApi()
 
-        task && updateTaskApi(token, task._id, taskData)
+        let data = { ...taskData }
+
+        let removeCategory = false
+
+        if (data.category === '0' && !oldCategoryId) {
+            data.category = null
+        }
+
+        if (data.category === '0' && oldCategoryId) {
+            // no quiero que actualice la tarea con category: null
+            // si no, que lo deje como estaba y que ese proceso lo haga
+            // cuando llama a la func updateCategoryAndTasks (línea 156)...
+            // para evitar errores en dicha función
+
+            data.category = oldCategoryId
+            removeCategory = true
+        }
+
+        console.log('Primero', oldCategoryId, data.category)
+
+        task && updateTaskApi(token, task._id, data)
             .then(response => {
                 if (/token/g.test(response.message)) {
                     notification['info']({
@@ -125,18 +143,25 @@ const AddEditForm = (props) => {
 
                 notification['success']({ message: response.message })
 
+                if (removeCategory) {
+                    data.category = null
+                }
+
                 const finish = () => {
                     setIsVisibleModal(false)
                     setReloadTasks(true)
                     setReloadCategories(true)
+                    setOldCategoryId(null)
                     setTaskData({})
                 }
 
-                if (oldCategoryId !== category) {
+                console.log('Segundo', oldCategoryId, data.category)
+
+                if (oldCategoryId !== data.category) {
                     updateCategoryAndTasks(
                         token,
                         task._id,
-                        category,
+                        data.category,
                         oldCategoryId,
                         true,
                         finish
@@ -169,9 +194,20 @@ const FormTask = ({ taskData, setTaskData, categories, task, updateTask, addTask
     const { Option } = Select
 
     const getOptions = () => {
-        return categories.map(category => (
-            <Option key={category.title}>{category.title}</Option>
-        ))
+        const categoriesOption = [
+            <Option value={undefined} key={'0'}>Ninguna</Option>
+        ]
+        categories.forEach(category => {
+            categoriesOption.push(
+                <Option
+                    value={category.title}
+                    key={category.id}
+                >
+                    {category.title}
+                </Option>
+            )
+        })
+        return categoriesOption
     }
 
     const getTitleCategory = (category) => {

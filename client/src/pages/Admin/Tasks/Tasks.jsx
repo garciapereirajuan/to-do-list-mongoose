@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from 'react'
-import { useLocation, useNavigate, useParams } from 'react-router-dom'
-import useAuth from '../../hooks/useAuth'
-import { Row, Col, Button, Switch, Modal as ModalAntd, notification } from 'antd'
-import { getAccessTokenApi } from '../../api/auth'
-import { deleteTaskApi, indexTasksApi, updateTaskApi } from '../../api/task'
-import { indexCategoriesApi } from '../../api/category'
-import TasksList from '../../components/Admin/Tasks/TasksList'
-import AddEditForm from '../../components/Admin/Tasks/AddEditForm'
-import Pagination from '../../components/Admin/Pagination'
+import { useLocation, useNavigate } from 'react-router-dom'
+import useAuth from '../../../hooks/useAuth'
+import { Row, Col, Button, Switch, Select, Modal as ModalAntd, notification } from 'antd'
+import { getAccessTokenApi } from '../../../api/auth'
+import { deleteTaskApi, indexTasksApi, updateTaskApi } from '../../../api/task'
+import { indexCategoriesApi } from '../../../api/category'
+import TasksList from '../../../components/Admin/Tasks/TasksList'
+import AddEditForm from '../../../components/Admin/Tasks/AddEditForm'
+import Pagination from '../../../components/Admin/Pagination'
 import queryString from 'query-string'
-import Modal from '../../components/Modal'
-import { verifyExpireTokenInWeb } from '../../api/auth'
+import Modal from '../../../components/Modal'
+import { verifyExpireTokenInWeb } from '../../../api/auth'
+
+import './Tasks.scss'
 
 const Tasks = ({ setExpireToken }) => {
     const [tasks, setTasks] = useState(null)
@@ -21,20 +23,18 @@ const Tasks = ({ setExpireToken }) => {
     const [modalTitle, setModalTitle] = useState('')
     const [modalContent, setModalContent] = useState(null)
     const [checked, setChecked] = useState(false)
+    const { Option } = Select
+    const { confirm } = ModalAntd
     const { user } = useAuth()
+    const location = useLocation()
+    const navigate = useNavigate()
+    const { page = 1 } = queryString.parse(location.search)
+    const limit = 6
+    // const limit = (window.innerHeight / 110) - 1.5
 
     useEffect(() => {
         verifyExpireTokenInWeb(setExpireToken)
     }, [setExpireToken])
-
-    const { confirm } = ModalAntd
-
-    const location = useLocation()
-    const navigate = useNavigate()
-
-    const { page = 1 } = queryString.parse(location.search)
-    const limit = 6
-    // const limit = (window.innerHeight / 110) - 1.5
 
     useEffect(() => {
         getTasks()
@@ -194,6 +194,27 @@ const Tasks = ({ setExpireToken }) => {
                                     : `Tareas incompletas: ${tasks ? tasks.total : '0'}`
                             }
                         </span>
+                    </div>
+                    <div className='tasks-list__header-select-order'>
+                        <Select
+                            placeholder='Ordenar'
+                        >
+                            <Option
+                                value={'Por fecha de creación'}
+                                key='date-up'>
+                                Por fecha de creación
+                            </Option>
+                            <Option
+                                value={'Por fecha de actualización'}
+                                key='date-update'>
+                                Por fecha de actualización
+                            </Option>
+                            <Option
+                                value={'Por fecha de finalización'}
+                                key='date-down'>
+                                Por fecha de finalización
+                            </Option>
+                        </Select>
                     </div>
                     <div className='tasks-list__header-btn-new-task'>
                         <Button type='primary' onClick={addTask}>
