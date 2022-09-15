@@ -16,8 +16,17 @@ import {
     removeCategoryAndTasksApi
 } from '../api/categoryAndTasks'
 import { notification } from 'antd'
+import { verifyExpireTokenInWeb } from '../api/auth'
 
 export const updateCategoryAndTasks = (token, taskId, newCategoryId, oldCategoryId, msj, finish) => {
+
+    if (verifyExpireTokenInWeb()) {
+        notification['info']({
+            message: 'Lo siento, debes recargar la página e intentarlo de nuevo.',
+            duration: 20,
+        })
+        return
+    }
 
     if (!token || !taskId || !finish) {
         console.log('Token, taskId, y la función "finish" son requeridos.')
@@ -134,7 +143,13 @@ const addCategoryAndTasksManager = (unique, token, taskId, categoryId, oldCatego
     return new Promise((res, rej) => {
         addCategoryAndTasksApi(token, taskId, categoryId)
             .then(response => {
-                console.log(response)
+                if (/token/g.test(response.message)) {
+                    notification['info']({
+                        message: 'Lo siento, debes recargar la página e intentarlo de nuevo.',
+                        duration: 20,
+                    })
+                    return
+                }
                 if (response?.code !== 200 || !response.code) {
                     notification['error']({
                         message: response.message
@@ -160,7 +175,13 @@ const removeCategoryAndTasksManager = (token, taskId, oldCategoryId, add) => {
     return new Promise ((res, rej) => {
         removeCategoryAndTasksApi(token, taskId, oldCategoryId)
             .then(response => {
-                console.log(response)
+                if (/token/g.test(response.message)) {
+                    notification['info']({
+                        message: 'Lo siento, debes recargar la página e intentarlo de nuevo.',
+                        duration: 20,
+                    })
+                    return
+                }
                 if (response?.code !== 200 || !response.code) {
                     console.log('Error: ' + JSON.stringify(response))
                     return

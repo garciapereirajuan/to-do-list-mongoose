@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { List, Button, Checkbox } from 'antd'
 import DragSortableList from 'react-drag-sortable'
-import { DeleteFilled, EditFilled, ArrowUpOutlined, ClockCircleOutlined, ConsoleSqlOutlined } from '@ant-design/icons'
+import { DeleteFilled, EditFilled, ArrowUpOutlined, ClockCircleOutlined } from '@ant-design/icons'
 import useAuth from '../../../../hooks/useAuth'
 import { getAccessTokenApi } from '../../../../api/auth'
 import { updateTaskApi } from '../../../../api/task'
@@ -11,7 +11,7 @@ import 'moment/locale/es'
 
 import './TasksList.scss'
 
-const TasksList = ({ tasks, editTask, deleteTask, getTasks, setReloadTasks, updateCheckTask, categories }) => {
+const TasksList = ({ tasks, editTask, deleteTask, getTasks, updateCheckTask }) => {
     const [listItems, setListItems] = useState([])
     const { user } = useAuth()
 

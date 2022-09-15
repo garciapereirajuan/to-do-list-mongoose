@@ -10,7 +10,12 @@ import 'moment/locale/es'
 
 import './AddEditForm.scss'
 
-const AddEditForm = ({ task, newOrder, categories, setIsVisibleModal, setReloadTasks, setReloadCategories }) => {
+const AddEditForm = (props) => {
+    const {
+        task, newOrder, categories, setIsVisibleModal,
+        setReloadTasks, setReloadCategories
+    } = props
+
     const [taskData, setTaskData] = useState({})
     const [oldCategoryId, setOldCategoryId] = useState(null)
     const { user } = useAuth()
@@ -53,6 +58,13 @@ const AddEditForm = ({ task, newOrder, categories, setIsVisibleModal, setReloadT
 
         user && createTaskApi(token, data)
             .then(response => {
+                if (/token/g.test(response.message)) {
+                    notification['info']({
+                        message: 'Lo siento, debes recargar la página e intentarlo de nuevo.',
+                        duration: 20,
+                    })
+                    return
+                }
                 if (response?.code !== 200) {
                     notification['error']({ message: response.message })
                     return
@@ -95,11 +107,20 @@ const AddEditForm = ({ task, newOrder, categories, setIsVisibleModal, setReloadT
 
         task && updateTaskApi(token, task._id, taskData)
             .then(response => {
+                if (/token/g.test(response.message)) {
+                    notification['info']({
+                        message: 'Lo siento, debes recargar la página e intentarlo de nuevo.',
+                        duration: 20,
+                    })
+                    return
+                }
                 if (response?.code !== 200) {
                     notification['error']({ message: response.message })
+                    return
                 }
                 if (!response) {
                     notification['error']({ message: 'Se produjo un error inesperado.' })
+                    return
                 }
 
                 notification['success']({ message: response.message })
@@ -111,20 +132,20 @@ const AddEditForm = ({ task, newOrder, categories, setIsVisibleModal, setReloadT
                     setTaskData({})
                 }
 
-                if (category) {
-                    if (oldCategoryId !== category) {
-                        updateCategoryAndTasks(
-                            token,
-                            task._id,
-                            category,
-                            oldCategoryId,
-                            true,
-                            finish
-                        )
-                    }
-                } else {
-                    finish()
+                if (oldCategoryId !== category) {
+                    updateCategoryAndTasks(
+                        token,
+                        task._id,
+                        category,
+                        oldCategoryId,
+                        true,
+                        finish
+                    )
+                    return
                 }
+
+                finish()
+
             })
             .catch(err => {
                 notification['error']({ message: 'Se produjo un error inesperado.' })

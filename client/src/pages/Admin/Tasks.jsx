@@ -10,8 +10,9 @@ import AddEditForm from '../../components/Admin/Tasks/AddEditForm'
 import Pagination from '../../components/Admin/Pagination'
 import queryString from 'query-string'
 import Modal from '../../components/Modal'
+import { verifyExpireTokenInWeb } from '../../api/auth'
 
-const Tasks = () => {
+const Tasks = ({ setExpireToken }) => {
     const [tasks, setTasks] = useState(null)
     const [reloadTasks, setReloadTasks] = useState(false)
     const [categories, setCategories] = useState(null)
@@ -21,6 +22,10 @@ const Tasks = () => {
     const [modalContent, setModalContent] = useState(null)
     const [checked, setChecked] = useState(false)
     const { user } = useAuth()
+
+    useEffect(() => {
+        verifyExpireTokenInWeb(setExpireToken)
+    }, [setExpireToken])
 
     const { confirm } = ModalAntd
 
@@ -80,6 +85,7 @@ const Tasks = () => {
     }
 
     const addTask = () => {
+        verifyExpireTokenInWeb(setExpireToken)
         setIsVisibleModal(true)
         setModalTitle('Nueva tarea')
         setModalContent(
@@ -95,6 +101,7 @@ const Tasks = () => {
     }
 
     const editTask = (task) => {
+        verifyExpireTokenInWeb(setExpireToken)
         setIsVisibleModal(true)
         setModalTitle('Actualizar tarea')
         setModalContent(
@@ -121,6 +128,13 @@ const Tasks = () => {
 
                 deleteTaskApi(token, task._id)
                     .then(response => {
+                        if (/token/g.test(response.message)) {
+                            notification['info']({
+                                message: 'Lo siento, debes recargar la página e intentarlo de nuevo.',
+                                duration: 20,
+                            })
+                            return
+                        }
                         if (response?.code !== 200 || !response.code) {
                             notification['error']({ message: 'Se produjo un error al eliminar.' })
                             return
@@ -142,6 +156,13 @@ const Tasks = () => {
 
         updateTaskApi(token, task._id, { checked })
             .then(response => {
+                if (/token/g.test(response.message)) {
+                    notification['info']({
+                        message: 'Lo siento, debes recargar la página e intentarlo de nuevo.',
+                        duration: 20,
+                    })
+                    return
+                }
                 if (response?.code !== 200 || !response.code) {
                     notification['error']({ message: 'Se produjo un error al actualizar.' })
                     return

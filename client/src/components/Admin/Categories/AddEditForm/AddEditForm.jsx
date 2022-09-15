@@ -9,7 +9,12 @@ import { FontSizeOutlined, BgColorsOutlined, UnorderedListOutlined } from '@ant-
 
 import './AddEditForm.scss'
 
-const AddEditForm = ({ category, tasks, categories, setIsVisibleModal, setReloadCategories, setReloadTasks }) => {
+const AddEditForm = (props) => {
+    const {
+        category, tasks, categories, setIsVisibleModal,
+        setReloadCategories, setReloadTasks
+    } = props
+
     const [categoryData, setCategoryData] = useState({})
     const [tasksArray, setTasksArray] = useState([])
     const { user } = useAuth()
@@ -50,6 +55,13 @@ const AddEditForm = ({ category, tasks, categories, setIsVisibleModal, setReload
 
         user && createCategoryApi(token, data)
             .then(response => {
+                if (/token/g.test(response.message)) {
+                    notification['info']({
+                        message: 'Lo siento, debes recargar la página e intentarlo de nuevo.',
+                        duration: 20,
+                    })
+                    return
+                }
                 if ((response?.code !== 200 && response?.code !== 404) || !response.code) {
                     notification['error']({ message: response.message })
                     console.log('Error al crear la categoría: ' + JSON.stringify(response))
@@ -127,6 +139,13 @@ const AddEditForm = ({ category, tasks, categories, setIsVisibleModal, setReload
 
         user && updateCategoryApi(token, category._id, data)
             .then(response => {
+                if (/token/g.test(response.message)) {
+                    notification['info']({
+                        message: 'Lo siento, debes recargar la página e intentarlo de nuevo.',
+                        duration: 20,
+                    })
+                    return
+                }
                 if ((response?.code !== 200 && response?.code !== 404) || !response.code) {
                     notification['error']({ message: response.message })
                     console.log('Error al crear la categoría: ' + JSON.stringify(response))

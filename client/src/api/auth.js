@@ -1,3 +1,4 @@
+import React from 'react'
 import { ACCESS_TOKEN, REFRESH_TOKEN } from '../utils/constants'
 import { basePath, apiVersion } from './config'
 import jwtDecode from 'jwt-decode'
@@ -22,7 +23,7 @@ export const getRefreshTokenApi = () => {
     return willExpireToken(refreshToken) ? null : refreshToken
 }
 
-const willExpireToken = token => {
+export const willExpireToken = token => {
     const seconds = 60
     const metaToken = jwtDecode(token)
     const { exp } = metaToken
@@ -62,5 +63,15 @@ export const refreshAccessTokenApi = refreshToken => {
 
             localStorage.setItem(ACCESS_TOKEN, accessToken)
             localStorage.setItem(REFRESH_TOKEN, refreshToken)
+
+            window.location.reload()
         })
+}
+
+export const verifyExpireTokenInWeb = (setExpireToken) => {
+    const accessToken = localStorage.getItem(ACCESS_TOKEN)
+    let expire = willExpireToken(accessToken)
+
+    setExpireToken && setExpireToken(expire)
+    return expire
 }

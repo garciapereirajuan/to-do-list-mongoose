@@ -7,10 +7,11 @@ import { indexTasksWithoutPaginationApi } from '../../../api/task'
 import { Col, Row, Button, notification } from 'antd'
 import Modal from '../../../components/Modal'
 import AddEditForm from '../../../components/Admin/Categories/AddEditForm'
+import { verifyExpireTokenInWeb } from '../../../api/auth'
 
 import './Categories.scss'
 
-const Categories = () => {
+const Categories = ({ setExpireToken }) => {
     const [categories, setCategories] = useState([])
     const [reloadCategories, setReloadCategories] = useState(false)
     const [tasks, setTasks] = useState([])
@@ -19,6 +20,10 @@ const Categories = () => {
     const [modalTitle, setModalTitle] = useState('')
     const [modalContent, setModalContent] = useState(null)
     const { user } = useAuth()
+
+    useEffect(() => {
+        verifyExpireTokenInWeb(setExpireToken)
+    }, [setExpireToken])
 
     useEffect(() => {
         const token = getAccessTokenApi()
@@ -58,6 +63,7 @@ const Categories = () => {
     }, [reloadTasks, user])
 
     const addCategory = () => {
+        verifyExpireTokenInWeb(setExpireToken)
         setIsVisibleModal(true)
         setModalTitle('Crear categoría')
         setModalContent(
@@ -73,6 +79,7 @@ const Categories = () => {
     }
 
     const editCategory = (category) => {
+        verifyExpireTokenInWeb(setExpireToken)
         setIsVisibleModal(true)
         setModalTitle('Editar categoría')
         setModalContent(
