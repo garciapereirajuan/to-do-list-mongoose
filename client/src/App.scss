@@ -4,6 +4,14 @@
 //   min-height: 100vh;
 // }
 
+.ant-btn {
+  button {
+    span {
+      font-size: 17px !important;
+    }
+  }
+}
+
 .ant-btn-primary {
   background-color: $primary-color;
   border-color: $primary-color;
@@ -26,42 +34,52 @@
 
 .ant-select-selector,
 .ant-input-affix-wrapper,
-.ant-input {
+.ant-input,
+.ant-picker,
+.ant-picker-input {
   width: 100%;
   background: $background-dark-light  !important;
   transition: all ease 1s;
 
-  span,
-  input {
-    color: $font-light;
-    // font-weight: bold;
-  }
-
   .anticon {
-    color: $font-light
+    color: $primary-color  !important;
   }
 }
 
-.ant-select-selector span,
+.ant-select-arrow {
+  .anticon {
+    color: $primary-color-light;
+  }
+}
+
+.ant-select-selection-item,
 .ant-select-selector input,
 .ant-input-affix-wrapper span,
 .ant-input-affix-wrapper input,
 .ant-input span,
-.ant-input input {
+.ant-input input,
+.ant-picker-input input {
   color: $font-light  !important;
+  font-size: 17px !important;
+}
+
+.ant-select-selection-placeholder {
+  font-size: 17px !important;
 }
 
 .ant-select-focused,
 .ant-select,
 .ant-select-selector,
-.ant-input-affix-wrapper {
+.ant-input-affix-wrapper,
+.ant-picker {
   border-color: $primary-color  !important;
   transition: all ease .1s;
 }
 
 
 .ant-select-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input) .ant-select-selector,
-.ant-input-affix-wrapper-focused {
+.ant-input-affix-wrapper-focused,
+.ant-picker-focused {
   box-shadow: 0 0 0 .7px rgba($primary-color-light, 1);
   transition: all ease .2s;
 }
@@ -70,6 +88,21 @@
 
 .ant-switch-checked {
   background-color: $primary-color;
+}
+
+.ant-checkbox-inner {
+  // border-color: $primary-color  !important;
+  background-color: rgba($primary-color, .4) !important;
+  border: 1px solid $primary-color  !important;
+}
+
+.ant-checkbox-checked:after,
+.ant-checkbox-inner {
+  border: 1px solid $primary-color  !important;
+}
+
+.ant-checkbox-input {
+  fill: red !important;
 }
 
 .success-input {

@@ -13,6 +13,7 @@ import './TasksList.scss'
 
 const TasksList = ({ tasks, editTask, deleteTask, getTasks, updateCheckTask }) => {
     const [listItems, setListItems] = useState([])
+
     const { user } = useAuth()
 
     const { docs } = tasks
@@ -29,6 +30,7 @@ const TasksList = ({ tasks, editTask, deleteTask, getTasks, updateCheckTask }) =
                     deleteTask={deleteTask}
                     updateCheckTask={updateCheckTask}
                 />
+
             )
         })
 
@@ -86,6 +88,7 @@ const TasksList = ({ tasks, editTask, deleteTask, getTasks, updateCheckTask }) =
 }
 
 const TaskItem = ({ task, editTask, deleteTask, updateCheckTask }) => {
+    const [checked, setChecked] = useState(task.checked)
 
     const formatDate = (dateTask) => {
         let date = moment(dateTask).format('MMMM Do YYYY').split(' ')
@@ -100,7 +103,7 @@ const TaskItem = ({ task, editTask, deleteTask, updateCheckTask }) => {
         return `${day} de ${month} de ${year}`
     }
 
-    console.log(task._id)
+    console.log('task._id', task._id)
 
     return (
         <List.Item
@@ -116,8 +119,11 @@ const TaskItem = ({ task, editTask, deleteTask, updateCheckTask }) => {
             ]}
         >
             <Checkbox
-                checked={task.checked}
-                onChange={(e) => updateCheckTask(e, task)}
+                checked={checked}
+                onChange={(e) => {
+                    setChecked(e.target.checked)
+                    setTimeout(() => { updateCheckTask(e, task) }, 500)
+                }}
             />
             <List.Item.Meta
                 title={task.title}

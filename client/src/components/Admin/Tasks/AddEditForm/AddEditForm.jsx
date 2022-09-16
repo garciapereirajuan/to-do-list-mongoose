@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Form, Input, Button, DatePicker, Select, notification, message } from 'antd'
-import { FontSizeOutlined } from '@ant-design/icons'
+import { FontSizeOutlined, UnorderedListOutlined } from '@ant-design/icons'
 import { getAccessTokenApi } from '../../../../api/auth'
 import { createTaskApi, updateTaskApi } from '../../../../api/task'
 import { updateCategoryAndTasks } from '../../../../utils/categoryAndTasksManager'
@@ -249,12 +249,26 @@ const FormTask = ({ taskData, setTaskData, categories, task, updateTask, addTask
             </Form.Item>
             <Form.Item>
                 <Select
-                    placeholder={categories ? 'Selecciona una categoría (opcional)' : 'Selecciona una categoría (aún no tienes categorías)'}
                     disabled={categories ? false : true}
                     value={taskData.category && getTitleCategory(taskData.category)}
                     onChange={e => {
                         setTaskData({ ...taskData, category: getCategoryByTitle(e) })
                     }}
+                    // placeholder={categories ? 'Selecciona una categoría (opcional)' : 'Selecciona una categoría (aún no tienes categorías)'}
+                    placeholder={
+                        <>
+                            <span style={{ fontSize: '18px', marginLeft: '-1px' }}>
+                                <UnorderedListOutlined />
+                            </span>
+                            <span style={{ position: 'relative', marginLeft: '4px', bottom: '2px' }}>
+                                {
+                                    categories
+                                        ? 'Selecciona una categoría (opcional)'
+                                        : 'Selecciona una categoría (aún no tienes categorías)'
+                                }
+                            </span>
+                        </>
+                    }
                 >
                     {
                         categories

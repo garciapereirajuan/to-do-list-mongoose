@@ -172,9 +172,9 @@ const Tasks = ({ setExpireToken }) => {
                     ? 'La tarea ha sido completada.'
                     : 'Marcaste la tarea como incompleta.'
                 notification['success']({ message })
+
                 setReloadTasks()
             })
-
     }
 
     return (
@@ -190,14 +190,14 @@ const Tasks = ({ setExpireToken }) => {
                         <span>
                             {
                                 checked
-                                    ? `Tareas completadas: ${tasks ? tasks.total : '0'}`
-                                    : `Tareas incompletas: ${tasks ? tasks.total : '0'}`
+                                    ? `Hechas: ${tasks ? tasks.total : '0'}`
+                                    : `Sin hacer: ${tasks ? tasks.total : '0'}`
                             }
                         </span>
                     </div>
                     <div className='tasks-list__header-select-order'>
                         <Select
-                            placeholder='Ordenar'
+                            placeholder='Ordenar por...'
                         >
                             <Option
                                 value={'Por fecha de creación'}
