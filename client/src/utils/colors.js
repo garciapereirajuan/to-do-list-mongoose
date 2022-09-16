@@ -1,7 +1,5 @@
 
 const colors = [
-    {
-        autumn: [
             "#FF6B3B",
             "#626681",
             "#FFC100",
@@ -21,11 +19,7 @@ const colors = [
             "#8C8C47",
             "#8CDAE5",
             "#8E283B",
-            "#791DC9"
-        ]
-    },
-    {
-        macaron: [
+            "#791DC9",
             "#025DF4",
             "#DB6BCF",
             "#2498D1",
@@ -45,11 +39,7 @@ const colors = [
             "#36BCCB",
             "#327039",
             "#803488",
-            "#83BC99"
-        ]
-    },
-    {
-        contrastingOrange: [
+            "#83BC99",
             "#FF4500",
             "#1AAF8B",
             "#406C85",
@@ -69,8 +59,6 @@ const colors = [
             "#CCDC8A",
             "#8D00A1",
             "#1CC25E"
-        ]
-    }
 ]
 
 export default colors

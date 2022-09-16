@@ -6,6 +6,7 @@ import { positionCategoryAndTasksApi } from '../../../../api/categoryAndTasks'
 import { updateCategoryAndTasks } from '../../../../utils/categoryAndTasksManager'
 
 import './CategoriesTree.scss'
+import { relativeTimeRounding } from 'moment/moment'
 
 const { DirectoryTree } = Tree
 
@@ -24,6 +25,14 @@ const CategoriesTree = ({ categories, setReloadCategories, setReloadTasks, editC
                     title: item.title,
                     key: `${category._id}-${item._id}`,
                     isLeaf: true,
+                    style: {
+                        width: '98%',
+                        position: 'relative',
+                        left: '2%',
+                        boxShadow: `-2px 0px 4px .5px ${category.color ? category.color : 'rgb(66, 66, 66)'}`,
+                        borderLeft: `5px solid ${category.color ? category.color : 'rgb(66, 66, 66)'}`,
+                        borderRight: `5px solid ${category.color ? category.color : 'rgb(66, 66, 66)'}`,
+                    }
                 })
             })
 
@@ -43,6 +52,13 @@ const CategoriesTree = ({ categories, setReloadCategories, setReloadTasks, editC
                 ),
                 key: category._id,
                 children: children,
+                style: {
+                    // borderTop: `2px solid ${category.color || 'transparent'}`,
+                    boxShadow: `-2px 0px 4px .5px ${category.color ? category.color : 'rgb(66, 66, 66)'}`,
+                    borderLeft: `5px solid ${category.color ? category.color : 'rgb(66, 66, 66)'}`,
+                    borderRight: `5px solid ${category.color ? category.color : 'rgb(66, 66, 66)'}`,
+                    // boxShadow: `2px 5px 10px 1px 2px ${category.color || 'transparent'}`
+                }
             })
         })
 

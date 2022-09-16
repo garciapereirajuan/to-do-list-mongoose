@@ -110,6 +110,7 @@ const TaskItem = ({ task, editTask, deleteTask, updateCheckTask }) => {
             className='task'
             key={task._id}
             actions={[
+
                 <Button type='primary' onClick={() => editTask(task)}>
                     <EditFilled />
                 </Button>,
@@ -144,6 +145,9 @@ const TaskItem = ({ task, editTask, deleteTask, updateCheckTask }) => {
                     </>
                 }
             />
+            <Button>
+                {task.category}
+            </Button>
         </List.Item>
     )
 }

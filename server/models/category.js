@@ -4,7 +4,6 @@ const Schema = mongoose.Schema
 const CategorySchema = Schema({
     title: {
         type: String,
-        unique: true,
     },
     color: String,
     dateUp: Date,

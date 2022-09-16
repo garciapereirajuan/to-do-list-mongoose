@@ -17,6 +17,7 @@ const AddEditForm = (props) => {
 
     const [categoryData, setCategoryData] = useState({})
     const [tasksArray, setTasksArray] = useState([])
+    const [usedColors, setUsedColors] = useState([])
     const { user } = useAuth()
 
     useEffect(() => {
@@ -34,6 +35,13 @@ const AddEditForm = (props) => {
             setTasksArray([])
         }
     }, [category])
+
+    useEffect(() => {
+        if (categories) {
+            const usedColorsArray = categories.map(item => item.color).filter(Boolean)
+            setUsedColors(usedColorsArray)
+        }
+    }, [categories])
 
     const addCategory = () => {
         const token = getAccessTokenApi()
@@ -62,14 +70,13 @@ const AddEditForm = (props) => {
                     })
                     return
                 }
-                if ((response?.code !== 200 && response?.code !== 404) || !response.code) {
+                if ((response?.code !== 200) || !response.code) {
                     notification['error']({ message: response.message })
                     console.log('Error al crear la categoría: ' + JSON.stringify(response))
                     return
                 }
 
                 notification['success']({ message: 'Categoría creada correctamente.' })
-
                 const newCategoryId = response.category._id
 
                 const tasks = [...tasksArray]
@@ -102,6 +109,7 @@ const AddEditForm = (props) => {
         }
 
         let data = user && {
+            _id: categoryData._id,
             title: categoryData.title,
             color: categoryData.color,
             dateUp: categoryData.dateUp ? categoryData.dateUp : new Date(),
@@ -184,6 +192,10 @@ const AddEditForm = (props) => {
                     console.log('Error al crear la categoría: ' + JSON.stringify(response))
                     return
                 }
+                if (response?.code === 404) {
+                    notification['error']({ message: response.message })
+                    return
+                }
 
                 notification['success']({ message: 'Categoría actualizada correctamente.' })
 
@@ -219,6 +231,7 @@ const AddEditForm = (props) => {
         <FormCategory
             category={category}
             categoryData={categoryData}
+            usedColors={usedColors}
             setCategoryData={setCategoryData}
             addCategory={addCategory}
             editCategory={editCategory}
@@ -234,6 +247,7 @@ const FormCategory = (props) => {
     const {
         category,
         categoryData,
+        usedColors,
         setCategoryData,
         addCategory,
         editCategory,
@@ -244,12 +258,22 @@ const FormCategory = (props) => {
     } = props
     const { Option } = Select
 
+    // const [allColors, setAllColors] = useState({})
+
     const optionTemplate = (color) => {
+        const blockColor = usedColors.includes(color)
+
         return (
             <Option value={color} key={color}>
                 <div style={{ backgroundColor: color }} className='add-edit-form-categories__div-color'>
                     <div className='add-edit-form-categories__div-color__description'>
                         {color}
+                    </div>
+                    <div
+                        className='add-edit-form-categories__div-color__block-color'
+                        style={{ display: blockColor ? 'flex !important' : 'none' }}
+                    >
+                        Usado
                     </div>
                 </div>
             </Option>
@@ -258,7 +282,7 @@ const FormCategory = (props) => {
 
     const getColors = () => {
         const colorOptionItem = [
-            <Option value={undefined} key={'0'}>
+            <Option value={'0'} key={'0'}>
                 <div style={{ backgroundColor: '#fff' }} className='add-edit-form-categories__div-color'>
                     <div className='add-edit-form-categories__div-color__description'>
                         Ninguno
@@ -267,25 +291,13 @@ const FormCategory = (props) => {
             </Option>
         ]
 
-        return colors.map(item => {
-            if (item.autumn) {
-                item.autumn.map(color => (
-                    colorOptionItem.push(optionTemplate(color)
-                    )))
-            }
-            if (item.macaron) {
-                item.macaron.map(color => (
-                    colorOptionItem.push(optionTemplate(color)
-                    )))
-            }
-            if (item.contrastingOrange)
-                item.contrastingOrange.forEach(color => (
-                    colorOptionItem.push(optionTemplate(color)
-                    )))
+        colors.forEach(item =>
+            colorOptionItem.push(optionTemplate(item))
+        )
 
-            return colorOptionItem;
-        })
+        return colorOptionItem
     }
+
 
     const getCategoryById = (categoryId) => {
         const element = categories.filter(item => item._id === categoryId)
@@ -297,7 +309,7 @@ const FormCategory = (props) => {
 
         return filteredTasks.map(item => {
             const category = item.category && getCategoryById(item.category)
-            const borderColor = category?.color ? category.color : '#dddddd'
+            const borderColor = category?.color ? category.color : "rgb(66, 66, 66)"
 
             return (
                 <Option key={`${item._id}-${item.category ? item.category : 'no_category'}-${item.title}`}>
@@ -333,7 +345,7 @@ const FormCategory = (props) => {
             </Form.Item>
             <Form.Item>
                 <Select
-                    value={categoryData.color !== '0' ? categoryData.color : null}
+                    value={categoryData.color}
                     onChange={e => setCategoryData({ ...categoryData, color: e })}
                     placeholder={
                         <>
