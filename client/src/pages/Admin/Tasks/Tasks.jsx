@@ -11,6 +11,7 @@ import Pagination from '../../../components/Admin/Pagination'
 import queryString from 'query-string'
 import Modal from '../../../components/Modal'
 import { verifyExpireTokenInWeb } from '../../../api/auth'
+import { updateCategoryAndTasks } from '../../../utils/categoryAndTasksManager'
 
 import './Tasks.scss'
 
@@ -126,26 +127,37 @@ const Tasks = ({ setExpireToken }) => {
             onOk() {
                 const token = getAccessTokenApi()
 
-                deleteTaskApi(token, task._id)
-                    .then(response => {
-                        if (/token/g.test(response.message)) {
-                            notification['info']({
-                                message: 'Lo siento, debes recargar la página e intentarlo de nuevo.',
-                                duration: 20,
-                            })
-                            return
-                        }
-                        if (response?.code !== 200 || !response.code) {
-                            notification['error']({ message: 'Se produjo un error al eliminar.' })
-                            return
-                        }
+                const remove = () => {
+                    deleteTaskApi(token, task._id)
+                        .then(response => {
+                            if (/token/g.test(response.message)) {
+                                notification['info']({
+                                    message: 'Lo siento, debes recargar la página e intentarlo de nuevo.',
+                                    duration: 20,
+                                })
+                                return
+                            }
+                            if (response?.code !== 200 || !response.code) {
+                                notification['error']({ message: 'Se produjo un error al eliminar.' })
+                                return
+                            }
 
-                        notification['success']({ message: response.message })
-                        setReloadTasks(true)
-                    })
-                    .catch(err => {
-                        notification['error']({ message: 'Se produjo un error inesperado.' })
-                    })
+                            notification['success']({ message: response.message })
+                            setReloadTasks(true)
+                        })
+                        .catch(err => {
+                            notification['error']({ message: 'Se produjo un error inesperado.' })
+                        })
+                }
+
+                if (task.category) {
+                    updateCategoryAndTasks(token, task._id, null, task.category, false, () => { })
+                    remove()
+                } else {
+                    remove()
+                }
+
+
             }
         })
     }

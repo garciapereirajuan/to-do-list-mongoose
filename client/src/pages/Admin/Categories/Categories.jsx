@@ -4,10 +4,11 @@ import useAuth from '../../../hooks/useAuth'
 import { getAccessTokenApi } from '../../../api/auth'
 import { indexCategoriesApi } from '../../../api/category'
 import { indexTasksWithoutPaginationApi } from '../../../api/task'
-import { Col, Row, Button, notification } from 'antd'
+import { Col, Row, Button, Modal as ModalAntd, notification } from 'antd'
 import Modal from '../../../components/Modal'
 import AddEditForm from '../../../components/Admin/Categories/AddEditForm'
 import { verifyExpireTokenInWeb } from '../../../api/auth'
+import { updateCategoryAndTasks } from '../../../utils/categoryAndTasksManager'
 
 import './Categories.scss'
 
@@ -20,6 +21,7 @@ const Categories = ({ setExpireToken }) => {
     const [modalTitle, setModalTitle] = useState('')
     const [modalContent, setModalContent] = useState(null)
     const { user } = useAuth()
+    const { confirm } = ModalAntd
 
     useEffect(() => {
         verifyExpireTokenInWeb(setExpireToken)
@@ -94,6 +96,69 @@ const Categories = ({ setExpireToken }) => {
         )
     }
 
+    const deleteCategory = (category) => {
+        confirm({
+            title: 'Eliminar categoría',
+            content: `¿Quieres eliminar la categoría ${category.title}?`,
+            okText: 'Eliminar',
+            okType: 'danger',
+            cancelText: 'Cancelar',
+            onOk() {
+                const token = getAccessTokenApi()
+
+                const removeCategoryAndTasks = () => {
+                    // acá se remueve sólo la relación entre estas
+                    updateCategoryAndTasks(token, category.tasks, null, category._id, false, () => { })
+                }
+
+                const removeCategory = () => {
+
+                }
+
+                const removeTasks = () => {
+
+                }
+
+                if (category.tasks.length !== 0) {
+                    confirm({
+                        title: 'Eliminando categoría...',
+                        content: `Tu categoría tiene tareas... ¿También deseas eliminar esas tareas?`,
+                        okText: 'Si',
+                        okType: 'danger',
+                        cancelText: 'No',
+                        onOk() {
+
+                        },
+                        onCancel() {
+
+                        }
+                    })
+                }
+
+                // deleteTaskApi(token, task._id)
+                //     .then(response => {
+                //         if (/token/g.test(response.message)) {
+                //             notification['info']({
+                //                 message: 'Lo siento, debes recargar la página e intentarlo de nuevo.',
+                //                 duration: 20,
+                //             })
+                //             return
+                //         }
+                //         if (response?.code !== 200 || !response.code) {
+                //             notification['error']({ message: 'Se produjo un error al eliminar.' })
+                //             return
+                //         }
+
+                //         notification['success']({ message: response.message })
+                //         setReloadTasks(true)
+                //     })
+                //     .catch(err => {
+                //         notification['error']({ message: 'Se produjo un error inesperado.' })
+                //     })
+            }
+        })
+    }
+
     return (
         <Row className='categories'>
             <Col md={6} />
@@ -108,6 +173,7 @@ const Categories = ({ setExpireToken }) => {
                     setReloadCategories={setReloadCategories}
                     setReloadTasks={setReloadTasks}
                     editCategory={editCategory}
+                    deleteCategory={deleteCategory}
                 />
             </Col>
             <Col md={6} />

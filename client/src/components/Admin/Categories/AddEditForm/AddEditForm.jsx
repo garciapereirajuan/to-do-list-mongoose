@@ -71,6 +71,7 @@ const AddEditForm = (props) => {
                 notification['success']({ message: 'Categoría creada correctamente.' })
 
                 const newCategoryId = response.category._id
+
                 const tasks = [...tasksArray]
 
                 const finish = () => {

@@ -9,7 +9,7 @@ import './CategoriesTree.scss'
 
 const { DirectoryTree } = Tree
 
-const CategoriesTree = ({ categories, setReloadCategories, setReloadTasks, editCategory }) => {
+const CategoriesTree = ({ categories, setReloadCategories, setReloadTasks, editCategory, deleteCategory }) => {
     const [treeCategories, setTreeCategories] = useState([])
     const [position, setPosition] = useState(0)
 
@@ -35,7 +35,7 @@ const CategoriesTree = ({ categories, setReloadCategories, setReloadTasks, editC
                             <Button type='primary' onClick={() => editCategory(category)}>
                                 <EditFilled />
                             </Button>
-                            <Button type='danger' onClick={() => console.log('Eliminar categoría')}>
+                            <Button type='danger' onClick={() => deleteCategory(category)}>
                                 <DeleteFilled />
                             </Button>
                         </div>

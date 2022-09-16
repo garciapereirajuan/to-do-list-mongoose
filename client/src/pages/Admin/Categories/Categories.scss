@@ -9,6 +9,9 @@
 
         &-btn-new-category {
             button {
+                display: flex;
+                align-items: center;
+                font-size: 17px;
                 float: right;
             }
         }

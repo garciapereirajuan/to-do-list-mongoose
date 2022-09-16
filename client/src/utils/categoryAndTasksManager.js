@@ -7,7 +7,7 @@
     * Para solamente agregar una categoría a una tarea: 
     *   - updateCategoryAndTasks(token, taskId, newCategoryId, null, setReloadCategories)    
     * 
-    * Para solamente eliminar una categoría a una tarea:
+    * Para solamente eliminar la categoría de una tarea:
     *   - updateCategoryAndTasks(token, taskId, null, oldCategoryId, setReloadCategories)
     
     * NOTA: Si taskId es un array entra en un bucle asyncrono que permite enviar peticiones
