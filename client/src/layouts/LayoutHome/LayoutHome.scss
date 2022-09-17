@@ -1,8 +1,6 @@
 @import "../../sass/index.scss";
 
 .layout-home {
-
-
     &__header {
         background: $background-dark  !important;
     }
@@ -10,7 +8,6 @@
     &__content {
         background-image: url('../../assets/img/jpg/background-v1.jpg');
         height: calc(100vh - 64px);
-        // min-height: calc(100vh - 64px);
     }
 
     &__footer {

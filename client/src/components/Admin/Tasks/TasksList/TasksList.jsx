@@ -1,21 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { List, Button, Checkbox } from 'antd'
-import DragSortableList from 'react-drag-sortable'
 import { DeleteFilled, EditFilled, ArrowUpOutlined, ClockCircleOutlined } from '@ant-design/icons'
-import useAuth from '../../../../hooks/useAuth'
-import { getAccessTokenApi } from '../../../../api/auth'
-import { updateTaskApi } from '../../../../api/task'
-import { updateUserApi } from '../../../../api/user'
 import moment from 'moment'
 import 'moment/locale/es'
 
 import './TasksList.scss'
 
-const TasksList = ({ tasks, editTask, deleteTask, getTasks, updateCheckTask }) => {
+const TasksList = ({ tasks, editTask, deleteTask, updateCheckTask, categories }) => {
     const [listItems, setListItems] = useState([])
-
-    const { user } = useAuth()
-
+    const [titleCategory, setTitleCategory] = useState(null)
+    const [titlePropCategory, setTitlePropCategory] = useState('')
     const { docs } = tasks
 
     useEffect(() => {
@@ -29,51 +23,13 @@ const TasksList = ({ tasks, editTask, deleteTask, getTasks, updateCheckTask }) =
                     editTask={editTask}
                     deleteTask={deleteTask}
                     updateCheckTask={updateCheckTask}
+                    categories={categories}
                 />
-
             )
         })
 
         setListItems(listItemsArray)
-    }, [docs, editTask, deleteTask, updateCheckTask])
-
-    const onSort = (sortedList, dropEvent) => {
-        const token = getAccessTokenApi()
-
-        sortedList.forEach(item => {
-            const taskId = item.content.props.task._id
-            const order = item.rank
-
-            updateTaskApi(token, taskId, { order })
-                .then(response => {
-                    if (response?.code !== 200 || !response.code) {
-                        console.log('Hubo un error con el drag.', response)
-                        return
-                    }
-                    if (order === sortedList.length - 2) { //para que se ejecute una sola vez
-                        updateSort()
-
-                        // cree una función que renderice las tareas
-                        // porque si usaba setReloadTasks me las renderizaba
-                        // dos veces seguidas
-                        getTasks()
-                    }
-
-                })
-                .catch(err => console.log('Error: ' + err))
-        })
-
-        const updateSort = () => {
-            updateUserApi(token, user.id, { sort: { order: 'asc' } })
-                .then(response => {
-                    if (response?.code !== 200 || !response.code) {
-                        console.log('No se pudo actualizar el orden de petición.')
-                        return
-                    }
-                })
-                .catch(err => console.log('Error: ' + err))
-        }
-    }
+    }, [docs, editTask, deleteTask, updateCheckTask, categories])
 
     return (
         <div className='tasks-list__item'>
@@ -82,12 +38,11 @@ const TasksList = ({ tasks, editTask, deleteTask, getTasks, updateCheckTask }) =
                     listItems.map(task => task)
                 }
             </List>
-            {/* <DragSortableList items={listItems} onSort={onSort} dropBackTransitionDuration={0.3} type='vertical' /> */}
         </div>
     )
 }
 
-const TaskItem = ({ task, editTask, deleteTask, updateCheckTask }) => {
+const TaskItem = ({ task, editTask, deleteTask, updateCheckTask, categories }) => {
     const [checked, setChecked] = useState(task.checked)
 
     const formatDate = (dateTask) => {
@@ -103,14 +58,22 @@ const TaskItem = ({ task, editTask, deleteTask, updateCheckTask }) => {
         return `${day} de ${month} de ${year}`
     }
 
-    console.log('task._id', task._id)
+    const getCategoryById = (categoryId) => {
+        let title = categories && categories.map(item => {
+            if (item._id === categoryId) {
+                console.log(item.title)
+                return item.title
+            }
+        })
+
+        return title[0]
+    }
 
     return (
         <List.Item
             className='task'
             key={task._id}
             actions={[
-
                 <Button type='primary' onClick={() => editTask(task)}>
                     <EditFilled />
                 </Button>,
@@ -139,15 +102,21 @@ const TaskItem = ({ task, editTask, deleteTask, updateCheckTask }) => {
                             {
                                 task.dateDown
                                     ? `Finaliza ${moment(task.dateDown).fromNow()}`
-                                    : <span className='no-date'>Sin fecha de finalización</span>
+                                    : (<span className='no-date'>
+                                        Sin fecha de finalización
+                                    </span>)
                             }
                         </span>
                     </>
                 }
             />
-            <Button>
-                {task.category}
-            </Button>
+            {
+                <Button>
+                    {
+                        getCategoryById(task.category)
+                    }
+                </Button>
+            }
         </List.Item>
     )
 }

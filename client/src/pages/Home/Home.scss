@@ -1,6 +1,6 @@
-.home{
+.home {
     display: flex;
-    height: 100%;
+    height: calc(100vh - 180px);
     justify-content: space-around;
     align-items: center;
 }

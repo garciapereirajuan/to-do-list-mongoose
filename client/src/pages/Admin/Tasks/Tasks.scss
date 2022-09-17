@@ -1,18 +1,22 @@
 @import '../../../sass/index.scss';
 
-.tasks-list {
+.tasks {
+    padding: 20px 30px;
 
     &__header {
         display: flex;
         align-items: center;
-        // justify-content: space-between;
+
+        &-switch,
+        &-select-order,
+        &-btn-new-task {
+            display: flex;
+            width: calc(100% / 3);
+        }
 
         &-switch {
-            display: flex;
             align-items: center;
             justify-content: flex-start;
-            width: calc(100% / 3);
-            // background-color: red;
 
             span {
                 font-size: 17px;
@@ -23,10 +27,7 @@
         }
 
         &-select-order {
-            display: flex;
             justify-content: center;
-            width: calc(100% / 3);
-            // background: red;
             position: relative;
 
             .ant-select {
@@ -36,10 +37,7 @@
         }
 
         &-btn-new-task {
-            display: flex;
             justify-content: flex-end;
-            width: calc(100% / 3);
-            // background: blue;
 
             button {
                 display: flex;

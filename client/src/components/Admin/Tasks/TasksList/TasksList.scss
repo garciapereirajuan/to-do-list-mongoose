@@ -1,8 +1,6 @@
 @import '../../../../sass/index.scss';
 
 .tasks-list {
-    padding: 20px 30px;
-
     &__item {
         width: 100%;
 
@@ -45,7 +43,6 @@
             }
 
             .ant-list-item-meta-description {
-
                 display: flex;
                 flex-direction: column;
 
@@ -68,48 +65,6 @@
                     }
                 }
             }
-
-
-            .draggable {
-                width: 100%;
-                padding: 5px 20px;
-                background-color: $background-dark-light;
-
-                &.dragged {
-                    // border-bottom: 1px solid $primary-color-hover;
-                    box-shadow: 0px 2px 10px rgba($primary-color-hover, .5), 0px 2px 10px #000;
-                    -moz-box-shadow: 0px 2px 10px rgba($primary-color-hover, .5), 0px 2px 10px #000;
-                    -webkit-box-shadow: 0px 2px 10px rgba($primary-color-hover, .5), 0px 2px 10px #000;
-                    padding: 0 10px;
-                    opacity: .9;
-
-                }
-            }
         }
-
-        // .task {
-        //     width: 100%;
-        //     padding: 10px;
-        //     color: white;
-        //     background-color: $background-dark-light;
-        //     border-bottom: 1px solid rgba(0, 0, 0, .1);
-        //     cursor: pointer;
-
-        //     .ant-list-item-meta-title {
-        //         font-size: 22px;
-        //         color: $font-light;
-        //     }
-
-        //     .ant-list-item-meta-description {
-        //         color: $font-dark-light;
-        //     }
-        // }
-
-        // .dragabble {}
-
-        // .dragged {
-        //     width: calc(100% - 100px);
-        //     opacity: .7;
-        // }
     }
 }

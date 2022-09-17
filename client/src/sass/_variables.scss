@@ -1,19 +1,29 @@
 // $primary-color: #3f9e2a;
 // $primary-color-hover: #377928;
 
-// Green Theme
-// $primary-color: #377928;
-// $primary-color-hover: #316226;
-// $primary-color-light: #88d576;
-// $primary-color-shadow: #9bf786;
-// $primary-color-border: #9bf786;
+// ############## START Green Theme ############## 
+$primary-color: #377928;
+$primary-color-hover: #316226;
+$primary-color-light: #88d576;
+$primary-color-shadow: #9bf786;
+$primary-color-border: #9bf786;
 
-// Orange Theme
-$primary-color: rgb(215, 115, 16);
-$primary-color-hover: rgb(168, 90, 12);
-$primary-color-light: rgb(218, 139, 60);
-$primary-color-shadow: rgb(254, 178, 90);
-$primary-color-border: rgb(254, 178, 90);
+$background-select-item: rgb(166, 186, 162);
+
+$shadow-color-btn-active: #88d576 !important;
+// ############## END Green Theme ############## 
+
+// ############## START Orange Theme ############## 
+// $primary-color: #d77310;
+// $primary-color-hover: #a85a0c;
+// $primary-color-light: rgb(218, 139, 60);
+// $primary-color-shadow: rgb(254, 178, 90);
+// $primary-color-border: rgb(254, 178, 90);
+
+// $background-select-item: rgb(205, 185, 157);
+
+// $shadow-color-btn-active: rgb(218, 139, 60);
+// ############## END Orange Theme ############## 
 
 // $secondary-color: rgb(215, 115, 16);
 
@@ -23,12 +33,15 @@ $background-light: #e6e6e6;
 $background-success: #84b84c1f;
 $background-error: #ff00001f;
 
+
 $font-light: #e6e6e6;
 $font-dark: rgb(28, 28, 28);
 $font-dark-light: #919191;
 
 $font-title-size: 23px;
 $font-subtitle-size: 18px;
+
+$box-shadow-basic: 0px 2px 10px rgba(0, 0, 0, .4), 0px 2px 10px rgba(0, 0, 0, .2);
 
 $success: #84b84c;
 $error: #f00;

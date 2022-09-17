@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import { Form, Input, Button, DatePicker, Select, notification, message } from 'antd'
-import { FontSizeOutlined, UnorderedListOutlined } from '@ant-design/icons'
+import FormTask from '../FormTask'
+import { notification } from 'antd'
 import { getAccessTokenApi } from '../../../../api/auth'
 import { createTaskApi, updateTaskApi } from '../../../../api/task'
 import { updateCategoryAndTasks } from '../../../../utils/categoryAndTasksManager'
 import useAuth from '../../../../hooks/useAuth'
-import moment from 'moment'
 import 'moment/locale/es'
 
 import './AddEditForm.scss'
@@ -33,13 +32,10 @@ const AddEditForm = (props) => {
     }, [task])
 
     const addTask = () => {
-
         const { title, dateDown, dateUp, dateUpdate, category } = taskData
 
         if (!title) {
-            notification['warning']({
-                message: 'El título es requerido.'
-            })
+            notification['warning']({ message: 'El título es requerido.' })
             return
         }
 
@@ -70,7 +66,7 @@ const AddEditForm = (props) => {
                     return
                 }
                 if (!response.code) {
-                    notification['error']({ message: 'Se produjo un error inesperado.' })
+                    notification['error']({ message: 'Se produjo un error al crear la tarea.' })
                     return
                 }
                 notification['success']({ message: response.message })
@@ -96,15 +92,13 @@ const AddEditForm = (props) => {
                 }
             })
             .catch(err => {
-                notification['error']({ message: 'Se produjo un error inesperado.' })
+                notification['error']({ message: 'Se produjo un error al crear la tarea.' })
             })
     }
 
     const updateTask = () => {
         const token = getAccessTokenApi()
-
         let data = { ...taskData }
-
         let removeCategory = false
 
         if (data.category === '0' && !oldCategoryId) {
@@ -121,8 +115,6 @@ const AddEditForm = (props) => {
             removeCategory = true
         }
 
-        console.log('Primero', oldCategoryId, data.category)
-
         task && updateTaskApi(token, task._id, data)
             .then(response => {
                 if (/token/g.test(response.message)) {
@@ -137,7 +129,7 @@ const AddEditForm = (props) => {
                     return
                 }
                 if (!response) {
-                    notification['error']({ message: 'Se produjo un error inesperado.' })
+                    notification['error']({ message: 'Se produjo un error al actualizar la tarea.' })
                     return
                 }
 
@@ -155,8 +147,6 @@ const AddEditForm = (props) => {
                     setTaskData({})
                 }
 
-                console.log('Segundo', oldCategoryId, data.category)
-
                 if (oldCategoryId !== data.category) {
                     updateCategoryAndTasks(
                         token,
@@ -164,16 +154,13 @@ const AddEditForm = (props) => {
                         data.category,
                         oldCategoryId,
                         true,
-                        finish
+                        () => { }
                     )
-                    return
                 }
-
                 finish()
-
             })
             .catch(err => {
-                notification['error']({ message: 'Se produjo un error inesperado.' })
+                notification['error']({ message: 'Se produjo un error al actualizar la tarea.' })
             })
     }
 
@@ -188,103 +175,6 @@ const AddEditForm = (props) => {
         />
     )
 
-}
-
-const FormTask = ({ taskData, setTaskData, categories, task, updateTask, addTask }) => {
-    const { Option } = Select
-
-    const getOptions = () => {
-        const categoriesOption = [
-            <Option value={undefined} key={'0'}>Ninguna</Option>
-        ]
-        categories.forEach(category => {
-            categoriesOption.push(
-                <Option
-                    value={category.title}
-                    key={category.id}
-                >
-                    {category.title}
-                </Option>
-            )
-        })
-        return categoriesOption
-    }
-
-    const getTitleCategory = (category) => {
-        let element = categories.filter(item => {
-            return item._id === category
-        })
-        return element.length !== 0 ? element[0].title : category
-    }
-
-    const getCategoryByTitle = (category) => {
-        const element = categories.filter(item => {
-            return item.title === category
-        })
-        return element.length !== 0 ? element[0]._id : category
-    }
-
-
-    return (
-        <Form onFinish={task ? updateTask : addTask}>
-            <Form.Item>
-                <Input
-                    prefix={<FontSizeOutlined />}
-                    placeholder='Nueva tarea'
-                    value={taskData.title}
-                    maxLength={70}
-                    onChange={e => setTaskData({ ...taskData, title: e.target.value })}
-                />
-            </Form.Item>
-            <Form.Item>
-                <DatePicker
-                    format="DD-MM-YYYY"
-                    placeholder='Fecha de finalización (opcional)'
-                    value={taskData.dateDown && moment(taskData.dateDown)}
-                    onChange={(e, value) => setTaskData({
-                        ...taskData,
-                        dateDown: moment(value, 'DD-MM-YYYY HH:mm:ss').toISOString()
-                    })}
-                />
-            </Form.Item>
-            <Form.Item>
-                <Select
-                    disabled={categories ? false : true}
-                    value={taskData.category && getTitleCategory(taskData.category)}
-                    onChange={e => {
-                        setTaskData({ ...taskData, category: getCategoryByTitle(e) })
-                    }}
-                    // placeholder={categories ? 'Selecciona una categoría (opcional)' : 'Selecciona una categoría (aún no tienes categorías)'}
-                    placeholder={
-                        <>
-                            <span style={{ fontSize: '18px', marginLeft: '-1px' }}>
-                                <UnorderedListOutlined />
-                            </span>
-                            <span style={{ position: 'relative', marginLeft: '4px', bottom: '2px' }}>
-                                {
-                                    categories
-                                        ? 'Selecciona una categoría (opcional)'
-                                        : 'Selecciona una categoría (aún no tienes categorías)'
-                                }
-                            </span>
-                        </>
-                    }
-                >
-                    {
-                        categories
-                            ? getOptions(categories)
-                            : null
-                    }
-                </Select>
-            </Form.Item>
-
-            <Button type='primary' htmlType='submit' className='btn-submit'>
-                {
-                    task ? 'Actualizar tarea' : 'Nueva tarea'
-                }
-            </Button>
-        </Form >
-    )
 }
 
 export default AddEditForm

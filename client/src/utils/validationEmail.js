@@ -1,5 +1,5 @@
     
-    //CODIGO QUE PUEDE SER UTIL PARA UN FUTURO
+    //CODIGO UTIL PARA EL FUTURO
     
     //export const validationEmail = (target) => {
     //     const { value, name } = target

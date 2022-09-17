@@ -1,11 +1,6 @@
 @import '../../sass/index.scss';
 
-@import "../../sass/index.scss";
-
 .layout-admin {
-    // height: max-content !important;
-    // height: 100vh;
-
     &__header {
         background: $background-dark  !important;
     }
@@ -15,16 +10,36 @@
         height: 100%;
         padding-bottom: 64px;
         min-height: calc(100vh - 112px) !important;
+        position: relative;
+
+        &-img-right,
+        &-img-left {
+            position: absolute;
+            display: flex;
+            align-items: flex-start;
+            width: 100%;
+            height: 100%;
+            opacity: .6;
+            padding-top: 10px;
+        }
+
+        &-img-left {
+            justify-content: flex-start;
+            padding-left: 10px;
+        }
+
+        &-img-right {
+            justify-content: flex-end;
+            padding-right: 10px;
+        }
     }
 
     &__footer {
-        // position: relative;
         right: 0;
         display: flex;
         align-items: center;
         height: 30px;
         width: 100%;
-        // bottom: 48px;
         background-color: $background-dark  !important;
         color: #fff !important;
     }

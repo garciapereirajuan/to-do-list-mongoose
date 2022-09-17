@@ -1,17 +1,14 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
+import useAuth from '../../hooks/useAuth'
+import Modal from '../../components/Modal'
 import LoginForm from '../../components/Web/Home/LoginForm'
 import SignUpForm from '../../components/Web/Home/SignUpForm/SignUpForm'
-import Modal from '../../components/Modal'
-import ToDoLogo from '../../assets/img/png/to-do-logo.png'
-import useAuth from '../../hooks/useAuth'
-import { verifyExpireTokenInWeb } from '../../api/auth'
+import ToDoLogo from '../../assets/img/png/to-do-logo-orange.png'
 
 import './Home.scss'
 
 const Home = ({ setExpireToken }) => {
     const [isVisibleModal, setIsVisibleModal] = useState(false)
-    // const [modalTitle, setModalTitle] = useState('')
-    // const [modalContent, setModalContent] = useState(null)
     const { user, isLoading } = useAuth()
 
     return (

@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import CategoriesTree from '../../../components/Admin/Categories/CategoriesTree'
 import useAuth from '../../../hooks/useAuth'
-import { getAccessTokenApi } from '../../../api/auth'
-import { indexCategoriesApi } from '../../../api/category'
-import { indexTasksWithoutPaginationApi } from '../../../api/task'
-import { Col, Row, Button, Modal as ModalAntd, notification } from 'antd'
-import Modal from '../../../components/Modal'
 import AddEditForm from '../../../components/Admin/Categories/AddEditForm'
-import { verifyExpireTokenInWeb } from '../../../api/auth'
+import Modal from '../../../components/Modal'
+import { Col, Row, Button, Modal as ModalAntd, notification } from 'antd'
+import { indexCategoriesApi, deleteCategoryApi } from '../../../api/category'
+import { indexTasksWithoutPaginationApi, deleteTaskApi } from '../../../api/task'
+import { getAccessTokenApi, verifyExpireTokenInWeb } from '../../../api/auth'
 import { updateCategoryAndTasks } from '../../../utils/categoryAndTasksManager'
 
 import './Categories.scss'
@@ -106,33 +105,98 @@ const Categories = ({ setExpireToken }) => {
             onOk() {
                 const token = getAccessTokenApi()
 
-                const removeCategoryAndTasks = () => {
+                // let i = 0
+                // let tasks = category.tasks
+
+                // const loopAsync = () => {
+                //     console.log(tasks[i]._id)
+
+                //     i++
+                //     if (i === tasks.length) {
+                //         console.log('Terminó', i)
+                //     }
+
+                //     console.log('Se repite', i < tasks.length)
+                //     i < tasks.length && loopAsync()
+                // }
+                // console.log('Arranca', i)
+                // loopAsync()
+
+                // return
+
+                const removeRelationOfCategoryAndTasks = (finish) => {
                     // acá se remueve sólo la relación entre estas
-                    updateCategoryAndTasks(token, category.tasks, null, category._id, false, () => { })
+                    updateCategoryAndTasks(
+                        token, category.tasks, null, category._id, false, finish
+                    )
                 }
 
-                const removeCategory = () => {
-
+                const removeCategory = (msg) => {
+                    deleteCategoryApi(token, category._id)
+                        .then(response => {
+                            if (response?.code !== 200) {
+                                notification['error']({ message: response.message })
+                                return
+                            }
+                            notification['success']({ message: msg })
+                            setReloadCategories(true)
+                            setReloadTasks(true)
+                            setIsVisibleModal(false)
+                        })
                 }
 
-                const removeTasks = () => {
+                const removeCategoryAndTasks = () => {
+                    const tasks = category.tasks
+                    let i = 0
 
+                    const loopAsync = async () => {
+                        await deleteTaskApi(token, tasks[i]._id)
+                            .then(response => {
+                                if (response?.code !== 200) {
+                                    notification['error']({
+                                        message: response.message
+                                    })
+                                    i = 100000
+                                    return
+                                }
+                                // notification['success']({ message: response.message })
+                                i++
+                                if (i === tasks.length) {
+                                    console.log('Terminó', i)
+                                    removeCategory('La categoría y sus tareas fueron eliminadas.')
+                                }
+                            })
+
+                        if (i > tasks.length) i = 10000
+                        console.log('Se repite', i < tasks.length)
+                        i < tasks.length && loopAsync()
+                    }
+                    console.log('Arranca', i)
+                    loopAsync()
                 }
 
                 if (category.tasks.length !== 0) {
                     confirm({
                         title: 'Eliminando categoría...',
                         content: `Tu categoría tiene tareas... ¿También deseas eliminar esas tareas?`,
-                        okText: 'Si',
+                        okText: 'Eliminarlas',
                         okType: 'danger',
-                        cancelText: 'No',
+                        cancelText: 'Conservarlas',
                         onOk() {
-
+                            const finish = () => {
+                                removeCategoryAndTasks()
+                            }
+                            removeRelationOfCategoryAndTasks(finish)
                         },
                         onCancel() {
-
+                            const finish = () => {
+                                removeCategory('La categoría ha sido eliminada. Se conservaron las tareas.')
+                            }
+                            removeRelationOfCategoryAndTasks(finish)
                         }
                     })
+                } else {
+                    removeCategory('La categoría ha sido eliminada.')
                 }
 
                 // deleteTaskApi(token, task._id)

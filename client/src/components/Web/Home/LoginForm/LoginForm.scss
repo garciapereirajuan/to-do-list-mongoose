@@ -5,11 +5,11 @@
     width: 30%;
     padding: 20px 35px;
     background-color: $background-dark;
+    text-align: center;
     border-radius: 10px;
     box-shadow: 0px 0px 15px 10px #000;
     -webkit-box-shadow: 0px 0px 15px 10px #000;
     -moz-box-shadow: 0px 0px 15px 10px #000;
-    text-align: center;
 
     &__header {
         padding: 10px;
@@ -64,7 +64,7 @@
             }
 
             &:after {
-                --antd-wave-shadow-color: #88d576 !important;
+                --antd-wave-shadow-color: $shadow-color-btn-active;
             }
 
             button {

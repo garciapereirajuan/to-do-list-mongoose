@@ -1,16 +1,35 @@
 @import '../../../../sass/index.scss';
 
 .categories-tree {
-    background: transparent !important;
-
 
     .ant-tree-block-node,
     .categories-tree .ant-tree-treenode span {
         background: transparent !important;
     }
 
-    .ant-tree-treenode {
+    .ant-tree.ant-tree-directory .ant-tree-treenode-selected:before,
+    .ant-tree.ant-tree-directory .ant-tree-treenode-selected:hover:before {
+        transition: all ease 0s;
+        background-color: transparent !important;
+    }
 
+    .ant-tree-treenode-selected {
+        .ant-tree-switcher span svg {
+            fill: $primary-color-light  !important;
+        }
+    }
+
+    .ant-tree-node-selected {
+        span {
+            color: $primary-color-light  !important;
+        }
+
+        button span {
+            color: $font-light  !important;
+        }
+    }
+
+    .ant-tree-treenode {
         border-bottom: 1px solid rgba(0, 0, 0, .1);
         background-color: $background-dark-light  !important;
 
@@ -25,22 +44,14 @@
             display: none !important;
         }
 
-        &-selected {
-            // span {
-            //     color: $font-dark;
-            // }
+        .ant-tree-switcher {
+            display: flex;
+            align-items: center;
+            justify-content: center;
 
-            // .category-title {
-            //     .anticon {
-            //         color: $font-light;
-            //     }
-
-            //     button {
-            //         background: $background-dark-light  !important;
-            //         border-color: $primary-color  !important;
-            //         box-shadow: none !important;
-            //     }
-            // }
+            .anticon {
+                height: max-content;
+            }
         }
 
         &:hover {
@@ -59,7 +70,6 @@
             position: relative;
             display: flex;
             align-items: center;
-            // border-bottom: 1px solid rgba(0, 0, 0, .1);
 
             .ant-tree-title {
                 width: 100%;
@@ -83,58 +93,16 @@
                             align-items: flex-start;
                             height: 30px;
                             width: 46px;
-                            // background-color: $background-dark-light  !important;
-                            // border-color: $font-light;
                             box-shadow: 0px 2px 10px rgba(0, 0, 0, .3);
 
-                            span {
-                                svg {
-                                    height: 15px;
-                                    // fill: red;
-                                }
+                            span svg {
+                                height: 15px;
                             }
-
-                            // &:hover {
-                            //     background-color: $primary-color-hover  !important;
-                            //     border-color: $primary-color-hover;
-                            // }
                         }
                     }
                 }
             }
         }
-
-        .ant-tree-switcher {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            .anticon {
-                height: max-content;
-            }
-        }
     }
 
-    .ant-tree.ant-tree-directory .ant-tree-treenode-selected:before,
-    .ant-tree.ant-tree-directory .ant-tree-treenode-selected:hover:before {
-        transition: all ease 0s;
-        background-color: transparent !important;
-
-
-
-    }
-
-    .ant-tree-treenode-selected {
-        .ant-tree-switcher span svg {
-            fill: $primary-color-light  !important;
-        }
-    }
-
-    .ant-tree-node-selected span {
-        color: $primary-color-light  !important;
-    }
-
-    .ant-tree-node-selected button span {
-        color: $font-light  !important;
-    }
 }

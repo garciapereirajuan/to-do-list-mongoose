@@ -3,7 +3,6 @@ import { Form, Input, Button, notification } from 'antd'
 import { UserOutlined, LockFilled } from '@ant-design/icons'
 import { loginUserApi } from '../../../../api/user'
 import { ACCESS_TOKEN, REFRESH_TOKEN } from '../../../../utils/constants'
-import moment from 'moment'
 
 import "./LoginForm.scss"
 
@@ -34,7 +33,7 @@ const LoginForm = ({ setIsVisibleModal }) => {
                     localStorage.setItem(ACCESS_TOKEN, accessToken)
                     localStorage.setItem(REFRESH_TOKEN, refreshToken)
 
-                    notification['success']({ message: 'Login correcto' })
+                    notification['success']({ message: '¡Hola ' + userData.username + '!' })
                     window.location.href = '/tasks'
                     return
                 }
@@ -45,13 +44,14 @@ const LoginForm = ({ setIsVisibleModal }) => {
                     return
                 }
                 notification['error']({
-                    message: 'Error en el servidor'
+                    message: 'Se produjo un problema al iniciar sesión.'
                 })
             })
             .catch(err => {
                 notification['error']({
-                    message: 'Error en el servidor'
+                    message: 'Se produjo un problema al iniciar sesión.'
                 })
+                console.log('Problema al iniciar sesión: ' + err)
             })
 
 

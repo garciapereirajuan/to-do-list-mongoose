@@ -93,11 +93,9 @@ module.exports = {
             data.color = null
         }
 
-        console.log(data)
-
         Category.find({ author: data.author }, (err, categories) => {
             if (err) {
-                message(res, 404, 'Se produjo un error al actualizar la categoría.', {err})
+                message(res, 500, 'Se produjo un error al actualizar la categoría.', {err})
                 return
             } 
             if (!categories) { 
@@ -121,7 +119,7 @@ module.exports = {
 
             Category.findByIdAndUpdate(id, data, (err, category) => {
                 if (err) {
-                    message(res, 404, 'Se produjo un error al actualizar la categoría.', {err})
+                    message(res, 500, 'Se produjo un error al actualizar la categoría.', {err})
                     return
                 } 
                 if (!category) { 
@@ -131,6 +129,22 @@ module.exports = {
     
                 message(res, 200, 'Categoria actualizada correctamente.')
             })
+        })
+    },
+    delete: (req, res) => {
+        const { id } = req.params
+        
+        Category.findByIdAndDelete(id, (err, category) => {
+            if (err) {
+                message(res, 500, 'Se produjo un error al eliminar la categoría.', {err})
+                return
+            }
+            if (!category) {
+                message(res, 404, 'Esta categoría ya no existe.')
+                return
+            }
+            
+            message(res, 200, 'Categoría eliminada correctamente.')
         })
     }
 }

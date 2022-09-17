@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
+import queryString from 'query-string'
 import useAuth from '../../../hooks/useAuth'
-import { Row, Col, Button, Switch, Select, Modal as ModalAntd, notification } from 'antd'
-import { getAccessTokenApi } from '../../../api/auth'
-import { deleteTaskApi, indexTasksApi, updateTaskApi } from '../../../api/task'
-import { indexCategoriesApi } from '../../../api/category'
+import Modal from '../../../components/Modal'
 import TasksList from '../../../components/Admin/Tasks/TasksList'
 import AddEditForm from '../../../components/Admin/Tasks/AddEditForm'
 import Pagination from '../../../components/Admin/Pagination'
-import queryString from 'query-string'
-import Modal from '../../../components/Modal'
-import { verifyExpireTokenInWeb } from '../../../api/auth'
+import { Row, Col, Button, Switch, Select, Modal as ModalAntd, notification } from 'antd'
+import { getAccessTokenApi, verifyExpireTokenInWeb } from '../../../api/auth'
+import { deleteTaskApi, indexTasksApi, updateTaskApi } from '../../../api/task'
+import { indexCategoriesApi } from '../../../api/category'
 import { updateCategoryAndTasks } from '../../../utils/categoryAndTasksManager'
 
 import './Tasks.scss'
@@ -24,6 +23,7 @@ const Tasks = ({ setExpireToken }) => {
     const [modalTitle, setModalTitle] = useState('')
     const [modalContent, setModalContent] = useState(null)
     const [checked, setChecked] = useState(false)
+
     const { Option } = Select
     const { confirm } = ModalAntd
     const { user } = useAuth()
@@ -39,13 +39,11 @@ const Tasks = ({ setExpireToken }) => {
 
     useEffect(() => {
         getTasks()
-
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [limit, page, reloadTasks, checked])
 
     useEffect(() => {
         getCategories()
-
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [reloadCategories])
 
@@ -190,11 +188,11 @@ const Tasks = ({ setExpireToken }) => {
     }
 
     return (
-        <Row className='tasks-list'>
+        <Row className='tasks'>
             <Col sm={0} md={4} />
             <Col sm={24} md={16} >
-                <div className='tasks-list__header'>
-                    <div className='tasks-list__header-switch'>
+                <div className='tasks__header'>
+                    <div className='tasks__header-switch'>
                         <Switch
                             defaultChecked={false}
                             onChange={e => setChecked(e)}
@@ -207,7 +205,7 @@ const Tasks = ({ setExpireToken }) => {
                             }
                         </span>
                     </div>
-                    <div className='tasks-list__header-select-order'>
+                    <div className='tasks__header-select-order'>
                         <Select
                             placeholder='Ordenar por...'
                         >
@@ -228,7 +226,7 @@ const Tasks = ({ setExpireToken }) => {
                             </Option>
                         </Select>
                     </div>
-                    <div className='tasks-list__header-btn-new-task'>
+                    <div className='tasks__header-btn-new-task'>
                         <Button type='primary' onClick={addTask}>
                             Nueva tarea
                         </Button>
@@ -239,8 +237,6 @@ const Tasks = ({ setExpireToken }) => {
                         tasks={tasks ? tasks : []}
                         editTask={editTask}
                         deleteTask={deleteTask}
-                        setReloadTasks={setReloadTasks}
-                        getTasks={getTasks}
                         updateCheckTask={updateCheckTask}
                         categories={categories}
                     />

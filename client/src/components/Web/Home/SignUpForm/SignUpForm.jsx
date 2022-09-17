@@ -3,6 +3,7 @@ import { Form, Input, Button, Checkbox, notification } from 'antd'
 import { UserOutlined, LockFilled } from '@ant-design/icons'
 import { createUserApi } from '../../../../api/user'
 import formClassManager from '../../../../utils/formClassManager'
+import { minLength } from '../../../../utils/validationsForm'
 
 import "./SignUpForm.scss"
 
@@ -20,25 +21,7 @@ const SignUpForm = ({ setIsVisibleModal }) => {
             username: '',
             privacyPolicy: false,
         })
-
     }, [setUserData])
-
-    const minLength = (target, min) => {
-        const { value, name } = target
-
-        formClassManager('all', 'input', 'remove', null)
-        formClassManager('all', 'wrapper', 'remove', null)
-
-        if (value.length >= min) {
-            formClassManager(name, 'input', 'add', 'success-input')
-            formClassManager(name, 'wrapper', 'add', 'success-wrapper')
-            return true
-        } else {
-            formClassManager(name, 'input', 'add', 'error-input')
-            formClassManager(name, 'wrapper', 'add', 'error-wrapper')
-            return false
-        }
-    }
 
     const changeForm = (e) => {
         const { name, value, checked } = e.target
@@ -64,19 +47,23 @@ const SignUpForm = ({ setIsVisibleModal }) => {
         }
 
         if (name === 'repeatPassword') {
-            formClassManager('all', 'input', 'remove', null)
-            formClassManager('all', 'wrapper', 'remove', null)
+            setInputsValid({ ...inputsValid, [name]: minLength(e.target, 6) })
 
-            if (value !== userData.password) {
-                formClassManager(name, 'input', 'add', 'error-input')
-                formClassManager(name, 'wrapper', 'add', 'error-wrapper')
-            } else {
-                formClassManager(name, 'input', 'add', 'success-input')
-                formClassManager(name, 'wrapper', 'add', 'success-wrapper')
+            if (inputsValid.repeatPassword) {
+                formClassManager('all', 'input', 'remove', null)
+                formClassManager('all', 'wrapper', 'remove', null)
+
+                if (value !== userData.password) {
+                    formClassManager(name, 'input', 'add', 'error-input')
+                    formClassManager(name, 'wrapper', 'add', 'error-wrapper')
+                } else {
+                    formClassManager(name, 'input', 'add', 'success-input')
+                    formClassManager(name, 'wrapper', 'add', 'success-wrapper')
+                }
             }
         }
 
-        // EN CASO DE NECESITARLO EN EL FUTURO
+        // PARA EL FUTURO
         // validationEmail se encuentra en utils/validationEmail.js
 
         // if (name === 'email') {
@@ -85,10 +72,14 @@ const SignUpForm = ({ setIsVisibleModal }) => {
     }
 
     const signUp = () => {
-        const { username, password, repeatPassword, privacyPolicy } = userData
+        const { password, repeatPassword, privacyPolicy } = userData
 
-        if (!username || !password) {
-            notification['error']({ message: 'Todos los campos son obligatorios.' })
+        if (!inputsValid.username) {
+            notification['error']({ message: 'El nombre de usuario debe tener 4 o más caracteres.' })
+            return
+        }
+        if (!inputsValid.password) {
+            notification['error']({ message: 'La contraseña debe tener 6 o más caracteres.' })
             return
         }
         if (password !== repeatPassword) {

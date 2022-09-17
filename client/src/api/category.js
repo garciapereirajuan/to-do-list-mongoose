@@ -48,3 +48,19 @@ export const updateCategoryApi = (token, categoryId, categoryData) => {
         .then(result => result)
         .catch(err => err)
 }
+
+export const deleteCategoryApi = (token, categoryId) => {
+    const url = `${basePath}/${apiVersion}/category/${categoryId}`
+    const params = {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: token,
+        }
+    }
+
+    return fetch(url, params)
+        .then(response => response.json())
+        .then(result => result)
+        .catch(err => err)
+}

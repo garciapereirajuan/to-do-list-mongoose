@@ -1,25 +1,32 @@
+import { addCategoryAndTasksApi, removeCategoryAndTasksApi } from '../api/categoryAndTasks'
+import { notification } from 'antd'
+import { verifyExpireTokenInWeb } from '../api/auth'
+
 /*
     *** MODO DE USO *** 
 
-    * Para actualizar la categoría de una tarea: 
-    *   - updateCategoryAndTasks(token, taskId, newCategoryId, oldCategory, setReloadCategories)
+    * Para actualizar la categoría de una tarea (o más tareas taskId=[array]): 
+    *   - updateCategoryAndTasks(token, taskId, newCategoryId, oldCategory, msj, finish)
     * 
-    * Para solamente agregar una categoría a una tarea: 
-    *   - updateCategoryAndTasks(token, taskId, newCategoryId, null, setReloadCategories)    
+    * Para agregar una categoría a una tarea (o más tareas taskId=[array]) que
+      no tenía categoría: 
+    *   - updateCategoryAndTasks(token, taskId, newCategoryId, null, msj, finish)    
     * 
-    * Para solamente eliminar la categoría de una tarea:
-    *   - updateCategoryAndTasks(token, taskId, null, oldCategoryId, setReloadCategories)
+    * Para solamente eliminar la categoría de una tarea (o más tareas taskId=[array]):
+    *   - updateCategoryAndTasks(token, taskId, null, oldCategoryId, msj, finish)
     
-    * NOTA: Si taskId es un array entra en un bucle asyncrono que permite enviar peticiones
+    * msj = true - muestra notificación
+    * finish - función que se ejecuta cuando termina de realizar todas las peticiones.
+    * si finish = (() => {}) - entonces no ejecuta nada.  
+    
+    * NOTA: La ventaja de la función finish es que se ejecuta de manera asíncrona, luego
+            de haber hecho todas las peticiones. (Un ejemplo de esto está en la función 
+            deleteCategory, dentro de Categories.jsx)
+    
+    * NOTA: Si taskId es un array entra en un bucle asíncrono que permite enviar peticiones
             a medida que se vaya obteniendo repuesta de la petición anterior
-*/
 
-import { 
-    addCategoryAndTasksApi, 
-    removeCategoryAndTasksApi
-} from '../api/categoryAndTasks'
-import { notification } from 'antd'
-import { verifyExpireTokenInWeb } from '../api/auth'
+*/
 
 export const updateCategoryAndTasks = (token, taskId, newCategoryId, oldCategoryId, msj, finish) => {
 
@@ -43,43 +50,40 @@ export const updateCategoryAndTasks = (token, taskId, newCategoryId, oldCategory
             const add = async () => {
                 if (newCategoryId) {
                     await addCategoryAndTasksManager(
-                        unique,
-                        token,
-                        taskId,
-                        newCategoryId,
-                        oldCategoryId,
-                        msj,
-                        finish
-                    ).then(response => response.code === 200 && res(response))
+                        unique, token, taskId, newCategoryId, 
+                        oldCategoryId, msj, finish
+                    ).then(response => {
+                        response.code === 200 && res(response)
+                    })
                 } else {
                     finish()
                 }
             }
 
             const remove = async () => {
-                //al final ejecuto la función add (para que sea asicrono)
-                await removeCategoryAndTasksManager(
-                    token, 
-                    taskId, 
-                    oldCategoryId
-                )
-                .then(response => {
-                    if (response?.code === 200 && newCategoryId) {
-                        add()
-                        return
-                    }
-                    if (response?.code === 200 && !newCategoryId) {
-                        res(response)
-                        finish()
-                    }
-                })
+                await removeCategoryAndTasksManager(token, taskId, oldCategoryId)
+                    .then(response => {
+                        if (response?.code === 200 && newCategoryId) {
+                            add()
+                            return
+                        }
+                        if (response?.code === 200 && !newCategoryId) {
+                            if (typeof taskId === 'object') {
+                                console.log('Entra acá porque es array')
+                                res(response)
+                                return
+                            }
+                            res(response)
+                            // finish()
+                        }
+                    })
             }
 
             if (oldCategoryId) {
                 remove()
             }
 
-            !oldCategoryId && add() //withoutOldCategory
+            !oldCategoryId && add()
         })
     }
 
@@ -99,14 +103,14 @@ export const updateCategoryAndTasks = (token, taskId, newCategoryId, oldCategory
             let itemOldCategoryId = ''
 
             if (typeof taskId[i] === 'string') {
-
+                // console.log('Entra acá porque es un string')
                 const item = taskId[i]
                 const itemArray = item.split('-')
                 itemTaskId = itemArray[0] 
                 itemOldCategoryId = itemArray[1] !== 'no_category' ? itemArray[1] : null
 
             } else {
-                console.log('Entra acá porque es un objeto')
+                // console.log('Entra acá porque es un objeto')
                 itemTaskId = taskId[i]._id
                 itemOldCategoryId = oldCategoryId
 
@@ -121,55 +125,12 @@ export const updateCategoryAndTasks = (token, taskId, newCategoryId, oldCategory
                 })
 
             i < length && bucleAsync()
-        } 
-
-        bucleAsync()
-
-          
+        }
+        bucleAsync()    
     }
-
-        // const  funcAsync = async () => {
-        //     setTimeout(() => {
-        //         const item = taskId[i]
-        //         const itemArray = item.split('-')
-        //         const itemTaskId = itemArray[0] 
-        //         const itemOldCategoryId = itemArray[1] !== 'no_category' ? itemArray[1] : null 
-        //         console.log('En el forEach es: ', itemArray, 'Y: ', itemTaskId, itemOldCategoryId)
-        //         // console.log(itemArray, itemTaskId, itemOldCategoryId)
-        //         update(itemTaskId, newCategoryId, itemOldCategoryId)
-        //         // console.log(item); 
-
-        //         i++;
-        //         i < length && funcAsync()
-
-        //         if (i === length) {
-        //             setTimeout(() => {
-        //                 setReloadCategories(true)
-        //                 setReloadTasks(true) 
-        //                 setIsVisibleModal(false)
-        //             }, 200)
-        //         }
-        //     }, 200)
-        // }
-
-
-
-
-        // taskId.forEach( async item => {
-        //     const itemArray = item.split('-')
-        //     const itemTaskId = itemArray[0] 
-        //     const itemOldCategoryId = itemArray[1] !== 'no_category' ? itemArray[1] : null 
-        //     console.log('En el forEach es: ', itemArray, 'Y: ', itemTaskId, itemOldCategoryId)
-        //     // console.log(itemArray, itemTaskId, itemOldCategoryId)
-        //     await update(itemTaskId, newCategoryId, itemOldCategoryId)
-        // })
-        // return
-    // })   
 }
 
 const addCategoryAndTasksManager = (unique, token, taskId, categoryId, oldCategoryId, msj, finish) => {
-
-    // console.log('agregó taskID: ', JSON.stringify(taskId))
         
     return new Promise((res, rej) => {
         addCategoryAndTasksApi(token, taskId, categoryId)
@@ -193,7 +154,6 @@ const addCategoryAndTasksManager = (unique, token, taskId, categoryId, oldCatego
                 if (!oldCategoryId || unique) {
                     finish()
                 }
-                // fromRemove && resolve({ ok: true })
                 res(response)
             })
             .catch(err => {
@@ -202,7 +162,8 @@ const addCategoryAndTasksManager = (unique, token, taskId, categoryId, oldCatego
     })
 }
 
-const removeCategoryAndTasksManager = (token, taskId, oldCategoryId, add) => {
+const removeCategoryAndTasksManager = (token, taskId, oldCategoryId) => {
+
     return new Promise ((res, rej) => {
         removeCategoryAndTasksApi(token, taskId, oldCategoryId)
             .then(response => {
@@ -218,10 +179,9 @@ const removeCategoryAndTasksManager = (token, taskId, oldCategoryId, add) => {
                     return
                 }
                 res(response)
-                // add && add(true) //add recibe fromRemove para saber si se ejecuta desde acá
             })
             .catch(err => {
-                notification['error']({ message: 'Se produjo un error. Intenta más tarde.' })
+                notification['error']({ message: 'Se produjo un error, intenta más tarde.' })
             })
     })
 }

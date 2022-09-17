@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { Button, message, notification, Tree } from 'antd'
+import { Button, notification, Tree } from 'antd'
 import { EditFilled, DeleteFilled } from '@ant-design/icons'
 import { getAccessTokenApi } from '../../../../api/auth'
 import { positionCategoryAndTasksApi } from '../../../../api/categoryAndTasks'
 import { updateCategoryAndTasks } from '../../../../utils/categoryAndTasksManager'
 
 import './CategoriesTree.scss'
-import { relativeTimeRounding } from 'moment/moment'
 
 const { DirectoryTree } = Tree
 
@@ -17,6 +16,30 @@ const CategoriesTree = ({ categories, setReloadCategories, setReloadTasks, editC
     useEffect(() => {
         let treeCategoriesArray = []
 
+        const style = (category) => ({
+            boxShadow: `-2px 0px 4px .5px ${category.color ? category.color : 'rgb(66, 66, 66)'}`,
+            border: `5px solid ${category.color ? category.color : 'rgb(66, 66, 66)'}`
+        })
+        const getStyles = {
+            children: (category) => {
+                return {
+                    width: '98%',
+                    position: 'relative',
+                    left: '2%',
+                    boxShadow: style(category).boxShadow,
+                    borderLeft: style(category).border,
+                    borderRight: style(category).border
+                }
+            },
+            category: (category) => {
+                return {
+                    boxShadow: style(category).boxShadow,
+                    borderLeft: style(category).border,
+                    borderRight: style(category).border,
+                }
+            }
+        }
+
         categories && categories.forEach(category => {
             let children = []
 
@@ -25,14 +48,7 @@ const CategoriesTree = ({ categories, setReloadCategories, setReloadTasks, editC
                     title: item.title,
                     key: `${category._id}-${item._id}`,
                     isLeaf: true,
-                    style: {
-                        width: '98%',
-                        position: 'relative',
-                        left: '2%',
-                        boxShadow: `-2px 0px 4px .5px ${category.color ? category.color : 'rgb(66, 66, 66)'}`,
-                        borderLeft: `5px solid ${category.color ? category.color : 'rgb(66, 66, 66)'}`,
-                        borderRight: `5px solid ${category.color ? category.color : 'rgb(66, 66, 66)'}`,
-                    }
+                    style: getStyles.children(category)
                 })
             })
 
@@ -52,13 +68,7 @@ const CategoriesTree = ({ categories, setReloadCategories, setReloadTasks, editC
                 ),
                 key: category._id,
                 children: children,
-                style: {
-                    // borderTop: `2px solid ${category.color || 'transparent'}`,
-                    boxShadow: `-2px 0px 4px .5px ${category.color ? category.color : 'rgb(66, 66, 66)'}`,
-                    borderLeft: `5px solid ${category.color ? category.color : 'rgb(66, 66, 66)'}`,
-                    borderRight: `5px solid ${category.color ? category.color : 'rgb(66, 66, 66)'}`,
-                    // boxShadow: `2px 5px 10px 1px 2px ${category.color || 'transparent'}`
-                }
+                style: getStyles.category(category)
             })
         })
 
@@ -66,20 +76,14 @@ const CategoriesTree = ({ categories, setReloadCategories, setReloadTasks, editC
 
     }, [categories, editCategory])
 
-    const onExpand = (keys, info) => {
-        // console.log(keys, info)
-    }
-
     const onDragEnter = (info) => {
         const pos = info.node.pos.split('-')
         setPosition(pos[2])
-        // console.log(info)
     }
 
     const onSelect = (keys, info) => {
         const pos = info.node.pos.split('-')
         setPosition(pos[2])
-        // console.log(keys, info)
     }
 
     const onDrop = (info) => {
@@ -87,7 +91,6 @@ const CategoriesTree = ({ categories, setReloadCategories, setReloadTasks, editC
 
         const dragNode = info.dragNode.key.split('-')
         const node = info.node.key.split('-')
-
         const oldCategoryId = dragNode[0]
         const newCategoryId = node[0]
         const taskId = dragNode[1]
@@ -117,41 +120,6 @@ const CategoriesTree = ({ categories, setReloadCategories, setReloadTasks, editC
         }
 
         updateCategoryAndTasks(token, taskId, newCategoryId, oldCategoryId, true, finish)
-
-        // removeCategoryAndTasksApi(token, taskId, oldCategoryId)
-        //     .then(response => {
-        //         if (response?.code !== 200 || !response.code) {
-        //             notification['error']({
-        //                 message: response.message
-        //             })
-        //             return
-        //         }
-
-        //         addCategoryAndTasksApi(token, taskId, newCategoryId)
-        //             .then(response => {
-        //                 if (response?.code !== 200 || !response.code) {
-        //                     notification['error']({
-        //                         message: response.message
-        //                     })
-        //                     return
-        //                 }
-
-        //                 // notification['success']({ message: response.message })
-        //                 setReloadCategories(true)
-        //             })
-        //             .catch(err => {
-        //                 notification['error']({ message: 'Se produjo un error. Intenta más tarde.' })
-        //             })
-        //     })
-        //     .catch(err => {
-        //         notification['error']({ message: 'Se produjo un error. Intenta más tarde.' })
-        //     })
-
-
-
-        // console.log('position', position)
-        // console.log(info)
-
     }
 
     return (
@@ -162,7 +130,6 @@ const CategoriesTree = ({ categories, setReloadCategories, setReloadTasks, editC
                 onDragEnter={onDragEnter}
                 onSelect={onSelect}
                 onDrop={onDrop}
-                onExpand={onExpand}
                 treeData={treeCategories}
             />
         </div>

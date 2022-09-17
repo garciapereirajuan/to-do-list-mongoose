@@ -8,6 +8,7 @@ router.route('/category')
 
 router.route('/category/:id')
     .put([md_auth.ensureAuth], CategoryController.update)
+    .delete([md_auth.ensureAuth], CategoryController.delete)
 
 router.route('/categories/:id')
     .get([md_auth.ensureAuth], CategoryController.index)
