@@ -1,5 +1,17 @@
 @import "./sass/index.scss";
 
+.ant-modal-confirm-btns {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ant-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .ant-btn-primary {
   background-color: $primary-color;
   border-color: $primary-color;
@@ -22,6 +34,10 @@
 
 .ant-btn-default {
   font-size: 17px;
+}
+
+.anticon {
+  height: max-content !important;
 }
 
 .ant-select-dropdown {

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { Routes, Route } from 'react-router-dom'
 import FormCategory from '../FormCategory'
 import useAuth from '../../../../hooks/useAuth'
 import { notification } from 'antd'
@@ -8,7 +9,7 @@ import { updateCategoryAndTasks } from '../../../../utils/categoryAndTasksManage
 
 import './AddEditForm.scss'
 
-const AddEditForm = (props) => {
+export const AddEditForm = (props) => {
     const {
         category, tasks, categories, setIsVisibleModal,
         setReloadCategories, setReloadTasks

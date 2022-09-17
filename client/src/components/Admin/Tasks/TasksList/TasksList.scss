@@ -32,9 +32,37 @@
 
         .List {
             margin-top: 20px;
+        }
+
+        .task {
+            margin-top: 10px;
             padding: 5px 20px;
             position: relative;
             background-color: $background-dark-light;
+
+            &__btn-category {
+                width: 150px;
+                font-weight: bold;
+                border: 3px solid transparent;
+                color: $font-light;
+                background-color: $background-dark;
+                opacity: .7;
+
+                &:focus {}
+
+                &:hover {
+                    width: 160px;
+                    box-shadow: 0px 9px 12px rgba(0, 0, 0, .6) !important;
+                    // color: rgba(0, 0, 0, .7);
+                    opacity: 1;
+                    // border: 1px solid rgba($background-dark-light, .8) !important;
+                }
+
+                &:active {
+                    transition: all ease .3s;
+                    box-shadow: 0px 3px 7px rgba(0, 0, 0, .6) !important;
+                }
+            }
 
             .ant-list-item-meta-title {
                 font-size: 22px;

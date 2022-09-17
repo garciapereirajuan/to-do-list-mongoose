@@ -48,3 +48,18 @@ export const updateUserApi = (token, userId, userData) => {
         .then(result => result)
         .catch(err => err)
 }
+
+export const showUserApi = (token, userId) => {
+    const url = `${basePath}/${apiVersion}/user/${userId}`
+    const params = {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: token
+        }
+    }
+
+    return fetch(url, params) 
+        .then(response => response.json())
+        .then(result => result)
+        .catch(err => err)
+}

@@ -1,6 +1,7 @@
 import { Form, Input, Select, Button } from 'antd'
+import { Routes, Route } from 'react-router-dom'
 import colors from '../../../../utils/colors'
-import { FontSizeOutlined, BgColorsOutlined, UnorderedListOutlined } from '@ant-design/icons'
+import { FontSizeOutlined, BgColorsOutlined, UnorderedListOutlined, CheckCircleFilled } from '@ant-design/icons'
 
 import './FormCategory.scss'
 
@@ -9,6 +10,8 @@ const FormCategory = (props) => {
         category, categoryData, usedColors, setCategoryData, addCategory,
         editCategory, tasks, categories, tasksArray, setTasksArray
     } = props
+
+    console.log(category)
 
     const { Option } = Select
 
@@ -60,25 +63,30 @@ const FormCategory = (props) => {
         const filteredTasks = tasks.filter(task => !tasksArray.includes(task.title))
 
         return filteredTasks.map(item => {
-            const category = item.category && getCategoryById(item.category)
-            const borderColor = category?.color ? category.color : "rgb(66, 66, 66)"
+            const categoryTask = item.category && getCategoryById(item.category)
+            const borderColor = categoryTask?.color ? categoryTask.color : "rgb(66, 66, 66)"
 
             return (
                 <Option key={`${item._id}-${item.category ? item.category : 'no_category'}-${item.title}`}>
                     {
-                        !item.category
-                            ? `${item.title}`
-                            : (
-                                <div className='form-category__select-tasks'>
-                                    <span>{item.title}</span>
-                                    <span
-                                        className='form-category__select-tasks__category'
-                                        style={{ borderColor: borderColor }}
-                                    >
-                                        {`${category.title}`}
-                                    </span>
-                                </div>
-                            )
+                        (!item.category && (
+                            <span>{item.checked && <CheckCircleFilled />} {item.title}</span>
+                        )) ||
+                        (item.category && (
+                            <div className='form-category__select-tasks'>
+                                <span>{item.checked && <CheckCircleFilled />}  {item.title}</span>
+                                {
+                                    category.title !== categoryTask.title && (
+                                        <span
+                                            className='form-category__select-tasks__category'
+                                            style={{ borderColor: borderColor }}
+                                        >
+                                            {`${categoryTask.title}`}
+                                        </span>
+                                    )
+                                }
+                            </div>
+                        ))
                     }
                 </Option>
             )

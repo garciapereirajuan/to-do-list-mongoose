@@ -65,7 +65,8 @@ const FormTask = ({ taskData, setTaskData, categories, task, updateTask, addTask
             </Form.Item>
             <Form.Item>
                 <DatePicker
-                    format="DD-MM-YYYY"
+                    format="DD-MM-YYYY HH:mm"
+                    showTime={{ defaultValue: moment('09:00', 'HH:mm') }}
                     placeholder='Fecha de finalización (opcional)'
                     value={taskData.dateDown && moment(taskData.dateDown)}
                     onChange={(e, value) => setTaskData({

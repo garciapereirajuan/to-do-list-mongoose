@@ -6,10 +6,8 @@ import 'moment/locale/es'
 
 import './TasksList.scss'
 
-const TasksList = ({ tasks, editTask, deleteTask, updateCheckTask, categories }) => {
+const TasksList = ({ tasks, editTask, deleteTask, updateCheckTask, categories, editCategory }) => {
     const [listItems, setListItems] = useState([])
-    const [titleCategory, setTitleCategory] = useState(null)
-    const [titlePropCategory, setTitlePropCategory] = useState('')
     const { docs } = tasks
 
     useEffect(() => {
@@ -21,6 +19,7 @@ const TasksList = ({ tasks, editTask, deleteTask, updateCheckTask, categories })
                     key={task._id}
                     task={task}
                     editTask={editTask}
+                    editCategory={editCategory}
                     deleteTask={deleteTask}
                     updateCheckTask={updateCheckTask}
                     categories={categories}
@@ -42,7 +41,7 @@ const TasksList = ({ tasks, editTask, deleteTask, updateCheckTask, categories })
     )
 }
 
-const TaskItem = ({ task, editTask, deleteTask, updateCheckTask, categories }) => {
+const TaskItem = ({ task, editTask, editCategory, deleteTask, updateCheckTask, categories }) => {
     const [checked, setChecked] = useState(task.checked)
 
     const formatDate = (dateTask) => {
@@ -58,29 +57,94 @@ const TaskItem = ({ task, editTask, deleteTask, updateCheckTask, categories }) =
         return `${day} de ${month} de ${year}`
     }
 
-    const getCategoryById = (categoryId) => {
-        let title = categories && categories.map(item => {
-            if (item._id === categoryId) {
-                console.log(item.title)
-                return item.title
-            }
-        })
+    const getStyles = (color) => ({
+        boxShadow: `
+            -2px 0px 4px .5px rgba(0,0,0,.5), 
+            -2px 0px 4px .5px ${color ? color : 'rgb(66, 66, 66)'}
+        `,
+        border: `1px solid ${color ? color : 'rgb(66, 66, 66)'}`
+    })
 
-        return title[0]
+    let title = ''
+    let titleProp = ''
+    let color = null
+    let disabled = false
+
+    const getCategoryById = (categoryId) => {
+        if (categories) {
+            categories.forEach(item => {
+                if (item._id === categoryId) {
+                    console.log(item.title, item.color)
+                    title = item.title
+                    titleProp = item.title
+                    color = item.color
+                }
+            })
+        }
+
+        if (title.length > 18) {
+            title = title.split('').splice(0, 18).join('') + '...'
+        }
+
+        if (title === '') {
+            color = 'rgba(90,90,90)'
+            title = 'Sin categoría'
+            titleProp = 'Sin categoría'
+            disabled = true
+        }
+
+        // return { title, color }
+    }
+
+    const getButtons = () => {
+        getCategoryById(task.category)
+
+        const btnCategory = (
+            < Button
+                onClick={(e) => editCategory(task.category)}
+                className='task__btn-category'
+                title={titleProp}
+                disabled={disabled}
+                style={{
+                    background: 'rgba(61,61,61)',
+                    borderColor: color ? color : 'rgba(80,80,80)',
+                    boxShadow: getStyles(color).boxShadow,
+                    color: disabled && 'rgba(0,0,0,.2)'
+                }}
+            >
+                {title}
+            </Button>
+        )
+        const btnDelete = (
+            <Button type='danger' onClick={() => deleteTask(task)}>
+                <DeleteFilled />
+            </Button>
+        )
+        const btnEdit = (
+            <Button type='primary' onClick={() => editTask(task)}>
+                <EditFilled />
+            </Button>
+        )
+
+        if (task.checked) {
+            return ([
+                btnCategory,
+                btnDelete
+            ])
+        }
+
+        return ([
+            btnCategory,
+            btnEdit,
+            btnDelete
+        ])
     }
 
     return (
         <List.Item
             className='task'
             key={task._id}
-            actions={[
-                <Button type='primary' onClick={() => editTask(task)}>
-                    <EditFilled />
-                </Button>,
-                <Button type='danger' onClick={() => deleteTask(task)}>
-                    <DeleteFilled />
-                </Button>
-            ]}
+            actions={getButtons()}
         >
             <Checkbox
                 checked={checked}
@@ -107,17 +171,11 @@ const TaskItem = ({ task, editTask, deleteTask, updateCheckTask, categories }) =
                                     </span>)
                             }
                         </span>
+
                     </>
                 }
             />
-            {
-                <Button>
-                    {
-                        getCategoryById(task.category)
-                    }
-                </Button>
-            }
-        </List.Item>
+        </List.Item >
     )
 }
 

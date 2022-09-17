@@ -1,4 +1,6 @@
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import { Menu, Button } from 'antd'
 import useAuth from '../../../hooks/useAuth'
 import { logout } from '../../../api/auth'
@@ -8,6 +10,7 @@ import { PoweroffOutlined } from '@ant-design/icons'
 
 const MenuTop = () => {
     const { user, isLoading } = useAuth()
+    const location = useLocation()
 
     const logoutUser = () => {
         logout()
@@ -18,7 +21,8 @@ const MenuTop = () => {
         <Menu
             className="menu-top"
             mode="horizontal"
-            defaultSelectedKeys={[window.location.pathname]}
+            defaultSelectedKeys={[location.pathname]}
+
         >
             {
                 !user && !isLoading

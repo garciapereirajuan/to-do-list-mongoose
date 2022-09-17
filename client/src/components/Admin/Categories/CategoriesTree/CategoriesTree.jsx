@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Button, notification, Tree } from 'antd'
-import { EditFilled, DeleteFilled } from '@ant-design/icons'
+import { EditFilled, DeleteFilled, CheckCircleFilled } from '@ant-design/icons'
 import { getAccessTokenApi } from '../../../../api/auth'
 import { positionCategoryAndTasksApi } from '../../../../api/categoryAndTasks'
 import { updateCategoryAndTasks } from '../../../../utils/categoryAndTasksManager'
@@ -40,12 +40,20 @@ const CategoriesTree = ({ categories, setReloadCategories, setReloadTasks, editC
             }
         }
 
+        const getTitle = (item) => {
+            if (item.checked) {
+                return <span>{item.title} <CheckCircleFilled /></span>
+            }
+
+            return item.title
+        }
+
         categories && categories.forEach(category => {
             let children = []
 
             category.tasks.forEach(item => {
                 children.push({
-                    title: item.title,
+                    title: getTitle(item),
                     key: `${category._id}-${item._id}`,
                     isLeaf: true,
                     style: getStyles.children(category)

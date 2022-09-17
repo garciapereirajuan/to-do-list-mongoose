@@ -5,6 +5,8 @@ import MenuTop from '../../components/Web/MenuTop'
 import Home from '../../pages/Home'
 import Tasks from '../../pages/Admin/Tasks'
 import Categories from '../../pages/Admin/Categories'
+
+import AddEditForm from '../../components/Admin/Categories/AddEditForm'
 import useAuth from '../../hooks/useAuth'
 import ToDoLogo from '../../assets/img/png/to-do-logo-orange.png'
 
@@ -14,6 +16,27 @@ const LayoutAdmin = () => {
     const [expireToken, setExpireToken] = useState(false)
     const { user } = useAuth()
     const { Header, Content, Footer } = Layout
+
+    const editCategoryGeneral = (
+        category, verifyExpireTokenInWeb, setExpireToken,
+        setIsVisibleModal, setModalTitle, setModalContent,
+        tasks, categories, setReloadCategories, setReloadTasks
+    ) => {
+        console.log(category._id)
+        verifyExpireTokenInWeb(setExpireToken)
+        setIsVisibleModal(true)
+        setModalTitle('Editar categoría')
+        setModalContent(
+            <AddEditForm
+                category={category}
+                tasks={tasks}
+                categories={categories}
+                setReloadCategories={setReloadCategories}
+                setReloadTasks={setReloadTasks}
+                setIsVisibleModal={setIsVisibleModal}
+            />
+        )
+    }
 
     useEffect(() => {
         if (expireToken) {
@@ -42,11 +65,13 @@ const LayoutAdmin = () => {
                     <Route path="/tasks" element={
                         user && <Tasks
                             setExpireToken={setExpireToken}
+                            editCategoryGeneral={editCategoryGeneral}
                         />
                     } />
                     <Route path="/categories" element={
                         user && <Categories
                             setExpireToken={setExpireToken}
+                            editCategoryGeneral={editCategoryGeneral}
                         />
                     } />
                 </Routes>

@@ -26,7 +26,7 @@ module.exports = {
             }
             user.password = hash
             user._id = new mongoose.Types.ObjectId()
-            user.sort = { order: 'desc' }
+            user.sort = { dateUp: 'desc' }
             
             user.save((err, userStored) => {
                 if (err?.code === 11000) {
@@ -90,22 +90,18 @@ module.exports = {
     },
     show: (req, res) => {
         const { id } = req.params
-
-        User.findById(id).populate('tasks').exec((err, tasks) => {
-            res.send({tasks})
+        
+        User.findById(id, (err, user) => {
+            if (err) {
+                message(res, 404, 'El usuario que intentas encontrar no existe.')
+            } else {
+                if (!user) {
+                    message(res, 404, 'El usuario que intentas encontrar no existe.')
+                } else {
+                    message(res, 200, '', { user })
+                }
+            }
         })
-
-        // User.findById(id, (err, user) => {
-        //     if (err) {
-        //         message(res, 404, 'El usuario que intentas encontrar no existe.')
-        //     } else {
-        //         if (!user) {
-        //             message(res, 404, 'El usuario que intentas encontrar no existe.')
-        //         } else {
-        //             message(res, 200, '', { user })
-        //         }
-        //     }
-        // })
     },
     update: (req, res) => {
         const { id } = req.params

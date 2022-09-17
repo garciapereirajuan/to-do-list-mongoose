@@ -31,6 +31,16 @@ const AddEditForm = (props) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [task])
 
+    const getTitleCapitalize = (title) => {
+        let titleTask = []
+        let titleArray = title.split('')
+        let letter = title[0].toUpperCase()
+        let rest = titleArray.splice(1)
+        titleTask.push(letter)
+        titleTask.push(rest)
+        return titleTask.flat().join('')
+    }
+
     const addTask = () => {
         const { title, dateDown, dateUp, dateUpdate, category } = taskData
 
@@ -40,7 +50,7 @@ const AddEditForm = (props) => {
         }
 
         const data = {
-            title: title,
+            title: getTitleCapitalize(title),
             author: user.id,
             checked: false,
             dateUp: dateUp ? dateUp : new Date().toISOString(),
@@ -98,8 +108,12 @@ const AddEditForm = (props) => {
 
     const updateTask = () => {
         const token = getAccessTokenApi()
-        let data = { ...taskData }
         let removeCategory = false
+        let data = {
+            ...taskData,
+            title: getTitleCapitalize(taskData.title),
+            dateUpdate: new Date().toISOString()
+        }
 
         if (data.category === '0' && !oldCategoryId) {
             data.category = null

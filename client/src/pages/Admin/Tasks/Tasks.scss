@@ -2,49 +2,4 @@
 
 .tasks {
     padding: 20px 30px;
-
-    &__header {
-        display: flex;
-        align-items: center;
-
-        &-switch,
-        &-select-order,
-        &-btn-new-task {
-            display: flex;
-            width: calc(100% / 3);
-        }
-
-        &-switch {
-            align-items: center;
-            justify-content: flex-start;
-
-            span {
-                font-size: 17px;
-                margin-left: 10px;
-                letter-spacing: 1.5px;
-                color: white;
-            }
-        }
-
-        &-select-order {
-            justify-content: center;
-            position: relative;
-
-            .ant-select {
-                font-size: 17px;
-                width: 90%;
-            }
-        }
-
-        &-btn-new-task {
-            justify-content: flex-end;
-
-            button {
-                display: flex;
-                align-items: center;
-                font-size: 17px;
-
-            }
-        }
-    }
 }

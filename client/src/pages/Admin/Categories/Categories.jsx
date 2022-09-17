@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { Routes, Route } from 'react-router-dom'
 import CategoriesTree from '../../../components/Admin/Categories/CategoriesTree'
 import useAuth from '../../../hooks/useAuth'
 import AddEditForm from '../../../components/Admin/Categories/AddEditForm'
@@ -11,7 +12,7 @@ import { updateCategoryAndTasks } from '../../../utils/categoryAndTasksManager'
 
 import './Categories.scss'
 
-const Categories = ({ setExpireToken }) => {
+const Categories = ({ setExpireToken, editCategoryGeneral }) => {
     const [categories, setCategories] = useState([])
     const [reloadCategories, setReloadCategories] = useState(false)
     const [tasks, setTasks] = useState([])
@@ -47,7 +48,7 @@ const Categories = ({ setExpireToken }) => {
     useEffect(() => {
         const token = getAccessTokenApi()
 
-        user && indexTasksWithoutPaginationApi(token, false, user.id)
+        user && indexTasksWithoutPaginationApi(token, user.id)
             .then(response => {
                 if ((response?.code !== 200 && response?.code !== 404) || !response.code) {
                     // notification['error']({ message: 'Se produjo un error al cargar las tareas'})
@@ -80,20 +81,14 @@ const Categories = ({ setExpireToken }) => {
     }
 
     const editCategory = (category) => {
-        verifyExpireTokenInWeb(setExpireToken)
-        setIsVisibleModal(true)
-        setModalTitle('Editar categoría')
-        setModalContent(
-            <AddEditForm
-                category={category}
-                tasks={tasks}
-                categories={categories}
-                setReloadCategories={setReloadCategories}
-                setReloadTasks={setReloadTasks}
-                setIsVisibleModal={setIsVisibleModal}
-            />
+        editCategoryGeneral(
+            category, verifyExpireTokenInWeb, setExpireToken,
+            setIsVisibleModal, setModalTitle, setModalContent,
+            tasks, categories, setReloadCategories, setReloadTasks
         )
     }
+
+
 
     const deleteCategory = (category) => {
         confirm({
@@ -241,7 +236,6 @@ const Categories = ({ setExpireToken }) => {
                 />
             </Col>
             <Col md={6} />
-
             <Modal
                 modalTitle={modalTitle}
                 isVisibleModal={isVisibleModal}

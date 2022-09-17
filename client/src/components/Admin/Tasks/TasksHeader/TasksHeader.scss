@@ -1,0 +1,46 @@
+@import '../../../../sass/index.scss';
+
+.tasks-header {
+    display: flex;
+    align-items: center;
+
+    &__switch,
+    &__select-order,
+    &__btn-new-task {
+        display: flex;
+        width: calc(100% / 3);
+    }
+
+    &__switch {
+        align-items: center;
+        justify-content: flex-start;
+
+        span {
+            font-size: 17px;
+            margin-left: 10px;
+            letter-spacing: 1.5px;
+            color: white;
+        }
+    }
+
+    &__select-order {
+        justify-content: center;
+        position: relative;
+
+        .ant-select {
+            font-size: 17px;
+            width: 90%;
+        }
+    }
+
+    &__btn-new-task {
+        justify-content: flex-end;
+
+        button {
+            display: flex;
+            align-items: center;
+            font-size: 17px;
+
+        }
+    }
+}

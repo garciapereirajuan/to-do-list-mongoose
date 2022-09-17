@@ -1,6 +1,6 @@
 import { basePath, apiVersion } from './config'
 
-export const indexTasksApi = (token, page, limit, checked, userId, sort) => {
+export const indexTasksApi = (token, page, limit, checked, userId) => {
     const url = `${basePath}/${apiVersion}/tasks?page=${page}&limit=${limit}&checked=${checked}`
     const params = {
         method: 'POST',
@@ -8,7 +8,7 @@ export const indexTasksApi = (token, page, limit, checked, userId, sort) => {
             'Content-Type': 'application/json',
             Authorization: token
         },
-        body: JSON.stringify({ userId: userId, sort: sort })
+        body: JSON.stringify({ userId: userId })
     }
 
     return fetch(url, params)
@@ -17,15 +17,15 @@ export const indexTasksApi = (token, page, limit, checked, userId, sort) => {
         .catch(err => err)
 }
 
-export const indexTasksWithoutPaginationApi = (token, checked, userId, sort) => {
-    const url = `${basePath}/${apiVersion}/tasks?&checked=${checked}`   
+export const indexTasksWithoutPaginationApi = (token, userId) => {
+    const url = `${basePath}/${apiVersion}/tasks`   
     const params = {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
             Authorization: token
         },
-        body: JSON.stringify({ userId: userId, pagination: false, sort: sort })
+        body: JSON.stringify({ userId: userId, pagination: false })
     }
 
     return fetch(url, params)
