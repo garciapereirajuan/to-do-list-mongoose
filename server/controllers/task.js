@@ -246,24 +246,57 @@ const createTasksDevelopment = (user) => {
         category: null,
     }
 
-    const data2 = { ...data1, title: 'Salir a correr'}
-    const data3 = { ...data1, title: 'Ir a la peluquería'}
-    const data4 = { ...data1, title: 'Limpiar el baño'}
-    const data5 = { ...data1, title: 'Limpiar la pieza'}
-    const data6 = { ...data1, title: 'Lavar ropa'}
+    const data2 = { 
+        ...data1, 
+        title: 'Comprar juego de pesas',
+        dateUp: moment().subtract(12, 'days'),
+        dateDown: moment().subtract(10, 'days'),
+        orderByDateDown: moment().subtract(10, 'days')
+    }
+    const data3 = { 
+        ...data1, 
+        title: 'Ir a la peluquería',
+        checked: true,
+        dateUp: moment().subtract(35, 'days'),
+        dateDown: moment().subtract(25, 'days'),
+        orderByDateDown: moment().subtract(25, 'days')
+    }   
+    const data5 = { 
+        ...data1, title: 
+        'Arreglar la puerta',
+        checked: true,
+        dateUp: moment().subtract(10, 'days'),
+        dateDown: moment().subtract(2, 'days'),
+        orderByDateDown: moment().subtract(2, 'days')
+    }
+    
+    const data4 = { 
+        ...data1, 
+        title: 'Arreglar la ducha',
+        dateUp: moment().subtract(2, 'days'),
+        dateDown: moment().add(1, 'days'),
+        orderByDateDown: moment().add(1, 'days')
+    }
+    const data6 = { 
+        ...data1, 
+        title: 'Comprar shampoo - Perro',
+        dateUp: moment().subtract(2, 'days'),
+        dateDown: moment().add(2, 'days'),
+        orderByDateDown: moment().add(2, 'days')
+    }
     const data7 = { ...data1, title: 'Podar las plantas'}
     const data8 = { ...data1, title: 'Comprar foco'}
     const data9 = { ...data1, title: 'Comprar jabón'}
 
-    createTask(data1)
-    createTask(data2)
     createTask(data3)
+    createTask(data1)
     createTask(data4)
-    createTask(data5)
-    createTask(data6)
-    createTask(data7)
     createTask(data8)
+    createTask(data6)
+    createTask(data2)
+    createTask(data5)
     createTask(data9)
+    createTask(data7)
 }
 
 // createTasksDevelopment('63247aad2e89489e9ca9ab16')

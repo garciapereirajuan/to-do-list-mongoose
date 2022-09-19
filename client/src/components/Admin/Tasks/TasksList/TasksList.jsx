@@ -43,6 +43,31 @@ const TasksList = ({ tasks, editTask, deleteTask, updateCheckTask, categories, e
 
 const TaskItem = ({ task, editTask, editCategory, deleteTask, updateCheckTask, categories }) => {
     const [checkedTask, setCheckedTask] = useState(task.checked)
+    const [warningTime, setWarningTime] = useState(false)
+    const [finishTime, setFinishTime] = useState(false)
+    const [classes, setClasses] = useState('')
+
+    useEffect(() => {
+        setWarningTime(moment(task.dateDown).subtract(2, 'days').format() < moment().format())
+        setFinishTime(moment(task.dateDown).format() < moment().format())
+    }, [task])
+
+    useEffect(() => {
+        if (finishTime) {
+            setClasses('task finish-time')
+            return
+        }
+
+        if (warningTime) {
+            setClasses('task warning-time')
+            return
+        }
+
+        if (!warningTime) {
+            setClasses('task')
+            return
+        }
+    }, [finishTime, warningTime])
 
     // const formatDate = (dateTask) => {
     //     let date = moment(dateTask).format('MMMM Do YYYY').split(' ')
@@ -152,17 +177,26 @@ const TaskItem = ({ task, editTask, editCategory, deleteTask, updateCheckTask, c
             )
         }
 
-        if (moment(task.dateDown).add(1, 'days').format() > moment().format()) {
+        if (finishTime) {
             return (
-                <span className='task__description-date-down__date-down-ok'>
+                <span className='task__description-date-down__date-down-not-ok'>
+                    Finalizó {moment(task.dateDown).fromNow()}
+                </span>
+            )
+        }
+
+        if (warningTime) {
+            return (
+                <span className='task__description-date-down__date-down-warning'>
                     Finaliza {moment(task.dateDown).fromNow()}
                 </span>
             )
+        }
 
-        } else {
+        if (!warningTime) {
             return (
-                <span className='task__description-date-down__date-down-not-ok'>
-                    Finalizada {moment(task.dateDown).fromNow()}
+                <span className='task__description-date-down__date-down-ok'>
+                    Finaliza {moment(task.dateDown).fromNow()}
                 </span>
             )
         }
@@ -172,7 +206,7 @@ const TaskItem = ({ task, editTask, editCategory, deleteTask, updateCheckTask, c
 
     return (
         <List.Item
-            className='task'
+            className={classes}
             key={task._id}
             actions={getButtons()}
         >
