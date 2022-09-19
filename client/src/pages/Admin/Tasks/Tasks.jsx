@@ -7,11 +7,13 @@ import TasksList from '../../../components/Admin/Tasks/TasksList'
 import AddEditForm from '../../../components/Admin/Tasks/AddEditForm'
 import Pagination from '../../../components/Admin/Pagination'
 import TasksHeader from '../../../components/Admin/Tasks/TasksHeader'
-import { Row, Col, Modal as ModalAntd, notification } from 'antd'
+import { Row, Col, Modal as ModalAntd } from 'antd'
+import { openNotification } from '../../../utils/openNotification'
 import { getAccessTokenApi, verifyExpireTokenInWeb } from '../../../api/auth'
 import { deleteTaskApi, indexTasksApi, indexTasksWithoutPaginationApi, updateTaskApi } from '../../../api/task'
 import { indexCategoriesApi } from '../../../api/category'
 import { updateCategoryAndTasks } from '../../../utils/categoryAndTasksManager'
+import { deleteManyTasks } from '../../../utils/deleteManyRegisters'
 
 import './Tasks.scss'
 
@@ -57,42 +59,17 @@ const Tasks = ({ setExpireToken, editCategoryGeneral }) => {
     const getTasks = () => {
         const token = getAccessTokenApi()
 
-        // const alternateOrderDateDown = (tasks) => {
-        //     const withDateDown = []
-        //     const withoutDateDown = []
-
-        //     tasks.docs.forEach(item => {
-        //         if (item.dateDown) {
-        //             console.log(item)
-        //             withDateDown.push(item)
-        //         }
-        //         if (!item.dateDown) {
-        //             console.log(item)
-        //             withoutDateDown.push(item)
-        //         }
-        //     })
-
-        //     tasks.docs = withDateDown.concat(withoutDateDown)
-        //     setTasks(tasks)
-
-        // }
-
         indexTasksApi(token, page, limit, checked, user.id)
             .then(response => {
                 if ((response?.code !== 200 && response?.code !== 404) || !response.code) {
-                    notification['error']({ message: 'Se produjo un error al cargar las tareas.' })
+                    openNotification('error', 'Se produjo un error al cargar las tareas.')
                     return
                 }
-                // if (JSON.stringify(response.sort) === '{"dateDown":"asc"}') {
-                //     alternateOrderDateDown(response.tasks)
-                //     return   
-                // }
-                // console.log(JSON.stringify(response.sort))
                 setTasks(response.tasks)
                 setReloadTasks(false)
             })
             .catch(err => {
-                notification['error']({ message: 'Error en el servidor.' })
+                openNotification('error', 'Error en el servidor.')
             })
     }
 
@@ -102,7 +79,7 @@ const Tasks = ({ setExpireToken, editCategoryGeneral }) => {
         indexCategoriesApi(token, user.id)
             .then(response => {
                 if ((response?.code !== 200 && response?.code !== 404) || !response.code) {
-                    notification['error']({ message: 'Se produjo un error al cargar las categorías.' })
+                    openNotification('error', 'Se produjo un error al cargar las categorías.')
                     return
                 }
 
@@ -110,7 +87,7 @@ const Tasks = ({ setExpireToken, editCategoryGeneral }) => {
                 setReloadCategories(false)
             })
             .catch(err => {
-                notification['error']({ message: 'Error en el servidor.' })
+                openNotification('error', 'Error en el servidor.')
             })
     }
 
@@ -120,7 +97,7 @@ const Tasks = ({ setExpireToken, editCategoryGeneral }) => {
         user && indexTasksWithoutPaginationApi(token, user.id)
             .then(response => {
                 if ((response?.code !== 200 && response?.code !== 404) || !response.code) {
-                    // notification['error']({ message: 'Se produjo un error al cargar las tareas'})
+                    // openNotification('error', 'Se produjo un error al cargar las tareas.')
                     console.log('Error al cargar las tareas: ' + JSON.stringify(response))
                     return
                 }
@@ -181,22 +158,19 @@ const Tasks = ({ setExpireToken, editCategoryGeneral }) => {
                     deleteTaskApi(token, task._id)
                         .then(response => {
                             if (/token/g.test(response.message)) {
-                                notification['info']({
-                                    message: 'Lo siento, debes recargar la página e intentarlo de nuevo.',
-                                    duration: 20,
-                                })
+                                openNotification('info', 'Lo siento, debes recargar la página e intentarlo de nuevo.')
                                 return
                             }
                             if (response?.code !== 200 || !response.code) {
-                                notification['error']({ message: 'Se produjo un error al eliminar.' })
+                                openNotification('error', 'Se produjo un error al eliminar.')
                                 return
                             }
 
-                            notification['success']({ message: response.message })
+                            openNotification('success', response.message)
                             setReloadTasks(true)
                         })
                         .catch(err => {
-                            notification['error']({ message: 'Se produjo un error inesperado.' })
+                            openNotification('error', 'Se produjo un error inesperado.')
                         })
                 }
 
@@ -206,8 +180,6 @@ const Tasks = ({ setExpireToken, editCategoryGeneral }) => {
                 } else {
                     remove()
                 }
-
-
             }
         })
     }
@@ -219,21 +191,18 @@ const Tasks = ({ setExpireToken, editCategoryGeneral }) => {
         updateTaskApi(token, task._id, { checked })
             .then(response => {
                 if (/token/g.test(response.message)) {
-                    notification['info']({
-                        message: 'Lo siento, debes recargar la página e intentarlo de nuevo.',
-                        duration: 20,
-                    })
+                    openNotification('info', 'Lo siento, debes recargar la página e intentarlo de nuevo.')
                     return
                 }
                 if (response?.code !== 200 || !response.code) {
-                    notification['error']({ message: 'Se produjo un error al actualizar.' })
+                    openNotification('error', 'Se produjo un error al actualizar.')
                     return
                 }
 
                 let message = checked
                     ? 'La tarea ha sido completada.'
                     : 'Marcaste la tarea como incompleta.'
-                notification['success']({ message })
+                openNotification('success', message)
 
                 setReloadTasks(true)
             })
@@ -250,6 +219,38 @@ const Tasks = ({ setExpireToken, editCategoryGeneral }) => {
         )
     }
 
+    const deleteAllTasks = () => {
+        let allTasks = tasksArray
+
+        confirm({
+            title: 'Eliminar todas las tareas',
+            content: '¿Quieres eliminar todas tus tareas?',
+            okText: 'Eliminar',
+            okType: 'danger',
+            cancelText: 'Cancelar',
+            onOk() {
+                confirm({
+                    title: 'Confirma la eliminación',
+                    content: 'Por favor, confirma una vez más que deseas eliminar todas tus tareas.',
+                    okText: 'Eliminar todas',
+                    okType: 'danger',
+                    cancelText: 'Cancelar',
+                    onOk() {
+                        const nextFunction = () => {
+                            setReloadTasks(true)
+                        }
+
+                        deleteManyTasks(
+                            allTasks,
+                            'Se eliminaron todas tus tareas.',
+                            nextFunction
+                        )
+                    }
+                })
+            }
+        })
+    }
+
     return (
         <Row className='tasks'>
             <Col sm={0} md={4} />
@@ -260,6 +261,7 @@ const Tasks = ({ setExpireToken, editCategoryGeneral }) => {
                     checked={checked}
                     setChecked={setChecked}
                     setReloadTasks={setReloadTasks}
+                    deleteAllTasks={deleteAllTasks}
                 />
                 <TasksList
                     tasks={tasks ? tasks : []}

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
-import { Form, Input, Button, notification } from 'antd'
+import { Form, Input, Button } from 'antd'
+import { openNotification } from '../../../../utils/openNotification'
 import { UserOutlined, LockFilled } from '@ant-design/icons'
 import { loginUserApi } from '../../../../api/user'
 import { ACCESS_TOKEN, REFRESH_TOKEN } from '../../../../utils/constants'
@@ -20,7 +21,7 @@ const LoginForm = ({ setIsVisibleModal }) => {
         const { username, password } = userData
 
         if (!username || !password) {
-            notification['error']({ message: 'Todos los campos son obligatorios' })
+            openNotification('error', 'Todos los campos son obligatorios.')
             return
         }
 
@@ -33,24 +34,19 @@ const LoginForm = ({ setIsVisibleModal }) => {
                     localStorage.setItem(ACCESS_TOKEN, accessToken)
                     localStorage.setItem(REFRESH_TOKEN, refreshToken)
 
-                    notification['success']({ message: '¡Hola ' + userData.username + '!' })
+                    openNotification('success', '¡Hola ' + userData.username + '!')
                     window.location.href = '/tasks'
                     return
                 }
                 if (response.message) {
-                    notification['error']({
-                        message: response.message
-                    })
+                    openNotification('error', response.message)
                     return
                 }
-                notification['error']({
-                    message: 'Se produjo un problema al iniciar sesión.'
-                })
+
+                openNotification('error', 'Se produjo un problema al iniciar sesión.')
             })
             .catch(err => {
-                notification['error']({
-                    message: 'Se produjo un problema al iniciar sesión.'
-                })
+                openNotification('error', 'Se produjo un problema al iniciar sesión.')
                 console.log('Problema al iniciar sesión: ' + err)
             })
 

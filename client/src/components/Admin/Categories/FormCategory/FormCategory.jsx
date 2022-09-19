@@ -1,5 +1,4 @@
 import { Form, Input, Select, Button } from 'antd'
-import { Routes, Route } from 'react-router-dom'
 import colors from '../../../../utils/colors'
 import { FontSizeOutlined, BgColorsOutlined, UnorderedListOutlined, CheckCircleFilled } from '@ant-design/icons'
 

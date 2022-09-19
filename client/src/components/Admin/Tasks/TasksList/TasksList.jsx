@@ -42,7 +42,7 @@ const TasksList = ({ tasks, editTask, deleteTask, updateCheckTask, categories, e
 }
 
 const TaskItem = ({ task, editTask, editCategory, deleteTask, updateCheckTask, categories }) => {
-    const [checked, setChecked] = useState(task.checked)
+    const [checkedTask, setCheckedTask] = useState(task.checked)
 
     // const formatDate = (dateTask) => {
     //     let date = moment(dateTask).format('MMMM Do YYYY').split(' ')
@@ -78,7 +78,6 @@ const TaskItem = ({ task, editTask, editCategory, deleteTask, updateCheckTask, c
         if (categories) {
             categories.forEach(item => {
                 if (item._id === categoryId) {
-                    console.log(item.title, item.color)
                     title = item.title
                     titleProp = item.title
                     color = item.color
@@ -111,7 +110,7 @@ const TaskItem = ({ task, editTask, editCategory, deleteTask, updateCheckTask, c
                 disabled={disabled}
                 style={{
                     background: 'rgba(61,61,61)',
-                    borderColor: color ? color : 'rgba(80,80,80)',
+                    borderColor: color ? color : 'rgba(200,200,200)',
                     boxShadow: getStyles(color).boxShadow,
                     color: disabled && 'rgba(255,255,255,.5)'
                 }}
@@ -144,6 +143,33 @@ const TaskItem = ({ task, editTask, editCategory, deleteTask, updateCheckTask, c
         ])
     }
 
+    const getDescriptionDateDown = () => {
+        if (!task.dateDown) {
+            return (
+                <span className='task__description-date-down__no-date'>
+                    Sin fecha de finalización
+                </span>
+            )
+        }
+
+        if (moment(task.dateDown).add(1, 'days').format() > moment().format()) {
+            return (
+                <span className='task__description-date-down__date-down-ok'>
+                    Finaliza {moment(task.dateDown).fromNow()}
+                </span>
+            )
+
+        } else {
+            return (
+                <span className='task__description-date-down__date-down-not-ok'>
+                    Finalizada {moment(task.dateDown).fromNow()}
+                </span>
+            )
+        }
+        // if (task.dateDown < moment())
+
+    }
+
     return (
         <List.Item
             className='task'
@@ -151,9 +177,9 @@ const TaskItem = ({ task, editTask, editCategory, deleteTask, updateCheckTask, c
             actions={getButtons()}
         >
             <Checkbox
-                checked={checked}
+                checked={checkedTask}
                 onChange={(e) => {
-                    setChecked(e.target.checked)
+                    setCheckedTask(e.target.checked)
                     setTimeout(() => { updateCheckTask(e, task) }, 500)
                 }}
             />
@@ -161,19 +187,13 @@ const TaskItem = ({ task, editTask, editCategory, deleteTask, updateCheckTask, c
                 title={task.title}
                 description={
                     <>
-                        <span className='description-date-up'>
+                        <span className='task__description-date-up'>
                             <ArrowUpOutlined />
                             Creada: {formatDate(task.dateUp)}
                         </span>
-                        <span className='description-date-down'>
+                        <span className='task__description-date-down'>
                             <ClockCircleOutlined />
-                            {
-                                task.dateDown
-                                    ? `Finaliza ${moment(task.dateDown).fromNow()}`
-                                    : (<span className='no-date'>
-                                        Sin fecha de finalización
-                                    </span>)
-                            }
+                            {getDescriptionDateDown()}
                         </span>
 
                     </>

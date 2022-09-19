@@ -82,20 +82,24 @@
                 .anticon {
                     margin-right: 6px;
                 }
+            }
 
-                .description-date-up {
-                    color: $font-dark-light;
-                    margin-left: 28px;
+            &__description-date-up {
+                color: $font-dark-light;
+                margin-left: 28px;
+            }
+
+            &__description-date-down {
+                color: $font-dark-light;
+                margin-left: 28px;
+
+                &__no-date {
+                    color: $primary-color;
+                    font-weight: bold;
                 }
 
-                .description-date-down {
-                    color: $font-dark-light;
-                    margin-left: 28px;
-
-                    .no-date {
-                        color: $primary-color;
-                        font-weight: bold;
-                    }
+                &__date-down-ok {
+                    // color: red;
                 }
             }
         }

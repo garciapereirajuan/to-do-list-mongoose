@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { Routes, Route } from 'react-router-dom'
 import FormCategory from '../FormCategory'
 import useAuth from '../../../../hooks/useAuth'
-import { notification } from 'antd'
+import { openNotification } from '../../../../utils/openNotification'
 import { getAccessTokenApi } from '../../../../api/auth'
 import { createCategoryApi, updateCategoryApi } from '../../../../api/category'
 import { updateCategoryAndTasks } from '../../../../utils/categoryAndTasksManager'
@@ -50,9 +49,7 @@ export const AddEditForm = (props) => {
         const token = getAccessTokenApi()
 
         if (!categoryData.title) {
-            notification['error']({
-                message: 'Escribe el título de la categoría.'
-            })
+            openNotification('error', 'Escribe el título de la categoría.')
             return
         }
 
@@ -67,19 +64,16 @@ export const AddEditForm = (props) => {
         user && createCategoryApi(token, data)
             .then(response => {
                 if (/token/g.test(response.message)) {
-                    notification['info']({
-                        message: 'Lo siento, debes recargar la página e intentarlo de nuevo.',
-                        duration: 20,
-                    })
+                    openNotification('info', 'Lo siento, debes recargar la página e intentarlo de nuevo.')
                     return
                 }
                 if ((response?.code !== 200) || !response.code) {
-                    notification['error']({ message: response.message })
+                    openNotification('error', response.message)
                     console.log('Error al crear la categoría: ' + JSON.stringify(response))
                     return
                 }
 
-                notification['success']({ message: 'Categoría creada correctamente.' })
+                openNotification('success', 'Categoría creada correctamente.')
                 const newCategoryId = response.category._id
 
                 const tasks = [...tasksArray]
@@ -99,7 +93,7 @@ export const AddEditForm = (props) => {
                 }
             })
             .catch(err => {
-                notification['error']({ message: 'Se produjo un error al crear la categoría.' })
+                openNotification('error', 'Se produjo un error al crear la categoría.')
                 console.log('Error al crear la categoría: ' + err)
             })
     }
@@ -108,7 +102,7 @@ export const AddEditForm = (props) => {
         const token = getAccessTokenApi()
 
         if (!categoryData.title) {
-            notification['error']({ message: 'Escribe el título de la categoría.' })
+            openNotification('error', 'Escribe el título de la categoría.')
         }
 
         let data = user && {
@@ -168,23 +162,20 @@ export const AddEditForm = (props) => {
         user && updateCategoryApi(token, category._id, data)
             .then(response => {
                 if (/token/g.test(response.message)) {
-                    notification['info']({
-                        message: 'Lo siento, debes recargar la página e intentarlo de nuevo.',
-                        duration: 20,
-                    })
+                    openNotification('info', 'Lo siento, debes recargar la página e intentarlo de nuevo.')
                     return
                 }
                 if ((response?.code !== 200 && response?.code !== 404) || !response.code) {
-                    notification['error']({ message: response.message })
+                    openNotification('error', response.message)
                     console.log('Error al crear la categoría: ' + JSON.stringify(response))
                     return
                 }
                 if (response?.code === 404) {
-                    notification['error']({ message: response.message })
+                    openNotification('error', response.message)
                     return
                 }
 
-                notification['success']({ message: 'Categoría actualizada correctamente.' })
+                openNotification('success', 'Categoría actualizada correctamente.')
 
                 const finish = () => {
                     setReloadTasks(true)

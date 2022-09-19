@@ -147,6 +147,10 @@ module.exports = {
                 }
             })
         })
+        .catch(err => {
+            message(res, 404, 'La tarea que intentas eliminar no existe.')
+            return
+        })
     }
 }
 
@@ -237,6 +241,7 @@ const createTasksDevelopment = (user) => {
         dateUp: new Date().toISOString(),
         dateUpdate: new Date().toISOString(),
         dateDown: null,
+        // dateDown: moment().subtract(10, 'days'),
         orderByDateDown: moment().add(10, 'years'),
         category: null,
     }

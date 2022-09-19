@@ -3,6 +3,7 @@ import { Switch, Button, Select } from 'antd'
 import useAuth from '../../../../hooks/useAuth'
 import { getAccessTokenApi } from '../../../../api/auth'
 import { showUserApi, updateUserApi } from '../../../../api/user'
+import { DeleteFilled, FileAddFilled } from '@ant-design/icons'
 
 import './TasksHeader.scss'
 
@@ -19,7 +20,8 @@ const sort = {
     '{"title":"asc"}': 'Por alfabeto',
 }
 
-const TasksHeader = ({ tasks, addTask, checked, setChecked, setReloadTasks }) => {
+const TasksHeader = ({ tasks, addTask, checked, setChecked, setReloadTasks, deleteAllTasks
+}) => {
     const [selectOrder, setSelectOrder] = useState('')
     const { user } = useAuth()
 
@@ -91,13 +93,44 @@ const TasksHeader = ({ tasks, addTask, checked, setChecked, setReloadTasks }) =>
                     </Option>
                 </Select>
             </div>
-            <div className='tasks-header__btn-new-task'>
-                <Button type='primary' onClick={addTask}>
-                    Nueva tarea
-                </Button>
+            <div className='tasks-header__btn'>
+                <ButtonHeader
+                    checked={checked}
+                    addTask={addTask}
+                    deleteAllTasks={deleteAllTasks}
+                    tasks={tasks}
+                />
             </div>
         </div>
     )
+}
+
+const ButtonHeader = ({ checked, addTask, deleteAllTasks, tasks }) => {
+    const btnClean = (
+        <Button type='danger' onClick={deleteAllTasks}>
+            <DeleteFilled />
+            Limpiar
+        </Button>
+    )
+
+    const btnAdd = (
+        <Button type='primary' onClick={addTask}>
+            <FileAddFilled />
+            Nueva
+        </Button>
+    )
+
+    if (!checked && tasks?.docs.length === 0) {
+        return <> {btnAdd} </>
+    }
+
+    if (!checked && tasks?.docs.length !== 0) {
+        return <> {btnClean} {btnAdd} </>
+    }
+
+    if (checked && tasks?.docs.length !== 0) {
+        return <> {btnClean} </>
+    }
 }
 
 export default TasksHeader

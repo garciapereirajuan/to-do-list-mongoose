@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
-import { Form, Input, Button, Checkbox, notification } from 'antd'
+import { Form, Input, Button, Checkbox } from 'antd'
+import { openNotification } from '../../../../utils/openNotification'
 import { UserOutlined, LockFilled } from '@ant-design/icons'
 import { createUserApi } from '../../../../api/user'
 import formClassManager from '../../../../utils/formClassManager'
@@ -75,26 +76,26 @@ const SignUpForm = ({ setIsVisibleModal }) => {
         const { password, repeatPassword, privacyPolicy } = userData
 
         if (!inputsValid.username) {
-            notification['error']({ message: 'El nombre de usuario debe tener 4 o más caracteres.' })
+            openNotification('error', 'El nombre de usuario debe tener 4 o más caracteres.')
             return
         }
         if (!inputsValid.password) {
-            notification['error']({ message: 'La contraseña debe tener 6 o más caracteres.' })
+            openNotification('error', 'La contraseña debe tener 6 o más caracteres.')
             return
         }
         if (password !== repeatPassword) {
-            notification['error']({ message: 'Las contraseñas deben coincidir.' })
+            openNotification('error', 'Las contraseñas deben coincidir.')
             return
         }
         if (!privacyPolicy) {
-            notification['error']({ message: 'Debes aceptar la política de privacidad.' })
+            openNotification('error', 'Debes aceptar la política de privacidad.')
             return
         }
 
         createUserApi(userData)
             .then(response => {
                 let status = response.code === 200 ? 'success' : 'error'
-                notification[status]({ message: response.message })
+                openNotification(status, response.message)
 
                 if (response.code === 200) {
                     setIsVisibleModal(false)
@@ -102,7 +103,7 @@ const SignUpForm = ({ setIsVisibleModal }) => {
                 }
             })
             .catch(err => {
-                notification['error']({ message: 'Error interno, intenta más tarde' })
+                openNotification('error', 'Error interno, intenta más tarde')
             })
     }
 

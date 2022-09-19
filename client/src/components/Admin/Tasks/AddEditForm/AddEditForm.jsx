@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import FormTask from '../FormTask'
-import { notification } from 'antd'
+import { openNotification } from '../../../../utils/openNotification'
 import { getAccessTokenApi } from '../../../../api/auth'
 import { createTaskApi, updateTaskApi } from '../../../../api/task'
 import { updateCategoryAndTasks } from '../../../../utils/categoryAndTasksManager'
@@ -46,7 +46,7 @@ const AddEditForm = (props) => {
         const { title, dateDown, dateUp, dateUpdate, category } = taskData
 
         if (!title) {
-            notification['warning']({ message: 'El título es requerido.' })
+            openNotification('warning', 'El título es requerido.')
             return
         }
 
@@ -55,7 +55,7 @@ const AddEditForm = (props) => {
             author: user.id,
             checked: false,
             dateUp: dateUp ? dateUp : new Date().toISOString(),
-            dateDown: dateDown ? dateDown : false,
+            dateDown: dateDown ? dateDown : null,
             dateUpdate: dateUpdate ? dateUpdate : new Date().toISOString(),
             category: category ? category : null,
             orderByDateDown: dateDown ? dateDown : moment().add(10, 'years')
@@ -66,21 +66,19 @@ const AddEditForm = (props) => {
         user && createTaskApi(token, data)
             .then(response => {
                 if (/token/g.test(response.message)) {
-                    notification['info']({
-                        message: 'Lo siento, debes recargar la página e intentarlo de nuevo.',
-                        duration: 20,
-                    })
+                    openNotification('info', 'Lo siento, debes recargar la página e intentarlo de nuevo.')
                     return
                 }
                 if (response?.code !== 200) {
-                    notification['error']({ message: response.message })
+                    openNotification('error', response.message)
                     return
                 }
                 if (!response.code) {
-                    notification['error']({ message: 'Se produjo un error al crear la tarea.' })
+                    openNotification('error', 'Se produjo un error al crear la tarea.')
                     return
                 }
-                notification['success']({ message: response.message })
+
+                openNotification('success', response.message)
 
                 const finish = () => {
                     setIsVisibleModal(false)
@@ -103,7 +101,7 @@ const AddEditForm = (props) => {
                 }
             })
             .catch(err => {
-                notification['error']({ message: 'Se produjo un error al crear la tarea.' })
+                openNotification('error', 'Se produjo un error al crear la tarea.')
             })
     }
 
@@ -135,22 +133,19 @@ const AddEditForm = (props) => {
         task && updateTaskApi(token, task._id, data)
             .then(response => {
                 if (/token/g.test(response.message)) {
-                    notification['info']({
-                        message: 'Lo siento, debes recargar la página e intentarlo de nuevo.',
-                        duration: 20,
-                    })
+                    openNotification('info', 'Lo siento, debes recargar la página e intentarlo de nuevo.')
                     return
                 }
                 if (response?.code !== 200) {
-                    notification['error']({ message: response.message })
+                    openNotification('error', response.message)
                     return
                 }
                 if (!response) {
-                    notification['error']({ message: 'Se produjo un error al actualizar la tarea.' })
+                    openNotification('error', 'Se produjo un error al actualizar la tarea.')
                     return
                 }
 
-                notification['success']({ message: response.message })
+                openNotification('success', response.message)
 
                 if (removeCategory) {
                     data.category = null
@@ -177,7 +172,7 @@ const AddEditForm = (props) => {
                 finish()
             })
             .catch(err => {
-                notification['error']({ message: 'Se produjo un error al actualizar la tarea.' })
+                openNotification('error', 'Se produjo un error al actualizar la tarea.')
             })
     }
 

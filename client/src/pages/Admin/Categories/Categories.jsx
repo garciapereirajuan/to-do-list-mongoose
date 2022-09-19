@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react'
-import { Routes, Route } from 'react-router-dom'
 import CategoriesTree from '../../../components/Admin/Categories/CategoriesTree'
 import useAuth from '../../../hooks/useAuth'
 import AddEditForm from '../../../components/Admin/Categories/AddEditForm'
 import Modal from '../../../components/Modal'
-import { Col, Row, Button, Modal as ModalAntd, notification } from 'antd'
+import { Col, Row, Button, Modal as ModalAntd } from 'antd'
+import { openNotification } from '../../../utils/openNotification'
 import { indexCategoriesApi, deleteCategoryApi } from '../../../api/category'
-import { indexTasksWithoutPaginationApi, deleteTaskApi } from '../../../api/task'
+import { indexTasksWithoutPaginationApi } from '../../../api/task'
 import { getAccessTokenApi, verifyExpireTokenInWeb } from '../../../api/auth'
 import { updateCategoryAndTasks } from '../../../utils/categoryAndTasksManager'
+import { deleteManyTasks } from '../../../utils/deleteManyRegisters'
 
 import './Categories.scss'
 
@@ -33,13 +34,13 @@ const Categories = ({ setExpireToken, editCategoryGeneral }) => {
         user && indexCategoriesApi(token, user.id)
             .then(response => {
                 if ((response?.code !== 200 && response?.code !== 404) || !response.code) {
-                    notification['error']({ message: 'Se produjo un error al cargar las categorías.' })
+                    //  openNotification('error', 'Se produjo un error al cargar las categorías.')
                     return
                 }
                 setCategories(response.categories)
             })
             .catch(err => {
-                notification['error']({ message: 'Se produjo un error al cargar las categorías.' })
+                openNotification('error', 'Se produjo un error al cargar las categorías.')
             })
 
         setReloadCategories(false)
@@ -51,7 +52,7 @@ const Categories = ({ setExpireToken, editCategoryGeneral }) => {
         user && indexTasksWithoutPaginationApi(token, user.id)
             .then(response => {
                 if ((response?.code !== 200 && response?.code !== 404) || !response.code) {
-                    // notification['error']({ message: 'Se produjo un error al cargar las tareas'})
+                    //  openNotification('error', 'Se produjo un error al cargar las tareas.')
                     console.log('Error al cargar las tareas: ' + JSON.stringify(response))
                     return
                 }
@@ -100,25 +101,6 @@ const Categories = ({ setExpireToken, editCategoryGeneral }) => {
             onOk() {
                 const token = getAccessTokenApi()
 
-                // let i = 0
-                // let tasks = category.tasks
-
-                // const loopAsync = () => {
-                //     console.log(tasks[i]._id)
-
-                //     i++
-                //     if (i === tasks.length) {
-                //         console.log('Terminó', i)
-                //     }
-
-                //     console.log('Se repite', i < tasks.length)
-                //     i < tasks.length && loopAsync()
-                // }
-                // console.log('Arranca', i)
-                // loopAsync()
-
-                // return
-
                 const removeRelationOfCategoryAndTasks = (finish) => {
                     // acá se remueve sólo la relación entre estas
                     updateCategoryAndTasks(
@@ -130,44 +112,24 @@ const Categories = ({ setExpireToken, editCategoryGeneral }) => {
                     deleteCategoryApi(token, category._id)
                         .then(response => {
                             if (response?.code !== 200) {
-                                notification['error']({ message: response.message })
+                                openNotification('error', response.message)
                                 return
                             }
-                            notification['success']({ message: msg })
+                            openNotification('success', msg)
                             setReloadCategories(true)
                             setReloadTasks(true)
                             setIsVisibleModal(false)
                         })
                 }
 
-                const removeCategoryAndTasks = () => {
+                const removeCategoryAndTasks = (msg) => {
                     const tasks = category.tasks
-                    let i = 0
 
-                    const loopAsync = async () => {
-                        await deleteTaskApi(token, tasks[i]._id)
-                            .then(response => {
-                                if (response?.code !== 200) {
-                                    notification['error']({
-                                        message: response.message
-                                    })
-                                    i = 100000
-                                    return
-                                }
-                                // notification['success']({ message: response.message })
-                                i++
-                                if (i === tasks.length) {
-                                    console.log('Terminó', i)
-                                    removeCategory('La categoría y sus tareas fueron eliminadas.')
-                                }
-                            })
-
-                        if (i > tasks.length) i = 10000
-                        console.log('Se repite', i < tasks.length)
-                        i < tasks.length && loopAsync()
-                    }
-                    console.log('Arranca', i)
-                    loopAsync()
+                    deleteManyTasks(
+                        tasks,
+                        null,
+                        removeCategory(msg)
+                    )
                 }
 
                 if (category.tasks.length !== 0) {
@@ -179,7 +141,7 @@ const Categories = ({ setExpireToken, editCategoryGeneral }) => {
                         cancelText: 'Conservarlas',
                         onOk() {
                             const finish = () => {
-                                removeCategoryAndTasks()
+                                removeCategoryAndTasks('La categoría y sus tareas fueron eliminadas.')
                             }
                             removeRelationOfCategoryAndTasks(finish)
                         },

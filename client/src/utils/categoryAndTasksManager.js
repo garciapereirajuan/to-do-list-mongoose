@@ -1,5 +1,5 @@
 import { addCategoryAndTasksApi, removeCategoryAndTasksApi } from '../api/categoryAndTasks'
-import { notification } from 'antd'
+import { openNotification } from './openNotification'
 import { verifyExpireTokenInWeb } from '../api/auth'
 
 /*
@@ -31,16 +31,13 @@ import { verifyExpireTokenInWeb } from '../api/auth'
 export const updateCategoryAndTasks = (token, taskId, newCategoryId, oldCategoryId, msj, finish) => {
 
     if (verifyExpireTokenInWeb()) {
-        notification['info']({
-            message: 'Lo siento, debes recargar la página e intentarlo de nuevo.',
-            duration: 20,
-        })
+        openNotification('info', 'Lo siento, debes recargar la página e intentarlo de nuevo.')
         return
     }
 
     if (!token || !taskId || !finish) {
         // console.log('Token, taskId, y la función "finish" son requeridos.')
-        notification['info']({ message: 'Sólo puedes mover las tareas. 😀'})
+        openNotification('info', 'Sólo puedes mover las tareas. 😀')
         return
     }
 
@@ -136,20 +133,15 @@ const addCategoryAndTasksManager = (unique, token, taskId, categoryId, oldCatego
         addCategoryAndTasksApi(token, taskId, categoryId)
             .then(response => {
                 if (/token/g.test(response.message)) {
-                    notification['info']({
-                        message: 'Lo siento, debes recargar la página e intentarlo de nuevo.',
-                        duration: 20,
-                    })
+                    openNotification('info', 'Lo siento, debes recargar la página e intentarlo de nuevo.')
                     return
                 }
                 if (response?.code !== 200 || !response.code) {
-                    notification['error']({
-                        message: response.message
-                    })
+                    openNotification('error', response.message)
                     return
                 }
                 if (msj) {
-                    notification['success']({ message: response.message })
+                    openNotification('success', response.message)
                 }
                 if (!oldCategoryId || unique) {
                     finish()
@@ -157,7 +149,7 @@ const addCategoryAndTasksManager = (unique, token, taskId, categoryId, oldCatego
                 res(response)
             })
             .catch(err => {
-                notification['error']({ message: 'Se produjo un error. Intenta más tarde.' })
+                openNotification('error', 'Se produjo un error. Intenta más tarde.')
             })
     })
 }
@@ -168,10 +160,7 @@ const removeCategoryAndTasksManager = (token, taskId, oldCategoryId) => {
         removeCategoryAndTasksApi(token, taskId, oldCategoryId)
             .then(response => {
                 if (/token/g.test(response.message)) {
-                    notification['info']({
-                        message: 'Lo siento, debes recargar la página e intentarlo de nuevo.',
-                        duration: 20,
-                    })
+                    openNotification('info', 'Lo siento, debes recargar la página e intentarlo de nuevo.')
                     return
                 }
                 if (response?.code !== 200 || !response.code) {
@@ -181,7 +170,7 @@ const removeCategoryAndTasksManager = (token, taskId, oldCategoryId) => {
                 res(response)
             })
             .catch(err => {
-                notification['error']({ message: 'Se produjo un error, intenta más tarde.' })
+                openNotification('error', 'Se produjo un error, intenta más tarde.' )
             })
     })
 }

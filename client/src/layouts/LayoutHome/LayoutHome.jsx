@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { Routes, Route } from 'react-router-dom'
-import { Layout, notification } from 'antd'
+import { Layout } from 'antd'
 import Home from '../../pages/Home'
 import MenuTop from '../../components/Web/MenuTop'
 import FooterSection from '../../components/FooterSection'

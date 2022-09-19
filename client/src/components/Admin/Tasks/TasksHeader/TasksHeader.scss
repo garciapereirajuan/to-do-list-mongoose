@@ -6,7 +6,7 @@
 
     &__switch,
     &__select-order,
-    &__btn-new-task {
+    &__btn {
         display: flex;
         width: calc(100% / 3);
     }
@@ -33,14 +33,14 @@
         }
     }
 
-    &__btn-new-task {
+    &__btn {
         justify-content: flex-end;
 
         button {
+            margin-left: 10px;
             display: flex;
             align-items: center;
             font-size: 17px;
-
         }
     }
 }

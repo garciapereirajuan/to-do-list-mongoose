@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { Button, notification, Tree } from 'antd'
+import { Button, Tree } from 'antd'
+import { openNotification } from '../../../../utils/openNotification'
 import { EditFilled, DeleteFilled, CheckCircleFilled } from '@ant-design/icons'
 import { getAccessTokenApi } from '../../../../api/auth'
 import { positionCategoryAndTasksApi } from '../../../../api/categoryAndTasks'
@@ -108,16 +109,16 @@ const CategoriesTree = ({ categories, setReloadCategories, setReloadTasks, editC
             positionCategoryAndTasksApi(token, taskId, oldCategoryId, position)
                 .then(response => {
                     if (response?.code !== 200 || !response.code) {
-                        // notification['error']({ message: 'Se produjo un error al mover la tarea.' })
+                        // openNotification('error', 'Se produjo un error al mover la tarea.')
                         return
                     }
 
-                    // notification['success']({ message: response.message })
+                    // openNotification('success', response.message)
                     setReloadCategories(true)
                     setReloadTasks(true)
                 })
                 .catch(err => {
-                    notification['error']({ message: 'Se produjo un error al mover la tarea.' })
+                    openNotification('error', 'Se produjo un error al mover la tarea.')
                 })
             return
         }

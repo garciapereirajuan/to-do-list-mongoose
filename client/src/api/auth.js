@@ -1,4 +1,3 @@
-import React from 'react'
 import { ACCESS_TOKEN, REFRESH_TOKEN } from '../utils/constants'
 import { basePath, apiVersion } from './config'
 import jwtDecode from 'jwt-decode'
