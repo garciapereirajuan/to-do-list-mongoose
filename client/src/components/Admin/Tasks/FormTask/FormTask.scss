@@ -1,3 +1,9 @@
 @import '../../../../sass/index.scss';
 
-.form-task {}
+.form-task {
+    .anticon {
+        &.anticon-close-circle {
+            background-color: $background-dark-light ;
+        }
+    }
+}

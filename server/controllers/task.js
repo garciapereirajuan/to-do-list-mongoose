@@ -1,6 +1,7 @@
 const Task = require('../models/task')
 const User = require('../models/user')
 const { message } = require('../utils')
+const moment = require('moment/moment')
 
 module.exports = {
     create: (req, res) => {
@@ -86,7 +87,7 @@ module.exports = {
                     return
                 }
                 if (tasks) {
-                    message(res, 200, '', { tasks: tasks })
+                    res.status(200).send({ code: 200, tasks, sort: user.sort })
                 }
             })
         })
@@ -173,7 +174,7 @@ const indexWithoutPagination = (req, res) => {
                 return
             }
             if (tasks) {
-                message(res, 200, '', { tasks: tasks })
+                message(res, 200, '', { tasks: tasks, sort: user.sort })
             }
         })
     })
@@ -234,8 +235,9 @@ const createTasksDevelopment = (user) => {
         author: user,
         checked: false,
         dateUp: new Date().toISOString(),
-        dateDown: null,
         dateUpdate: new Date().toISOString(),
+        dateDown: null,
+        orderByDateDown: moment().add(10, 'years'),
         category: null,
     }
 

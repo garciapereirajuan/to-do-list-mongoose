@@ -8,9 +8,7 @@ const TaskSchema = Schema({
         type: Schema.Types.ObjectId, 
         ref: 'User'
     },
-    order: {
-        type: Number,
-    },
+    orderByDateDown: Date,
     dateUp: Date,
     dateDown: Date,
     dateUpdate: Date,

@@ -217,17 +217,17 @@ const createCategoryDevelopment = (user) => {
 
     const data1 = {
         title: 'Casa',
-        color: '0',
+        color: '#FF6B3B',
         dateUp: new Date(),
         dateUpdate: new Date(),
         author: user,
     }
 
-    const data2 = { ...data1, title: 'Trabajo'}
-    const data3 = { ...data1, title: 'Salud'}
-    const data4 = { ...data1, title: 'Patio'}
-    const data5 = { ...data1, title: 'Ejercicio'}
-    const data6 = { ...data1, title: 'Estética'}
+    const data2 = { ...data1, title: 'Trabajo', color: '#626681'}
+    const data3 = { ...data1, title: 'Salud', color: '#1D9ED1'}
+    const data4 = { ...data1, title: 'Patio', color: '#9FB40F'}
+    const data5 = { ...data1, title: 'Ejercicio', color: '#B1ABF4'}
+    const data6 = { ...data1, title: 'Estética', color: '#F383A2'}
 
     createCategory(data1)
     createCategory(data2)

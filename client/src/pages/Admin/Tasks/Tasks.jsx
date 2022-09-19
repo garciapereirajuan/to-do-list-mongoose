@@ -24,6 +24,7 @@ const Tasks = ({ setExpireToken, editCategoryGeneral }) => {
     const [isVisibleModal, setIsVisibleModal] = useState(false)
     const [modalTitle, setModalTitle] = useState('')
     const [modalContent, setModalContent] = useState(null)
+    const [modalWidth, setModalWidth] = useState('500px')
     const [checked, setChecked] = useState(false)
 
     const { confirm } = ModalAntd
@@ -56,13 +57,37 @@ const Tasks = ({ setExpireToken, editCategoryGeneral }) => {
     const getTasks = () => {
         const token = getAccessTokenApi()
 
+        // const alternateOrderDateDown = (tasks) => {
+        //     const withDateDown = []
+        //     const withoutDateDown = []
+
+        //     tasks.docs.forEach(item => {
+        //         if (item.dateDown) {
+        //             console.log(item)
+        //             withDateDown.push(item)
+        //         }
+        //         if (!item.dateDown) {
+        //             console.log(item)
+        //             withoutDateDown.push(item)
+        //         }
+        //     })
+
+        //     tasks.docs = withDateDown.concat(withoutDateDown)
+        //     setTasks(tasks)
+
+        // }
+
         indexTasksApi(token, page, limit, checked, user.id)
             .then(response => {
                 if ((response?.code !== 200 && response?.code !== 404) || !response.code) {
                     notification['error']({ message: 'Se produjo un error al cargar las tareas.' })
                     return
                 }
-
+                // if (JSON.stringify(response.sort) === '{"dateDown":"asc"}') {
+                //     alternateOrderDateDown(response.tasks)
+                //     return   
+                // }
+                // console.log(JSON.stringify(response.sort))
                 setTasks(response.tasks)
                 setReloadTasks(false)
             })
@@ -109,6 +134,7 @@ const Tasks = ({ setExpireToken, editCategoryGeneral }) => {
     }
 
     const addTask = () => {
+        setModalWidth('500px')
         verifyExpireTokenInWeb(setExpireToken)
         setIsVisibleModal(true)
         setModalTitle('Nueva tarea')
@@ -125,6 +151,7 @@ const Tasks = ({ setExpireToken, editCategoryGeneral }) => {
     }
 
     const editTask = (task) => {
+        setModalWidth('500px')
         verifyExpireTokenInWeb(setExpireToken)
         setIsVisibleModal(true)
         setModalTitle('Actualizar tarea')
@@ -208,12 +235,13 @@ const Tasks = ({ setExpireToken, editCategoryGeneral }) => {
                     : 'Marcaste la tarea como incompleta.'
                 notification['success']({ message })
 
-                setReloadTasks()
+                setReloadTasks(true)
             })
     }
 
     const editCategory = (category) => {
         const categoryObj = categories.filter(item => item._id === category)[0]
+        setModalWidth('700px')
 
         editCategoryGeneral(
             categoryObj, verifyExpireTokenInWeb, setExpireToken,
@@ -252,6 +280,7 @@ const Tasks = ({ setExpireToken, editCategoryGeneral }) => {
                 modalTitle={modalTitle}
                 isVisibleModal={isVisibleModal}
                 setIsVisibleModal={setIsVisibleModal}
+                width={modalWidth}
             >
                 {modalContent}
             </Modal>

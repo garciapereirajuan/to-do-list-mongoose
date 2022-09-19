@@ -22,6 +22,7 @@ const LayoutAdmin = () => {
         setIsVisibleModal, setModalTitle, setModalContent,
         tasks, categories, setReloadCategories, setReloadTasks
     ) => {
+
         console.log(category._id)
         verifyExpireTokenInWeb(setExpireToken)
         setIsVisibleModal(true)

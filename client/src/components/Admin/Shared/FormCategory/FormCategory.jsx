@@ -11,6 +11,8 @@ const FormCategory = (props) => {
         editCategory, tasks, categories, tasksArray, setTasksArray
     } = props
 
+    console.log(category)
+
     const { Option } = Select
 
     const optionTemplate = (color) => {
@@ -58,16 +60,11 @@ const FormCategory = (props) => {
     }
 
     const getTasks = () => {
-        const filteredTasks = tasks.filter(task => {
-            return !tasksArray.includes(task.title)
-        })
+        const filteredTasks = tasks.filter(task => !tasksArray.includes(task.title))
 
         return filteredTasks.map(item => {
-            console.log(item)
             const categoryTask = item.category && getCategoryById(item.category)
             const borderColor = categoryTask?.color ? categoryTask.color : "rgb(66, 66, 66)"
-
-            console.log(category)
 
             return (
                 <Option key={`${item._id}-${item.category ? item.category : 'no_category'}-${item.title}`}>
@@ -77,10 +74,9 @@ const FormCategory = (props) => {
                         )) ||
                         (item.category && (
                             <div className='form-category__select-tasks'>
-                                <span>{item.checked && <CheckCircleFilled />} {item.title}</span>
+                                <span>{item.checked && <CheckCircleFilled />}  {item.title}</span>
                                 {
-                                    category?.title !== categoryTask.title && (
-                                        // false && (
+                                    category.title !== categoryTask.title && (
                                         <span
                                             className='form-category__select-tasks__category'
                                             style={{ borderColor: borderColor }}

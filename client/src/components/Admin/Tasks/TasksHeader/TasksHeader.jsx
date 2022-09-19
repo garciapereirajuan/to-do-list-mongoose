@@ -8,22 +8,20 @@ import './TasksHeader.scss'
 
 const { Option } = Select
 
+const sort = {
+    'Por fecha de creación': { dateUp: 'desc' },
+    'Por fecha de finalización': { orderByDateDown: 'asc' },
+    'Por categorías': { category: 'desc' },
+    'Por alfabeto': { title: 'asc' },
+    '{"dateUp":"desc"}': 'Por fecha de creación',
+    '{"orderByDateDown":"asc"}': 'Por fecha de finalización',
+    '{"category":"desc"}': 'Por categorías',
+    '{"title":"asc"}': 'Por alfabeto',
+}
+
 const TasksHeader = ({ tasks, addTask, checked, setChecked, setReloadTasks }) => {
     const [selectOrder, setSelectOrder] = useState('')
     const { user } = useAuth()
-
-    const sort = {
-        'Por fecha de creación': { dateUp: 'desc' },
-        'Por fecha de actualización': { dateUpdate: 'desc' },
-        'Por fecha de finalización': { dateDown: 'desc' },
-        'Por categorías': { category: 'desc' },
-        'Por alfabeto': { title: 'asc' },
-        '{"dateUp":"desc"}': 'Por fecha de creación',
-        '{"dateUpdate":"desc"}': 'Por fecha de actualización',
-        '{"dateDown":"desc"}': 'Por fecha de finalización',
-        '{"category":"desc"}': 'Por categorías',
-        '{"title":"asc"}': 'Por alfabeto',
-    }
 
     useEffect(() => {
         const token = getAccessTokenApi()
@@ -48,7 +46,7 @@ const TasksHeader = ({ tasks, addTask, checked, setChecked, setReloadTasks }) =>
             })
 
 
-    }, [selectOrder, user])
+    }, [selectOrder, user, setReloadTasks])
 
     return (
         <div className='tasks-header'>
@@ -85,11 +83,6 @@ const TasksHeader = ({ tasks, addTask, checked, setChecked, setReloadTasks }) =>
                         value={'Por fecha de creación'}
                         key='Por fecha de creación'>
                         Por fecha de creación
-                    </Option>
-                    <Option
-                        value={'Por fecha de actualización'}
-                        key='Por fecha de actualización'>
-                        Por fecha de actualización
                     </Option>
                     <Option
                         value={'Por fecha de finalización'}

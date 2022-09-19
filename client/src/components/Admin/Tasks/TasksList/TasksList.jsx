@@ -44,17 +44,21 @@ const TasksList = ({ tasks, editTask, deleteTask, updateCheckTask, categories, e
 const TaskItem = ({ task, editTask, editCategory, deleteTask, updateCheckTask, categories }) => {
     const [checked, setChecked] = useState(task.checked)
 
-    const formatDate = (dateTask) => {
-        let date = moment(dateTask).format('MMMM Do YYYY').split(' ')
-        let day = date[1].replace(/[^0-9]/g, '')
-        let month = date[0].split('')
-        let letter = month[0].toUpperCase()
-        month.shift()
-        month.unshift(letter)
-        month = month.join('')
-        let year = date[2]
+    // const formatDate = (dateTask) => {
+    //     let date = moment(dateTask).format('MMMM Do YYYY').split(' ')
+    //     let day = date[1].replace(/[^0-9]/g, '')
+    //     let month = date[0].split('')
+    //     let letter = month[0].toUpperCase()
+    //     month.shift()
+    //     month.unshift(letter)
+    //     month = month.join('')
+    //     let year = date[2]
 
-        return `${day} de ${month} de ${year}`
+    //     return `${day} de ${month} de ${year}`
+    // }
+
+    const formatDate = (dateTask) => {
+        return moment(dateTask).calendar()
     }
 
     const getStyles = (color) => ({
@@ -109,7 +113,7 @@ const TaskItem = ({ task, editTask, editCategory, deleteTask, updateCheckTask, c
                     background: 'rgba(61,61,61)',
                     borderColor: color ? color : 'rgba(80,80,80)',
                     boxShadow: getStyles(color).boxShadow,
-                    color: disabled && 'rgba(0,0,0,.2)'
+                    color: disabled && 'rgba(255,255,255,.5)'
                 }}
             >
                 {title}
@@ -159,7 +163,7 @@ const TaskItem = ({ task, editTask, editCategory, deleteTask, updateCheckTask, c
                     <>
                         <span className='description-date-up'>
                             <ArrowUpOutlined />
-                            Creada el {formatDate(task.dateUp)}
+                            Creada: {formatDate(task.dateUp)}
                         </span>
                         <span className='description-date-down'>
                             <ClockCircleOutlined />

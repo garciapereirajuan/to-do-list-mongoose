@@ -2,6 +2,8 @@ import { Form, Input, Button, DatePicker, Select } from 'antd'
 import { FontSizeOutlined, UnorderedListOutlined } from '@ant-design/icons'
 import moment from 'moment'
 
+import './FormTask.scss'
+
 const { Option } = Select
 
 const getOptions = (categories) => {
@@ -50,7 +52,12 @@ const placeholderSelect = (categories) => (
     </>
 )
 
+
 const FormTask = ({ taskData, setTaskData, categories, task, updateTask, addTask }) => {
+    const disabledDate = current => {
+        // Can not select days before today and today
+        return current && current < moment().endOf('day');
+    };
 
     return (
         <Form className='form-task' onFinish={task ? updateTask : addTask}>
@@ -65,8 +72,9 @@ const FormTask = ({ taskData, setTaskData, categories, task, updateTask, addTask
             </Form.Item>
             <Form.Item>
                 <DatePicker
-                    format="DD-MM-YYYY HH:mm"
-                    showTime={{ defaultValue: moment('09:00', 'HH:mm') }}
+                    format="DD-MM-YYYY"
+                    // showTime={{ defaultValue: moment('09:00', 'HH:mm') }}
+                    disabledDate={disabledDate}
                     placeholder='Fecha de finalización (opcional)'
                     value={taskData.dateDown && moment(taskData.dateDown)}
                     onChange={(e, value) => setTaskData({

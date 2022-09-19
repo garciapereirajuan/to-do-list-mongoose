@@ -5,6 +5,7 @@ import { getAccessTokenApi } from '../../../../api/auth'
 import { createTaskApi, updateTaskApi } from '../../../../api/task'
 import { updateCategoryAndTasks } from '../../../../utils/categoryAndTasksManager'
 import useAuth from '../../../../hooks/useAuth'
+import moment from 'moment'
 import 'moment/locale/es'
 
 import './AddEditForm.scss'
@@ -54,10 +55,10 @@ const AddEditForm = (props) => {
             author: user.id,
             checked: false,
             dateUp: dateUp ? dateUp : new Date().toISOString(),
-            dateDown: dateDown ? dateDown : null,
+            dateDown: dateDown ? dateDown : false,
             dateUpdate: dateUpdate ? dateUpdate : new Date().toISOString(),
             category: category ? category : null,
-            order: parseInt(newOrder)
+            orderByDateDown: dateDown ? dateDown : moment().add(10, 'years')
         }
 
         const token = getAccessTokenApi()
@@ -112,6 +113,7 @@ const AddEditForm = (props) => {
         let data = {
             ...taskData,
             title: getTitleCapitalize(taskData.title),
+            orderByDateDown: taskData.dateDown ? taskData.dateDown : moment().add(10, 'years'),
             dateUpdate: new Date().toISOString()
         }
 
@@ -129,6 +131,7 @@ const AddEditForm = (props) => {
             removeCategory = true
         }
 
+        console.log(task)
         task && updateTaskApi(token, task._id, data)
             .then(response => {
                 if (/token/g.test(response.message)) {
@@ -168,7 +171,7 @@ const AddEditForm = (props) => {
                         data.category,
                         oldCategoryId,
                         true,
-                        () => { }
+                        finish
                     )
                 }
                 finish()
