@@ -8,6 +8,7 @@ const { Option } = Select
 
 const getOptions = (categories) => {
     const categoriesOption = [
+        //da problemas de key
         <Option value={undefined} key={'0'}>Ninguna</Option>
     ]
     categories.forEach(category => {
@@ -53,17 +54,31 @@ const placeholderSelect = (categories) => (
 )
 
 
-const FormTask = ({ taskData, setTaskData, categories, task, autoFocus, updateTask, addTask }) => {
+const FormTask = ({ taskData, setTaskData, categories, task, newCategoryId, autoFocus, updateTask, addTask }) => {
     const disabledDate = current => {
-        // Can not select days before today and today
         return current && current < moment().endOf('day');
-    };
+    }
+
+    let autoFocusSelect = false
+    if (autoFocus === 'autoFocusSelectCategories') {
+        autoFocusSelect = true
+    }
+
+    let valueSelectCategory = null
+
+    // if (newCategoryId) { //le llega desde /categories
+    //     taskData.category = newCategoryId
+    // }
+
+    if (taskData.category) {
+        valueSelectCategory = getTitleCategory(categories, taskData.category)
+    }
 
     return (
         <Form className='form-task' onFinish={task ? updateTask : addTask}>
             <Form.Item>
                 <Input
-                    autoFocus={!autoFocus ? true : false}
+                    autoFocus={!autoFocusSelect}
                     prefix={<FontSizeOutlined />}
                     placeholder='Nueva tarea'
                     value={taskData.title}
@@ -86,10 +101,10 @@ const FormTask = ({ taskData, setTaskData, categories, task, autoFocus, updateTa
             </Form.Item>
             <Form.Item className='input-select-categories'>
                 <Select
-                    autoFocus={autoFocus === 'autoFocusSelectCategories' ? true : false}
-                    defaultOpen={autoFocus === 'autoFocusSelectCategories' ? true : false}
+                    autoFocus={autoFocusSelect}
+                    defaultOpen={autoFocusSelect}
                     disabled={categories ? false : true}
-                    value={taskData.category && getTitleCategory(categories, taskData.category)}
+                    value={valueSelectCategory}
                     onChange={e => {
                         setTaskData({ ...taskData, category: getCategoryByTitle(categories, e) })
                     }}

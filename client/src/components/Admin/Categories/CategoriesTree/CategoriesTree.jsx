@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Button, Tree } from 'antd'
 import { openNotification } from '../../../../utils/openNotification'
-import { EditFilled, DeleteFilled, CheckCircleFilled } from '@ant-design/icons'
+import { EditFilled, DeleteFilled, CheckCircleFilled, FileAddFilled } from '@ant-design/icons'
 import { getAccessTokenApi } from '../../../../api/auth'
 import { positionCategoryAndTasksApi } from '../../../../api/categoryAndTasks'
 import { updateCategoryAndTasks } from '../../../../utils/categoryAndTasksManager'
@@ -10,7 +10,7 @@ import './CategoriesTree.scss'
 
 const { DirectoryTree } = Tree
 
-const CategoriesTree = ({ categories, setReloadCategories, setReloadTasks, editCategory, deleteCategory }) => {
+const CategoriesTree = ({ categories, setReloadCategories, setReloadTasks, editCategory, deleteCategory, addTask }) => {
     const [treeCategories, setTreeCategories] = useState([])
     const [position, setPosition] = useState(0)
 
@@ -50,7 +50,14 @@ const CategoriesTree = ({ categories, setReloadCategories, setReloadTasks, editC
         }
 
         categories && categories.forEach(category => {
-            let children = []
+            let children = [{
+                title: 'Crear una tarea',
+                key: `${category._id}-0`,
+                isLeaf: true,
+                style: getStyles.children(category),
+                icon: <FileAddFilled />,
+                onSelect: (e) => console.log(e)
+            }]
 
             category.tasks.forEach(item => {
                 children.push({
@@ -83,7 +90,7 @@ const CategoriesTree = ({ categories, setReloadCategories, setReloadTasks, editC
 
         setTreeCategories(treeCategoriesArray)
 
-    }, [categories, editCategory])
+    }, [categories, editCategory, deleteCategory])
 
     const onDragEnter = (info) => {
         const pos = info.node.pos.split('-')
@@ -92,7 +99,14 @@ const CategoriesTree = ({ categories, setReloadCategories, setReloadTasks, editC
 
     const onSelect = (keys, info) => {
         const pos = info.node.pos.split('-')
+        const key = info.node.key.split('-')
         setPosition(pos[2])
+
+        if (key[1] === '0') {
+            const categoryId = key[0]
+
+            addTask(categoryId)
+        }
     }
 
     const onDrop = (info) => {
@@ -104,8 +118,12 @@ const CategoriesTree = ({ categories, setReloadCategories, setReloadTasks, editC
         const newCategoryId = node[0]
         const taskId = dragNode[1]
 
+        if (taskId === '0') {
+            openNotification('info', 'Sólo puedes mover las tareas. 😀')
+            return
+        }
+
         if (oldCategoryId === newCategoryId) {
-            console.log(taskId, position)
             positionCategoryAndTasksApi(token, taskId, oldCategoryId, position)
                 .then(response => {
                     if (response?.code !== 200 || !response.code) {

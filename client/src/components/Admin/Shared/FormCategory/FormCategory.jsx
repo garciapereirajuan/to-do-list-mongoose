@@ -57,16 +57,11 @@ const FormCategory = (props) => {
     }
 
     const getTasks = () => {
-        const filteredTasks = tasks.filter(task => {
-            return !tasksArray.includes(task.title)
-        })
+        const filteredTasks = tasks.filter(task => !tasksArray.includes(task.title))
 
         return filteredTasks.map(item => {
-            console.log(item)
             const categoryTask = item.category && getCategoryById(item.category)
             const borderColor = categoryTask?.color ? categoryTask.color : "rgb(66, 66, 66)"
-
-            console.log(category)
 
             return (
                 <Option key={`${item._id}-${item.category ? item.category : 'no_category'}-${item.title}`}>
@@ -79,7 +74,6 @@ const FormCategory = (props) => {
                                 <span>{item.checked && <CheckCircleFilled />} {item.title}</span>
                                 {
                                     category?.title !== categoryTask.title && (
-                                        // false && (
                                         <span
                                             className='form-category__select-tasks__category'
                                             style={{ borderColor: borderColor }}
@@ -116,7 +110,7 @@ const FormCategory = (props) => {
                                 <BgColorsOutlined />
                             </span>
                             <span style={{ marginLeft: '4px' }}>
-                                Color de la categoría
+                                Color de la categoría (opcional)
                             </span>
                         </>
                     }
@@ -130,13 +124,18 @@ const FormCategory = (props) => {
                     value={tasksArray}
                     onChange={setTasksArray}
                     placement='topRight'
+                    disabled={tasks.length === 0}
                     placeholder={
                         <>
                             <span style={{ fontSize: '18px', marginLeft: '-1px' }}>
                                 <UnorderedListOutlined />
                             </span>
-                            <span style={{ position: 'relative', marginLeft: '4px', bottom: '2px' }}>
-                                Agrega tareas a tu categoría
+                            <span style={{ position: 'relative', marginLeft: '4px' }}>
+                                {
+                                    tasks.length === 0
+                                        ? 'Agrega tareas a tu categoría (aún no tienes tareas)'
+                                        : 'Agrega tareas a tu categoría (opcional)'
+                                }
                             </span>
                         </>
                     }

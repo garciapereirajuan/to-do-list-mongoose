@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import CategoriesTree from '../../../components/Admin/Categories/CategoriesTree'
 import useAuth from '../../../hooks/useAuth'
-import AddEditFormCategory from '../../../components/Admin/Shared/AddEditFormCategory'
 import Modal from '../../../components/Modal'
-import { Col, Row, Button, Modal as ModalAntd } from 'antd'
+import AddEditFormCategory from '../../../components/Admin/Shared/AddEditFormCategory'
+import AddEditFormTask from '../../../components/Admin/Shared/AddEditFormTask'
+import CategoriesTree from '../../../components/Admin/Categories/CategoriesTree'
+import CategoriesHeader from '../../../components/Admin/Categories/CategoriesHeader'
+import { Col, Row, Modal as ModalAntd } from 'antd'
 import { openNotification } from '../../../utils/openNotification'
 import { indexCategoriesApi, deleteCategoryApi } from '../../../api/category'
 import { indexTasksWithoutPaginationApi } from '../../../api/task'
@@ -21,6 +23,7 @@ const Categories = ({ setExpireToken, editCategoryGeneral }) => {
     const [isVisibleModal, setIsVisibleModal] = useState(false)
     const [modalTitle, setModalTitle] = useState('')
     const [modalContent, setModalContent] = useState(null)
+    const [modalWidth, setModalWidth] = useState('700px')
     const { user } = useAuth()
     const { confirm } = ModalAntd
 
@@ -66,6 +69,7 @@ const Categories = ({ setExpireToken, editCategoryGeneral }) => {
     }, [reloadTasks, user])
 
     const addCategory = () => {
+        setModalWidth('700px')
         verifyExpireTokenInWeb(setExpireToken)
         setIsVisibleModal(true)
         setModalTitle('Crear categoría')
@@ -82,6 +86,7 @@ const Categories = ({ setExpireToken, editCategoryGeneral }) => {
     }
 
     const editCategory = (category) => {
+        setModalWidth('700px')
         verifyExpireTokenInWeb(setExpireToken)
         setIsVisibleModal(true)
         setModalTitle('Editar categoría')
@@ -186,21 +191,38 @@ const Categories = ({ setExpireToken, editCategoryGeneral }) => {
         })
     }
 
+    const addTask = (newCategoryId) => {
+        setModalWidth('500px')
+
+        verifyExpireTokenInWeb(setExpireToken)
+        setIsVisibleModal(true)
+        setModalTitle('Nueva tarea')
+        setModalContent(
+            <AddEditFormTask
+                task={null}
+                category={newCategoryId}
+                categories={categories}
+                setIsVisibleModal={setIsVisibleModal}
+                setReloadTasks={setReloadTasks}
+                setReloadCategories={setReloadCategories}
+            />
+        )
+    }
+
     return (
         <Row className='categories'>
             <Col md={6} />
             <Col md={12}>
-                <div className='categories__header'>
-                    <div className='categories__header-btn-new-category'>
-                        <Button type='primary' onClick={addCategory}>Nueva categoría</Button>
-                    </div>
-                </div>
+                <CategoriesHeader
+                    addCategory={addCategory}
+                />
                 <CategoriesTree
                     categories={categories}
                     setReloadCategories={setReloadCategories}
                     setReloadTasks={setReloadTasks}
                     editCategory={editCategory}
                     deleteCategory={deleteCategory}
+                    addTask={addTask}
                 />
             </Col>
             <Col md={6} />
@@ -208,7 +230,7 @@ const Categories = ({ setExpireToken, editCategoryGeneral }) => {
                 modalTitle={modalTitle}
                 isVisibleModal={isVisibleModal}
                 setIsVisibleModal={setIsVisibleModal}
-                width='700px'
+                width={modalWidth}
             >
                 {modalContent}
             </Modal>

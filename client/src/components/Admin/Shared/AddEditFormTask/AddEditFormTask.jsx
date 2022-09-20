@@ -12,12 +12,13 @@ import './AddEditFormTask.scss'
 
 const AddEditFormTask = (props) => {
     const {
-        task, autoFocus, categories, setIsVisibleModal,
+        task, category, autoFocus, categories, setIsVisibleModal,
         setReloadTasks, setReloadCategories
     } = props
 
     const [taskData, setTaskData] = useState({})
     const [oldCategoryId, setOldCategoryId] = useState(null)
+    const [newCategoryId, setNewCategoryId] = useState(null)
     const { user } = useAuth()
 
     useEffect(() => {
@@ -25,9 +26,16 @@ const AddEditFormTask = (props) => {
             setTaskData(task)
             setOldCategoryId(task.category)
         }
-        if (!task) {
+        if (!task || !category) {
             setTaskData({})
             setOldCategoryId(null)
+            setNewCategoryId(null)
+        }
+        if (category) {
+            setTaskData({ ...taskData, category: category })
+        }
+        if (!category) {
+            setNewCategoryId(null)
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [task])
@@ -183,6 +191,7 @@ const AddEditFormTask = (props) => {
             setTaskData={setTaskData}
             categories={categories}
             task={task}
+            newCategoryId={newCategoryId}
             autoFocus={autoFocus}
             updateTask={updateTask}
             addTask={addTask}

@@ -119,7 +119,6 @@ const Tasks = ({ setExpireToken }) => {
         setModalContent(
             <AddEditFormTask
                 task={null}
-                newOrder={tasks ? tasks.total : 0}
                 categories={categories}
                 setIsVisibleModal={setIsVisibleModal}
                 setReloadTasks={setReloadTasks}

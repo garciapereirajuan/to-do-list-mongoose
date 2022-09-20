@@ -34,7 +34,7 @@ export const AddEditFormCategory = (props) => {
             setTasksArray([])
         }
         if (taskDefault) {
-            setTasksArray([...tasksArray, taskDefault])
+            setTasksArray([taskDefault])
         }
     }, [category, taskDefault])
 
