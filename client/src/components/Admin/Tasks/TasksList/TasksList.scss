@@ -37,6 +37,7 @@
         .task {
             margin-top: 2px;
             padding: 5px 20px;
+            border-radius: 4px;
             position: relative;
             background-color: $background-dark-light;
 
@@ -154,7 +155,7 @@
 
             &.check {
                 border: 2px solid rgba($success, .4);
-                background-color: rgb(70, 90, 70);
+                background-color: rgb(63, 95, 63);
 
                 .task__description-date-up {
                     color: $font-dark;

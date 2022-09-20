@@ -12,6 +12,7 @@ const TaskSchema = Schema({
     dateUp: Date,
     dateDown: Date,
     dateUpdate: Date,
+    dateComplete: Date,
     checked: Boolean,
     category: {
         type: Schema.Types.ObjectId,

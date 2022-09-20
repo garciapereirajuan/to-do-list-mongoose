@@ -51,7 +51,9 @@ const TaskItem = ({ task, editTask, chooseActionForCategory, deleteTask, updateC
     const [classes, setClasses] = useState('')
 
     useEffect(() => {
-        setWarningTime(moment(task.dateDown).subtract(24, 'hours').format() < moment().format())
+        setWarningTime(
+            moment(task.dateDown).subtract(24, 'hours').format() < moment().format()
+        )
         setFinishTime(moment(task.dateDown).format() < moment().format())
     }, [task])
 
@@ -75,7 +77,7 @@ const TaskItem = ({ task, editTask, chooseActionForCategory, deleteTask, updateC
             setClasses('task')
             return
         }
-    }, [finishTime, warningTime])
+    }, [finishTime, warningTime, task])
 
     // const formatDate = (dateTask) => {
     //     let date = moment(dateTask).format('MMMM Do YYYY').split(' ')
@@ -128,8 +130,6 @@ const TaskItem = ({ task, editTask, chooseActionForCategory, deleteTask, updateC
             titleProp = 'Haz clic para crear una categoría'
             disabled = true
         }
-
-        // return { title, color }
     }
 
     const getButtons = () => {
@@ -178,6 +178,14 @@ const TaskItem = ({ task, editTask, chooseActionForCategory, deleteTask, updateC
     }
 
     const getDescriptionDateDown = () => {
+        if (task.checked && task.dateComplete) {
+            return (
+                <span className='tasks__description-date-down__date-complete'>
+                    Completada: {moment(task.dateComplete).fromNow()}
+                </span>
+            )
+        }
+
         if (!task.dateDown) {
             return (
                 <span className='task__description-date-down__no-date'>

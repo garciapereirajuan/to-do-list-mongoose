@@ -27,7 +27,6 @@ const Tasks = ({ setExpireToken }) => {
     const [isVisibleModal, setIsVisibleModal] = useState(false)
     const [modalTitle, setModalTitle] = useState('')
     const [modalContent, setModalContent] = useState(null)
-    const [modalFooter, setModalFooter] = useState(null)
     const [modalWidth, setModalWidth] = useState('500px')
     const [checked, setChecked] = useState(false)
 
@@ -188,9 +187,10 @@ const Tasks = ({ setExpireToken }) => {
 
     const updateCheckTask = (e, task) => {
         const { checked } = e.target
+        const dateComplete = !checked ? null : new Date()
         const token = getAccessTokenApi()
 
-        updateTaskApi(token, task._id, { checked })
+        updateTaskApi(token, task._id, { checked, dateComplete })
             .then(response => {
                 if (/token/g.test(response.message)) {
                     openNotification('info', 'Lo siento, debes recargar la página e intentarlo de nuevo.')
@@ -215,11 +215,10 @@ const Tasks = ({ setExpireToken }) => {
             editCategory(task.category)
             return
         }
-        setModalWidth('700px')
+        setModalWidth('500px')
         setIsVisibleModal(true)
         setModalTitle('Deseo...')
         setModalContent(
-            //element será 'task' o 'category'
             <>
                 <Button
                     type='primary'
@@ -243,6 +242,7 @@ const Tasks = ({ setExpireToken }) => {
 
     const addCategory = (task) => {
         let taskDefault = `${task._id}-${task.category ? task.category : 'no_category'}-${task.title}`
+        setModalWidth('700px')
 
         verifyExpireTokenInWeb(setExpireToken)
         setIsVisibleModal(true)
@@ -262,6 +262,7 @@ const Tasks = ({ setExpireToken }) => {
 
     const editCategory = (category) => {
         const categoryObj = categories.filter(item => item._id === category)[0]
+        setModalWidth('700px')
 
         verifyExpireTokenInWeb(setExpireToken)
         setIsVisibleModal(true)
@@ -368,7 +369,6 @@ const Tasks = ({ setExpireToken }) => {
                 modalTitle={modalTitle}
                 isVisibleModal={isVisibleModal}
                 setIsVisibleModal={setIsVisibleModal}
-                footer={modalFooter}
                 width={modalWidth}
             >
                 {modalContent}

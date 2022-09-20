@@ -57,6 +57,7 @@ const AddEditFormTask = (props) => {
             dateUp: dateUp ? dateUp : new Date().toISOString(),
             dateDown: dateDown ? dateDown : null,
             dateUpdate: dateUpdate ? dateUpdate : new Date().toISOString(),
+            dateComplete: null,
             category: category ? category : null,
             orderByDateDown: dateDown ? dateDown : moment().add(10, 'years')
         }
