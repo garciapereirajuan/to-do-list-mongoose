@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import CategoriesTree from '../../../components/Admin/Categories/CategoriesTree'
 import useAuth from '../../../hooks/useAuth'
-import AddEditForm from '../../../components/Admin/Categories/AddEditForm'
+import AddEditFormCategory from '../../../components/Admin/Shared/AddEditFormCategory'
 import Modal from '../../../components/Modal'
 import { Col, Row, Button, Modal as ModalAntd } from 'antd'
 import { openNotification } from '../../../utils/openNotification'
@@ -70,7 +70,7 @@ const Categories = ({ setExpireToken, editCategoryGeneral }) => {
         setIsVisibleModal(true)
         setModalTitle('Crear categoría')
         setModalContent(
-            <AddEditForm
+            <AddEditFormCategory
                 category={null}
                 tasks={tasks}
                 categories={categories}
@@ -82,14 +82,20 @@ const Categories = ({ setExpireToken, editCategoryGeneral }) => {
     }
 
     const editCategory = (category) => {
-        editCategoryGeneral(
-            category, verifyExpireTokenInWeb, setExpireToken,
-            setIsVisibleModal, setModalTitle, setModalContent,
-            tasks, categories, setReloadCategories, setReloadTasks
+        verifyExpireTokenInWeb(setExpireToken)
+        setIsVisibleModal(true)
+        setModalTitle('Editar categoría')
+        setModalContent(
+            <AddEditFormCategory
+                category={category}
+                tasks={tasks}
+                categories={categories}
+                setReloadCategories={setReloadCategories}
+                setReloadTasks={setReloadTasks}
+                setIsVisibleModal={setIsVisibleModal}
+            />
         )
     }
-
-
 
     const deleteCategory = (category) => {
         confirm({

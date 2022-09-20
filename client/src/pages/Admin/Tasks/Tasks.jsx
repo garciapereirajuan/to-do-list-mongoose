@@ -4,10 +4,11 @@ import queryString from 'query-string'
 import useAuth from '../../../hooks/useAuth'
 import Modal from '../../../components/Modal'
 import TasksList from '../../../components/Admin/Tasks/TasksList'
-import AddEditForm from '../../../components/Admin/Tasks/AddEditForm'
+import AddEditFormTask from '../../../components/Admin/Shared/AddEditFormTask'
+import AddEditFormCategory from '../../../components/Admin/Shared/AddEditFormCategory'
 import Pagination from '../../../components/Admin/Pagination'
 import TasksHeader from '../../../components/Admin/Tasks/TasksHeader'
-import { Row, Col, Modal as ModalAntd } from 'antd'
+import { Row, Col, Button, Modal as ModalAntd } from 'antd'
 import { openNotification } from '../../../utils/openNotification'
 import { getAccessTokenApi, verifyExpireTokenInWeb } from '../../../api/auth'
 import { deleteTaskApi, indexTasksApi, indexTasksWithoutPaginationApi, updateTaskApi } from '../../../api/task'
@@ -17,7 +18,7 @@ import { deleteManyTasks } from '../../../utils/deleteManyRegisters'
 
 import './Tasks.scss'
 
-const Tasks = ({ setExpireToken, editCategoryGeneral }) => {
+const Tasks = ({ setExpireToken }) => {
     const [tasks, setTasks] = useState(null)
     const [tasksArray, setTasksArray] = useState([])
     const [reloadTasks, setReloadTasks] = useState(false)
@@ -26,6 +27,7 @@ const Tasks = ({ setExpireToken, editCategoryGeneral }) => {
     const [isVisibleModal, setIsVisibleModal] = useState(false)
     const [modalTitle, setModalTitle] = useState('')
     const [modalContent, setModalContent] = useState(null)
+    const [modalFooter, setModalFooter] = useState(null)
     const [modalWidth, setModalWidth] = useState('500px')
     const [checked, setChecked] = useState(false)
 
@@ -116,7 +118,7 @@ const Tasks = ({ setExpireToken, editCategoryGeneral }) => {
         setIsVisibleModal(true)
         setModalTitle('Nueva tarea')
         setModalContent(
-            <AddEditForm
+            <AddEditFormTask
                 task={null}
                 newOrder={tasks ? tasks.total : 0}
                 categories={categories}
@@ -127,15 +129,15 @@ const Tasks = ({ setExpireToken, editCategoryGeneral }) => {
         )
     }
 
-    const editTask = (task) => {
+    const editTask = (task, autoFocus) => {
         setModalWidth('500px')
         verifyExpireTokenInWeb(setExpireToken)
         setIsVisibleModal(true)
         setModalTitle('Actualizar tarea')
         setModalContent(
-            <AddEditForm
+            <AddEditFormTask
                 task={task}
-                newOrder={null}
+                autoFocus={autoFocus ? autoFocus : null}
                 categories={categories}
                 setIsVisibleModal={setIsVisibleModal}
                 setReloadTasks={setReloadTasks}
@@ -208,47 +210,131 @@ const Tasks = ({ setExpireToken, editCategoryGeneral }) => {
             })
     }
 
-    const editCategory = (category) => {
-        const categoryObj = categories.filter(item => item._id === category)[0]
+    const chooseActionForCategory = (task) => {
+        if (task.category) {
+            editCategory(task.category)
+            return
+        }
         setModalWidth('700px')
-
-        editCategoryGeneral(
-            categoryObj, verifyExpireTokenInWeb, setExpireToken,
-            setIsVisibleModal, setModalTitle, setModalContent,
-            tasksArray, categories, setReloadCategories, setReloadTasks
+        setIsVisibleModal(true)
+        setModalTitle('Deseo...')
+        setModalContent(
+            //element será 'task' o 'category'
+            <>
+                <Button
+                    type='primary'
+                    className='btn-submit'
+                    onClick={() => addCategory(task)}
+                >
+                    Crear una nueva categoría
+                </Button>,
+                <Button
+                    type='primary'
+                    className='btn-submit'
+                    onClick={() => {
+                        editTask(task, 'autoFocusSelectCategories')
+                    }}
+                >
+                    Elegir una categoría existente
+                </Button>
+            </>
         )
     }
 
-    const deleteAllTasks = () => {
-        let allTasks = tasksArray
+    const addCategory = (task) => {
+        let taskDefault = `${task._id}-${task.category ? task.category : 'no_category'}-${task.title}`
 
-        confirm({
-            title: 'Eliminar todas las tareas',
-            content: '¿Quieres eliminar todas tus tareas?',
-            okText: 'Eliminar',
-            okType: 'danger',
-            cancelText: 'Cancelar',
-            onOk() {
-                confirm({
-                    title: 'Confirma la eliminación',
-                    content: 'Por favor, confirma una vez más que deseas eliminar todas tus tareas.',
-                    okText: 'Eliminar todas',
-                    okType: 'danger',
-                    cancelText: 'Cancelar',
-                    onOk() {
-                        const nextFunction = () => {
-                            setReloadTasks(true)
-                        }
+        verifyExpireTokenInWeb(setExpireToken)
+        setIsVisibleModal(true)
+        setModalTitle('Crear categoría')
+        setModalContent(
+            <AddEditFormCategory
+                category={null}
+                tasks={tasksArray}
+                taskDefault={taskDefault}
+                categories={categories}
+                setReloadCategories={setReloadCategories}
+                setReloadTasks={setReloadTasks}
+                setIsVisibleModal={setIsVisibleModal}
+            />
+        )
+    }
 
-                        deleteManyTasks(
-                            allTasks,
-                            'Se eliminaron todas tus tareas.',
-                            nextFunction
-                        )
+    const editCategory = (category) => {
+        const categoryObj = categories.filter(item => item._id === category)[0]
+
+        verifyExpireTokenInWeb(setExpireToken)
+        setIsVisibleModal(true)
+        setModalTitle('Editar categoría')
+        setModalContent(
+            <AddEditFormCategory
+                category={categoryObj}
+                tasks={tasksArray}
+                categories={categories}
+                setReloadCategories={setReloadCategories}
+                setReloadTasks={setReloadTasks}
+                setIsVisibleModal={setIsVisibleModal}
+            />
+        )
+    }
+
+    const deleteAllTasks = (typeTasks) => {
+        let array = []
+
+        if (typeTasks === 'checked') {
+            array = tasksArray.filter(item => item.checked)
+
+            confirm({
+                title: 'Eliminar las tareas completadas',
+                content: '¿Quieres eliminar todas las tareas completadas?',
+                okText: 'Eliminar',
+                okType: 'danger',
+                cancelText: 'Cancelar',
+                onOk() {
+                    const nextFunction = () => {
+                        setReloadTasks(true)
                     }
-                })
-            }
-        })
+
+                    deleteManyTasks(
+                        array,
+                        'Se eliminaron las tareas completadas.',
+                        nextFunction
+                    )
+                }
+            })
+        }
+
+        if (!typeTasks) {
+            array = tasksArray
+
+            confirm({
+                title: 'Eliminar todas las tareas',
+                content: '¿Quieres eliminar todas tus tareas?',
+                okText: 'Eliminar',
+                okType: 'danger',
+                cancelText: 'Cancelar',
+                onOk() {
+                    confirm({
+                        title: 'Confirma la eliminación',
+                        content: 'Por favor, confirma una vez más que deseas eliminar todas tus tareas.',
+                        okText: 'Eliminar todas',
+                        okType: 'danger',
+                        cancelText: 'Cancelar',
+                        onOk() {
+                            const nextFunction = () => {
+                                setReloadTasks(true)
+                            }
+
+                            deleteManyTasks(
+                                array,
+                                'Se eliminaron todas tus tareas.',
+                                nextFunction
+                            )
+                        }
+                    })
+                }
+            })
+        }
     }
 
     return (
@@ -269,7 +355,7 @@ const Tasks = ({ setExpireToken, editCategoryGeneral }) => {
                     deleteTask={deleteTask}
                     updateCheckTask={updateCheckTask}
                     categories={categories}
-                    editCategory={editCategory}
+                    chooseActionForCategory={chooseActionForCategory}
                 />
             </Col>
             {
@@ -282,6 +368,7 @@ const Tasks = ({ setExpireToken, editCategoryGeneral }) => {
                 modalTitle={modalTitle}
                 isVisibleModal={isVisibleModal}
                 setIsVisibleModal={setIsVisibleModal}
+                footer={modalFooter}
                 width={modalWidth}
             >
                 {modalContent}

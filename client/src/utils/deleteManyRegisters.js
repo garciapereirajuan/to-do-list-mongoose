@@ -2,6 +2,7 @@ import { getAccessTokenApi } from '../api/auth'
 import { deleteTaskApi } from '../api/task'
 import { deleteCategoryApi } from '../api/category'
 import { openNotification } from './openNotification'
+import { updateCategoryAndTasks } from './categoryAndTasksManager'
 
 export const deleteManyTasks = (array, msj, nextFunction) => {
     const token = getAccessTokenApi()
@@ -19,6 +20,16 @@ export const deleteManyTasks = (array, msj, nextFunction) => {
                     openNotification('error', response.message)
                     i++
                     return
+                }
+                if (array[i].category) {
+                    updateCategoryAndTasks(
+                        token, 
+                        array[i]._id, 
+                        null, 
+                        array[i].category, 
+                        false, 
+                        () => {}
+                    )
                 }
                 // openNotification('success', response.message)
                 i++
@@ -48,6 +59,16 @@ export const deleteManyCategories = (array, nextFunction, msj) => {
                     openNotification('error', response.message)
                     i++
                     return
+                }
+                if (array[i].category) {
+                    updateCategoryAndTasks(
+                        token, 
+                        array[i]._id, 
+                        null, 
+                        array[i].category, 
+                        false, 
+                        () => {}
+                    )
                 }
                 // notification['success']({ message: response.message })
                 i++

@@ -6,7 +6,7 @@ import 'moment/locale/es'
 
 import './TasksList.scss'
 
-const TasksList = ({ tasks, editTask, deleteTask, updateCheckTask, categories, editCategory }) => {
+const TasksList = ({ tasks, editTask, deleteTask, updateCheckTask, categories, chooseActionForCategory }) => {
     const [listItems, setListItems] = useState([])
     const { docs } = tasks
 
@@ -19,7 +19,7 @@ const TasksList = ({ tasks, editTask, deleteTask, updateCheckTask, categories, e
                     key={task._id}
                     task={task}
                     editTask={editTask}
-                    editCategory={editCategory}
+                    chooseActionForCategory={chooseActionForCategory}
                     deleteTask={deleteTask}
                     updateCheckTask={updateCheckTask}
                     categories={categories}
@@ -28,7 +28,10 @@ const TasksList = ({ tasks, editTask, deleteTask, updateCheckTask, categories, e
         })
 
         setListItems(listItemsArray)
-    }, [docs, editTask, deleteTask, updateCheckTask, categories])
+    }, [
+        docs, editTask, deleteTask, updateCheckTask,
+        categories, chooseActionForCategory
+    ])
 
     return (
         <div className='tasks-list__item'>
@@ -41,25 +44,30 @@ const TasksList = ({ tasks, editTask, deleteTask, updateCheckTask, categories, e
     )
 }
 
-const TaskItem = ({ task, editTask, editCategory, deleteTask, updateCheckTask, categories }) => {
+const TaskItem = ({ task, editTask, chooseActionForCategory, deleteTask, updateCheckTask, categories }) => {
     const [checkedTask, setCheckedTask] = useState(task.checked)
     const [warningTime, setWarningTime] = useState(false)
     const [finishTime, setFinishTime] = useState(false)
     const [classes, setClasses] = useState('')
 
     useEffect(() => {
-        setWarningTime(moment(task.dateDown).subtract(2, 'days').format() < moment().format())
+        setWarningTime(moment(task.dateDown).subtract(24, 'hours').format() < moment().format())
         setFinishTime(moment(task.dateDown).format() < moment().format())
     }, [task])
 
     useEffect(() => {
+        if (task.checked) {
+            setClasses('check task')
+            return
+        }
+
         if (finishTime) {
-            setClasses('task finish-time')
+            setClasses('finish-time task')
             return
         }
 
         if (warningTime) {
-            setClasses('task warning-time')
+            setClasses('warning-time task')
             return
         }
 
@@ -117,7 +125,7 @@ const TaskItem = ({ task, editTask, editCategory, deleteTask, updateCheckTask, c
         if (title === '') {
             color = 'rgba(90,90,90)'
             title = 'Sin categoría'
-            titleProp = 'Sin categoría'
+            titleProp = 'Haz clic para crear una categoría'
             disabled = true
         }
 
@@ -129,10 +137,11 @@ const TaskItem = ({ task, editTask, editCategory, deleteTask, updateCheckTask, c
 
         const btnCategory = (
             < Button
-                onClick={(e) => editCategory(task.category)}
-                className='task__btn-category'
+                onClick={(e) => {
+                    chooseActionForCategory(task)
+                }}
+                className={`task__btn-category ${disabled ? 'disabled' : 'not-disabled'}`}
                 title={titleProp}
-                disabled={disabled}
                 style={{
                     background: 'rgba(61,61,61)',
                     borderColor: color ? color : 'rgba(200,200,200)',
@@ -221,11 +230,11 @@ const TaskItem = ({ task, editTask, editCategory, deleteTask, updateCheckTask, c
                 title={task.title}
                 description={
                     <>
-                        <span className='task__description-date-up'>
+                        <span className={`${classes}__description-date-up`}>
                             <ArrowUpOutlined />
                             Creada: {formatDate(task.dateUp)}
                         </span>
-                        <span className='task__description-date-down'>
+                        <span className={`${classes}__description-date-down`}>
                             <ClockCircleOutlined />
                             {getDescriptionDateDown()}
                         </span>

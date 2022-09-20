@@ -48,13 +48,13 @@
                 background-color: $background-dark;
                 opacity: .5;
 
-                &:hover {
+                &.not-disabled:hover {
                     width: 160px;
                     box-shadow: 0px 9px 12px rgba(0, 0, 0, .6) !important;
                     opacity: 1;
                 }
 
-                &:active {
+                &.not-disabled:active {
                     transition: all ease .3s;
                     box-shadow: 0px 3px 7px rgba(0, 0, 0, .6) !important;
                 }
@@ -77,17 +77,18 @@
             }
 
             &__description-date-up {
+                font-weight: bold;
                 color: $font-dark-light;
                 margin-left: 28px;
             }
 
             &__description-date-down {
+                font-weight: bold;
                 color: $font-dark-light;
                 margin-left: 28px;
 
                 &__no-date {
-                    color: $primary-color;
-                    font-weight: bold;
+                    color: #377928;
                 }
 
                 &__date-down-warning {
@@ -97,32 +98,37 @@
                 &__date-down-ok {}
 
                 &__date-down-not-ok {
-                    color: black;
+                    color: $font-dark;
                 }
             }
 
             &.warning-time {
                 animation-name: shadow-task;
-                animation-duration: 2s;
+                animation-duration: 1.5s;
                 animation-iteration-count: infinite;
             }
 
             @keyframes shadow-task {
                 0% {
-                    box-shadow: -4px 0px 6px rgba($danger, .4);
+                    box-shadow: -4px 0px 6px rgba($danger, .8);
+                    background-color: rgb(94, 62, 62);
                 }
 
                 50% {
                     box-shadow: -2px 0px 2px transparent;
+                    background-color: $background-dark-light;
                 }
 
                 100% {
-                    box-shadow: -4px 0px 6px rgba($danger, .4);
-                    font-weight: light;
+                    box-shadow: -4px 0px 6px rgba($danger, .8);
+                    background-color: rgb(94, 62, 62);
                 }
             }
 
             &.finish-time {
+                background-color: rgb(110, 80, 80);
+                border: 2px solid rgba($danger, .6);
+
                 .ant-list-item-meta-title {
                     color: $font-dark;
                 }
@@ -133,10 +139,38 @@
                     .anticon {
                         color: $font-dark;
                     }
+
                 }
 
-                border: 2px solid rgba($danger, .4);
-                background: rgb(90, 70, 70);
+                .task__description-date-up {
+                    color: $font-dark;
+                }
+
+                .task__description-date-down {
+                    color: $font-dark;
+                }
+
+            }
+
+            &.check {
+                border: 2px solid rgba($success, .4);
+                background-color: rgb(70, 90, 70);
+
+                .task__description-date-up {
+                    color: $font-dark;
+                }
+
+                .task__description-date-down {
+                    color: $font-dark;
+
+                    &__no-date {
+                        color: $font-dark;
+                    }
+
+                    &__date-down-warning {
+                        color: $font-dark;
+                    }
+                }
             }
 
 

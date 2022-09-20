@@ -8,11 +8,11 @@ import useAuth from '../../../../hooks/useAuth'
 import moment from 'moment'
 import 'moment/locale/es'
 
-import './AddEditForm.scss'
+import './AddEditFormTask.scss'
 
-const AddEditForm = (props) => {
+const AddEditFormTask = (props) => {
     const {
-        task, newOrder, categories, setIsVisibleModal,
+        task, autoFocus, categories, setIsVisibleModal,
         setReloadTasks, setReloadCategories
     } = props
 
@@ -182,6 +182,7 @@ const AddEditForm = (props) => {
             setTaskData={setTaskData}
             categories={categories}
             task={task}
+            autoFocus={autoFocus}
             updateTask={updateTask}
             addTask={addTask}
         />
@@ -189,4 +190,4 @@ const AddEditForm = (props) => {
 
 }
 
-export default AddEditForm
+export default AddEditFormTask

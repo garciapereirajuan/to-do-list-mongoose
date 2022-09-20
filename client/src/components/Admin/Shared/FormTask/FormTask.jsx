@@ -53,7 +53,7 @@ const placeholderSelect = (categories) => (
 )
 
 
-const FormTask = ({ taskData, setTaskData, categories, task, updateTask, addTask }) => {
+const FormTask = ({ taskData, setTaskData, categories, task, autoFocus, updateTask, addTask }) => {
     const disabledDate = current => {
         // Can not select days before today and today
         return current && current < moment().endOf('day');
@@ -63,6 +63,7 @@ const FormTask = ({ taskData, setTaskData, categories, task, updateTask, addTask
         <Form className='form-task' onFinish={task ? updateTask : addTask}>
             <Form.Item>
                 <Input
+                    autoFocus={!autoFocus ? true : false}
                     prefix={<FontSizeOutlined />}
                     placeholder='Nueva tarea'
                     value={taskData.title}
@@ -83,8 +84,10 @@ const FormTask = ({ taskData, setTaskData, categories, task, updateTask, addTask
                     })}
                 />
             </Form.Item>
-            <Form.Item>
+            <Form.Item className='input-select-categories'>
                 <Select
+                    autoFocus={autoFocus === 'autoFocusSelectCategories' ? true : false}
+                    defaultOpen={autoFocus === 'autoFocusSelectCategories' ? true : false}
                     disabled={categories ? false : true}
                     value={taskData.category && getTitleCategory(categories, taskData.category)}
                     onChange={e => {

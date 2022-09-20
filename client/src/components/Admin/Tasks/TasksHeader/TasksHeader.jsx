@@ -106,8 +106,8 @@ const TasksHeader = ({ tasks, addTask, checked, setChecked, setReloadTasks, dele
 }
 
 const ButtonHeader = ({ checked, addTask, deleteAllTasks, tasks }) => {
-    const btnClean = (
-        <Button type='danger' onClick={deleteAllTasks}>
+    const BtnClean = ({ type }) => (
+        <Button type='danger' onClick={() => deleteAllTasks(type)}>
             <DeleteFilled />
             Limpiar
         </Button>
@@ -125,11 +125,11 @@ const ButtonHeader = ({ checked, addTask, deleteAllTasks, tasks }) => {
     }
 
     if (!checked && tasks?.docs.length !== 0) {
-        return <> {btnClean} {btnAdd} </>
+        return <> <BtnClean /> {btnAdd} </>
     }
 
     if (checked && tasks?.docs.length !== 0) {
-        return <> {btnClean} </>
+        return <> <BtnClean type='checked' /> </>
     }
 }
 
