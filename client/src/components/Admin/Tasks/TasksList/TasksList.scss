@@ -61,11 +61,20 @@
                 }
             }
 
+            .ant-list-item-meta-content {
+                overflow: hidden !important;
+            }
+
             .ant-list-item-meta-title {
                 font-size: 22px;
                 color: $font-light;
                 font-weight: bold;
                 margin-left: 20px;
+                width: 700px;
+
+                h4 {
+                    overflow: hidden !important;
+                }
             }
 
             .ant-list-item-meta-description {

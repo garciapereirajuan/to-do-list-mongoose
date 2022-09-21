@@ -18,7 +18,6 @@ const AddEditFormTask = (props) => {
 
     const [taskData, setTaskData] = useState({})
     const [oldCategoryId, setOldCategoryId] = useState(null)
-    const [newCategoryId, setNewCategoryId] = useState(null)
     const { user } = useAuth()
 
     useEffect(() => {
@@ -26,16 +25,9 @@ const AddEditFormTask = (props) => {
             setTaskData(task)
             setOldCategoryId(task.category)
         }
-        if (!task || !category) {
+        if (!task) {
             setTaskData({})
             setOldCategoryId(null)
-            setNewCategoryId(null)
-        }
-        if (category) {
-            setTaskData({ ...taskData, category: category })
-        }
-        if (!category) {
-            setNewCategoryId(null)
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [task])
@@ -50,8 +42,30 @@ const AddEditFormTask = (props) => {
         return titleTask.flat().join('')
     }
 
+    const getCorrectDateTime = (dateDown, timeDateDown, data) => {
+        if (!dateDown) {
+            data.timeDateDown = null
+            data.orderByDateDown = moment().add(10, 'years')
+            return
+        }
+
+        if (dateDown && !timeDateDown) {
+            data.timeDateDown = moment('09:00', 'HH:mm').toISOString()
+        }
+
+        if (dateDown) {
+            const time = timeDateDown ? timeDateDown : data.timeDateDown
+
+            data.dateDown = moment(moment(dateDown).toISOString())
+                .add(moment(time).format('HH:mm')).toISOString()
+
+            data.timeDateDown = data.dateDown
+            data.orderByDateDown = data.dateDown
+        }
+    }
+
     const addTask = () => {
-        const { title, dateDown, dateUp, dateUpdate, category } = taskData
+        const { title, dateDown, timeDateDown, dateUp, dateUpdate, category } = taskData
 
         if (!title) {
             openNotification('warning', 'El título es requerido.')
@@ -64,11 +78,19 @@ const AddEditFormTask = (props) => {
             checked: false,
             dateUp: dateUp ? dateUp : new Date().toISOString(),
             dateDown: dateDown ? dateDown : null,
+            timeDateDown: null,
             dateUpdate: dateUpdate ? dateUpdate : new Date().toISOString(),
             dateComplete: null,
             category: category ? category : null,
-            orderByDateDown: dateDown ? dateDown : moment().add(10, 'years')
+            // orderByDateDown: dateDown ? dateDown : moment().add(10, 'years')
         }
+
+        getCorrectDateTime(dateDown, timeDateDown, data)
+
+        console.log('data', data)
+        console.log('moment(data.timeDateDown)', moment(data.timeDateDown))
+        console.log('moment(data.dateDown)', moment(data.dateDown))
+        // return
 
         const token = getAccessTokenApi()
 
@@ -116,13 +138,45 @@ const AddEditFormTask = (props) => {
 
     const updateTask = () => {
         const token = getAccessTokenApi()
+        const { dateDown, timeDateDown } = taskData
         let removeCategory = false
+
         let data = {
             ...taskData,
             title: getTitleCapitalize(taskData.title),
-            orderByDateDown: taskData.dateDown ? taskData.dateDown : moment().add(10, 'years'),
-            dateUpdate: new Date().toISOString()
+            // orderByDateDown: taskData.dateDown ? taskData.dateDown : moment().add(10, 'years'),
+            dateUpdate: new Date().toISOString(),
+            dateDown: dateDown ? dateDown : null,
+            timeDateDown: timeDateDown ? timeDateDown : null,
         }
+
+        if ((dateDown !== timeDateDown) || !dateDown) {
+            const dateDownFormat = data.dateDown
+                ? moment(
+                    `${moment(data.dateDown).format('DD-MM-YYYY')} 00:00:00`,
+                    'DD-MM-YYYY HH:mm:ss'
+                )
+                : null
+            // console.log(dateDownFormat)
+            // data.dateDown = dateDownFormat
+            // console.log(timeDateDown._isValid)
+            getCorrectDateTime(dateDownFormat, timeDateDown, data)
+        }
+
+        // console.log('moment(data.dateDown)', moment(moment(data.dateDown, 'DD-MM-YYYY').toISOString()))
+        // console.log('moment(data.timeDateDown)', moment(moment(data.timeDateDown).toISOString()))
+
+        // data.dateDown = moment(moment(dateDown).toISOString())
+        //     .add(moment(timeDateDown).format('HH:mm')).toISOString()
+
+        // data.timeDateDown = data.dateDown
+
+        console.log(data)
+        // return
+
+        // console.log('moment(data.timeDateDown)', moment(data.timeDateDown))
+        // console.log('moment(data.dateDown)', moment(data.dateDown))
+        // return
 
         if (data.category === '0' && !oldCategoryId) {
             data.category = null
@@ -191,7 +245,7 @@ const AddEditFormTask = (props) => {
             setTaskData={setTaskData}
             categories={categories}
             task={task}
-            newCategoryId={newCategoryId}
+            category={category}
             autoFocus={autoFocus}
             updateTask={updateTask}
             addTask={addTask}

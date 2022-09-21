@@ -1,7 +1,9 @@
 import { BrowserRouter as Router } from 'react-router-dom'
+import { ConfigProvider } from 'antd'
 import useAuth from './hooks/useAuth'
 import LayoutHome from './layouts/LayoutHome'
 import LayoutAdmin from './layouts/LayoutAdmin'
+import esES from 'antd/es/locale/es_ES';
 
 import './App.scss'
 
@@ -13,18 +15,22 @@ function App() {
   if (!user && !isLoading) {
     return (
       <div className="App">
-        <Router>
-          <LayoutHome />
-        </Router>
+        <ConfigProvider locale={esES}>
+          <Router>
+            <LayoutHome />
+          </Router>
+        </ConfigProvider>
       </div>
     )
   }
 
   return (
     <div className="App">
-      <Router>
-        <LayoutAdmin />
-      </Router>
+      <ConfigProvider locale={esES}>
+        <Router>
+          <LayoutAdmin />
+        </Router>
+      </ConfigProvider>
     </div>
   )
 }

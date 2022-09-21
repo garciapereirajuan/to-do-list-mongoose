@@ -1,3 +1,18 @@
 @import '../../../../sass/index.scss';
 
-.categories-header {}
+.categories-header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 20px 0;
+
+    &-btn {
+        button {
+            margin-left: 10px;
+            display: flex;
+            align-items: center;
+            font-size: 17px;
+            float: right;
+        }
+    }
+}

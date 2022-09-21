@@ -50,14 +50,7 @@ const CategoriesTree = ({ categories, setReloadCategories, setReloadTasks, editC
         }
 
         categories && categories.forEach(category => {
-            let children = [{
-                title: 'Crear una tarea',
-                key: `${category._id}-0`,
-                isLeaf: true,
-                style: getStyles.children(category),
-                icon: <FileAddFilled />,
-                onSelect: (e) => console.log(e)
-            }]
+            let children = []
 
             category.tasks.forEach(item => {
                 children.push({
@@ -73,10 +66,25 @@ const CategoriesTree = ({ categories, setReloadCategories, setReloadTasks, editC
                     <span className='category-title'>
                         {category.title}
                         <div>
-                            <Button type='primary' onClick={() => editCategory(category)}>
+                            <Button
+                                type='primary'
+                                title='Crear nueva tarea'
+                                onClick={() => addTask(category)}
+                            >
+                                <FileAddFilled />
+                            </Button>
+                            <Button
+                                type='primary'
+                                title='Editar la categoría'
+                                onClick={() => editCategory(category)}
+                            >
                                 <EditFilled />
                             </Button>
-                            <Button type='danger' onClick={() => deleteCategory(category)}>
+                            <Button
+                                type='danger'
+                                title='Eliminar la categoría'
+                                onClick={() => deleteCategory(category)}
+                            >
                                 <DeleteFilled />
                             </Button>
                         </div>

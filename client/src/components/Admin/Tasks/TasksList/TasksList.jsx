@@ -127,7 +127,7 @@ const TaskItem = ({ task, editTask, chooseActionForCategory, deleteTask, updateC
         if (title === '') {
             color = 'rgba(90,90,90)'
             title = 'Sin categoría'
-            titleProp = 'Haz clic para crear una categoría'
+            titleProp = 'Haz clic para crear o elegir una categoría'
             disabled = true
         }
     }
@@ -235,7 +235,7 @@ const TaskItem = ({ task, editTask, chooseActionForCategory, deleteTask, updateC
                 }}
             />
             <List.Item.Meta
-                title={task.title}
+                title={<span title={task.title}>{task.title}</span>}
                 description={
                     <>
                         <span className={`${classes}__description-date-up`}>

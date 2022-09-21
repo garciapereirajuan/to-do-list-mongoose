@@ -6,4 +6,16 @@
             background-color: $background-dark-light ;
         }
     }
+
+}
+
+.ant-picker-ranges {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    a {
+        color: $primary-color;
+        font-weight: bold;
+    }
 }

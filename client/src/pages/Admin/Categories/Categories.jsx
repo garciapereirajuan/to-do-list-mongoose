@@ -191,16 +191,23 @@ const Categories = ({ setExpireToken, editCategoryGeneral }) => {
         })
     }
 
-    const addTask = (newCategoryId) => {
+    const addTask = (category) => {
         setModalWidth('500px')
 
         verifyExpireTokenInWeb(setExpireToken)
         setIsVisibleModal(true)
-        setModalTitle('Nueva tarea')
+        setModalTitle(
+            <span>
+                Nueva tarea en {' '}
+                <span style={{ color: '#888' }}>
+                    {category.title}
+                </span>
+            </span>
+        )
         setModalContent(
             <AddEditFormTask
                 task={null}
-                category={newCategoryId}
+                category={category._id}
                 categories={categories}
                 setIsVisibleModal={setIsVisibleModal}
                 setReloadTasks={setReloadTasks}
@@ -215,6 +222,7 @@ const Categories = ({ setExpireToken, editCategoryGeneral }) => {
             <Col md={12}>
                 <CategoriesHeader
                     addCategory={addCategory}
+                    categoriesLength={categories.length}
                 />
                 <CategoriesTree
                     categories={categories}

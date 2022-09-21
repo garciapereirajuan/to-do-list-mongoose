@@ -1,4 +1,5 @@
-import { Form, Input, Button, DatePicker, Select } from 'antd'
+import { useState, useEffect } from 'react'
+import { Form, Input, Button, DatePicker, TimePicker, Select } from 'antd'
 import { FontSizeOutlined, UnorderedListOutlined } from '@ant-design/icons'
 import moment from 'moment'
 
@@ -54,7 +55,13 @@ const placeholderSelect = (categories) => (
 )
 
 
-const FormTask = ({ taskData, setTaskData, categories, task, newCategoryId, autoFocus, updateTask, addTask }) => {
+const FormTask = ({ taskData, setTaskData, categories, task, category, autoFocus, updateTask, addTask }) => {
+    const [checkDate, setCheckDate] = useState(false)
+
+    useEffect(() => {
+        setCheckDate(taskData.dateDown ? true : false)
+    }, [checkDate, taskData])
+
     const disabledDate = current => {
         return current && current < moment().endOf('day');
     }
@@ -66,12 +73,13 @@ const FormTask = ({ taskData, setTaskData, categories, task, newCategoryId, auto
 
     let valueSelectCategory = null
 
-    // if (newCategoryId) { //le llega desde /categories
-    //     taskData.category = newCategoryId
-    // }
-
     if (taskData.category) {
         valueSelectCategory = getTitleCategory(categories, taskData.category)
+    }
+
+    if (category) {
+        valueSelectCategory = getTitleCategory(categories, category)
+        taskData.category = category
     }
 
     return (
@@ -93,17 +101,37 @@ const FormTask = ({ taskData, setTaskData, categories, task, newCategoryId, auto
                     disabledDate={disabledDate}
                     placeholder='Fecha de finalización (opcional)'
                     value={taskData.dateDown && moment(taskData.dateDown)}
-                    onChange={(e, value) => setTaskData({
-                        ...taskData,
-                        dateDown: moment(value, 'DD-MM-YYYY HH:mm:ss').toISOString()
-                    })}
+                    onChange={(e, value) => {
+                        setTaskData({
+                            ...taskData,
+                            dateDown: moment(value, 'DD-MM-YYYY HH:mm:ss').toISOString()
+                        })
+                        // console.log(moment(moment(value, 'DD-MM-YYYY HH:mm:ss').toISOString()).add(moment().format('HH:mm')))
+                        // console.log(moment(value, 'DD-MM-YYYY HH:mm:ss').toISOString())
+                    }
+                    }
                 />
             </Form.Item>
-            <Form.Item className='input-select-categories'>
+            <Form.Item>
+                <TimePicker
+                    format='HH:mm'
+                    disabled={!checkDate}
+                    placeholder={`Horario de finalización (${!checkDate ? 'debes elegir la fecha' : 'por defecto: 09:00'})`}
+                    value={(taskData.timeDateDown && checkDate) && moment(taskData.timeDateDown)}
+                    onChange={(e) => {
+                        console.log(e)
+                        setTaskData({
+                            ...taskData,
+                            timeDateDown: moment(e || '09:00', 'HH:mm')
+                        })
+                    }}
+                />
+            </Form.Item>
+            <Form.Item>
                 <Select
                     autoFocus={autoFocusSelect}
                     defaultOpen={autoFocusSelect}
-                    disabled={categories ? false : true}
+                    disabled={category ? true : categories ? false : true}
                     value={valueSelectCategory}
                     onChange={e => {
                         setTaskData({ ...taskData, category: getCategoryByTitle(categories, e) })

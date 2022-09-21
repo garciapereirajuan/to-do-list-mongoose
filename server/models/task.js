@@ -11,6 +11,7 @@ const TaskSchema = Schema({
     orderByDateDown: Date,
     dateUp: Date,
     dateDown: Date,
+    timeDateDown: Date,
     dateUpdate: Date,
     dateComplete: Date,
     checked: Boolean,
