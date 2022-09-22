@@ -82,15 +82,9 @@ const AddEditFormTask = (props) => {
             dateUpdate: dateUpdate ? dateUpdate : new Date().toISOString(),
             dateComplete: null,
             category: category ? category : null,
-            // orderByDateDown: dateDown ? dateDown : moment().add(10, 'years')
         }
 
         getCorrectDateTime(dateDown, timeDateDown, data)
-
-        console.log('data', data)
-        console.log('moment(data.timeDateDown)', moment(data.timeDateDown))
-        console.log('moment(data.dateDown)', moment(data.dateDown))
-        // return
 
         const token = getAccessTokenApi()
 
@@ -144,39 +138,21 @@ const AddEditFormTask = (props) => {
         let data = {
             ...taskData,
             title: getTitleCapitalize(taskData.title),
-            // orderByDateDown: taskData.dateDown ? taskData.dateDown : moment().add(10, 'years'),
             dateUpdate: new Date().toISOString(),
             dateDown: dateDown ? dateDown : null,
             timeDateDown: timeDateDown ? timeDateDown : null,
         }
 
         if ((dateDown !== timeDateDown) || !dateDown) {
-            const dateDownFormat = data.dateDown
-                ? moment(
-                    `${moment(data.dateDown).format('DD-MM-YYYY')} 00:00:00`,
-                    'DD-MM-YYYY HH:mm:ss'
-                )
-                : null
-            // console.log(dateDownFormat)
-            // data.dateDown = dateDownFormat
-            // console.log(timeDateDown._isValid)
+            let dateDownFormat = null
+            if (data.dateDown) {
+                dateDownFormat =
+                    moment
+                        (`${moment(data.dateDown).format('DD-MM-YYYY')} 00:00:00`,
+                            'DD-MM-YYYY HH:mm:ss')
+            }
             getCorrectDateTime(dateDownFormat, timeDateDown, data)
         }
-
-        // console.log('moment(data.dateDown)', moment(moment(data.dateDown, 'DD-MM-YYYY').toISOString()))
-        // console.log('moment(data.timeDateDown)', moment(moment(data.timeDateDown).toISOString()))
-
-        // data.dateDown = moment(moment(dateDown).toISOString())
-        //     .add(moment(timeDateDown).format('HH:mm')).toISOString()
-
-        // data.timeDateDown = data.dateDown
-
-        console.log(data)
-        // return
-
-        // console.log('moment(data.timeDateDown)', moment(data.timeDateDown))
-        // console.log('moment(data.dateDown)', moment(data.dateDown))
-        // return
 
         if (data.category === '0' && !oldCategoryId) {
             data.category = null
@@ -251,7 +227,6 @@ const AddEditFormTask = (props) => {
             addTask={addTask}
         />
     )
-
 }
 
 export default AddEditFormTask

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import { Layout } from 'antd'
 import MenuTop from '../../components/Web/MenuTop'
-import Home from '../../pages/Home'
+import Home from '../../pages/Admin/Home'
 import Tasks from '../../pages/Admin/Tasks'
 import Categories from '../../pages/Admin/Categories'
 import useAuth from '../../hooks/useAuth'
@@ -23,9 +23,10 @@ const LayoutAdmin = () => {
 
     return (
         <Layout className="layout-admin">
-            <Header className="layout-admin__header">
-                <MenuTop />
-            </Header>
+            {/* <Header className="layout-admin__header"> */}
+
+            <MenuTop />
+            {/* </Header> */}
             <Content className="layout-admin__content">
                 <div className="layout-admin__content-img-left">
                     <img width={200} src={ToDoLogo} alt="Logo-to-do-list" />

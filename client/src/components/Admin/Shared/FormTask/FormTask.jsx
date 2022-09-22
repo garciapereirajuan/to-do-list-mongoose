@@ -106,8 +106,6 @@ const FormTask = ({ taskData, setTaskData, categories, task, category, autoFocus
                             ...taskData,
                             dateDown: moment(value, 'DD-MM-YYYY HH:mm:ss').toISOString()
                         })
-                        // console.log(moment(moment(value, 'DD-MM-YYYY HH:mm:ss').toISOString()).add(moment().format('HH:mm')))
-                        // console.log(moment(value, 'DD-MM-YYYY HH:mm:ss').toISOString())
                     }
                     }
                 />
@@ -119,7 +117,6 @@ const FormTask = ({ taskData, setTaskData, categories, task, category, autoFocus
                     placeholder={`Horario de finalización (${!checkDate ? 'debes elegir la fecha' : 'por defecto: 09:00'})`}
                     value={(taskData.timeDateDown && checkDate) && moment(taskData.timeDateDown)}
                     onChange={(e) => {
-                        console.log(e)
                         setTaskData({
                             ...taskData,
                             timeDateDown: moment(e || '09:00', 'HH:mm')

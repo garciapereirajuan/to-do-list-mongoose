@@ -2,7 +2,7 @@
 
 .login-form-div {
     position: relative;
-    width: 30%;
+    width: 400px;
     padding: 20px 35px;
     background-color: $background-dark;
     text-align: center;
@@ -48,6 +48,11 @@
                     color: rgba(0, 0, 0, .30)
                 }
             }
+        }
+
+        .ant-form-item-control-input-content {
+            display: flex;
+            justify-content: center;
         }
 
         .btn-submit {

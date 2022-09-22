@@ -16,11 +16,12 @@
         &-img-left {
             position: absolute;
             display: flex;
-            align-items: flex-start;
+            align-items: flex-end;
             width: 100%;
             height: 100%;
             opacity: .6;
             padding-top: 10px;
+            padding-bottom: 20px;
         }
 
         &-img-left {
@@ -42,5 +43,20 @@
         width: 100%;
         background-color: $background-dark  !important;
         color: #fff !important;
+    }
+
+    @media (max-width: 700px) {
+        &__content {
+            &-img-left {
+                display: none;
+            }
+
+            &-img-right {
+                // width: 100%;
+                padding-top: 50px;
+                justify-content: center;
+                opacity: .4;
+            }
+        }
     }
 }

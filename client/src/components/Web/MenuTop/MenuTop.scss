@@ -1,12 +1,17 @@
 @import '../../../sass/index.scss';
 
 .menu-top {
+    width: 100%;
     display: flex;
     justify-content: center;
     height: 65px;
     background: $background-dark  !important;
+    border: none;
 
     li {
+        display: flex !important;
+        align-items: center;
+
         a {
             font-weight: bold;
             color: #fff !important;

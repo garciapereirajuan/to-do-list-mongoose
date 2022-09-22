@@ -1,6 +1,6 @@
 import { getAccessTokenApi } from '../api/auth'
 import { deleteTaskApi } from '../api/task'
-import { deleteCategoryApi } from '../api/category'
+// import { deleteCategoryApi } from '../api/category'
 import { openNotification } from './openNotification'
 import { updateCategoryAndTasks } from './categoryAndTasksManager'
 

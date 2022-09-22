@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Switch, Button, Select } from 'antd'
+import { Row, Col, Switch, Button, Select } from 'antd'
 import useAuth from '../../../../hooks/useAuth'
 import { getAccessTokenApi } from '../../../../api/auth'
 import { showUserApi, updateUserApi } from '../../../../api/user'
@@ -40,19 +40,15 @@ const TasksHeader = ({ tasks, addTask, checked, setChecked, setReloadTasks, dele
     useEffect(() => {
         const token = getAccessTokenApi()
 
-        // console.log(sort[selectOrder])
-
         updateUserApi(token, user.id, { sort: sort[selectOrder] })
             .then(response => {
                 setReloadTasks(true)
             })
-
-
     }, [selectOrder, user, setReloadTasks])
 
     return (
-        <div className='tasks-header'>
-            <div className='tasks-header__switch'>
+        <Row className='tasks-header'>
+            <Col xs={24} sm={8} md={8} className='tasks-header__switch'>
                 <Switch
                     defaultChecked={false}
                     onChange={e => setChecked(e)}
@@ -64,8 +60,8 @@ const TasksHeader = ({ tasks, addTask, checked, setChecked, setReloadTasks, dele
                             : `Sin hacer: ${tasks ? tasks.total : '0'}`
                     }
                 </span>
-            </div>
-            <div className='tasks-header__select-order'>
+            </Col>
+            <Col xs={24} sm={8} md={8} className='tasks-header__select-order'>
                 <Select
                     value={selectOrder}
                     placeholder='Ordenar por...'
@@ -92,16 +88,16 @@ const TasksHeader = ({ tasks, addTask, checked, setChecked, setReloadTasks, dele
                         Por fecha de finalización
                     </Option>
                 </Select>
-            </div>
-            <div className='tasks-header__btn'>
+            </Col>
+            <Col xs={24} sm={8} md={8} className='tasks-header__btn'>
                 <ButtonHeader
                     checked={checked}
                     addTask={addTask}
                     deleteAllTasks={deleteAllTasks}
                     tasks={tasks}
                 />
-            </div>
-        </div>
+            </Col>
+        </Row>
     )
 }
 

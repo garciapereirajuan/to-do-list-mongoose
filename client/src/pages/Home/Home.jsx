@@ -4,6 +4,7 @@ import Modal from '../../components/Modal'
 import LoginForm from '../../components/Web/Home/LoginForm'
 import SignUpForm from '../../components/Web/Home/SignUpForm/SignUpForm'
 import ToDoLogo from '../../assets/img/png/to-do-logo-orange.png'
+import { Row, Col } from 'antd'
 
 import './Home.scss'
 
@@ -12,14 +13,18 @@ const Home = ({ setExpireToken }) => {
     const { user, isLoading } = useAuth()
 
     return (
-        <div className="home">
-            {
-                !user && !isLoading
-                    ? <LoginForm setIsVisibleModal={setIsVisibleModal} />
-                    : (<p style={{ color: 'white' }}>Otras apps...</p>)
+        <Row className="home">
+            <Col md={16} className='home__col col-login-form'>
+                {
+                    !user && !isLoading
+                        ? <LoginForm setIsVisibleModal={setIsVisibleModal} />
+                        : (<p style={{ color: 'white' }}>Otras apps...</p>)
 
-            }
-            <img width={400} src={ToDoLogo} alt="Logo-to-do-list" />
+                }
+            </Col>
+            <Col md={8} className='home__col col-img'>
+                <img width={300} src={ToDoLogo} alt="Logo-to-do-list" />
+            </Col>
             <Modal
                 isVisibleModal={isVisibleModal}
                 setIsVisibleModal={setIsVisibleModal}
@@ -29,7 +34,7 @@ const Home = ({ setExpireToken }) => {
                     setIsVisibleModal={setIsVisibleModal}
                 />
             </Modal>
-        </div>
+        </Row >
     )
 }
 

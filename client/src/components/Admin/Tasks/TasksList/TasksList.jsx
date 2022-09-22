@@ -79,19 +79,6 @@ const TaskItem = ({ task, editTask, chooseActionForCategory, deleteTask, updateC
         }
     }, [finishTime, warningTime, task])
 
-    // const formatDate = (dateTask) => {
-    //     let date = moment(dateTask).format('MMMM Do YYYY').split(' ')
-    //     let day = date[1].replace(/[^0-9]/g, '')
-    //     let month = date[0].split('')
-    //     let letter = month[0].toUpperCase()
-    //     month.shift()
-    //     month.unshift(letter)
-    //     month = month.join('')
-    //     let year = date[2]
-
-    //     return `${day} de ${month} de ${year}`
-    // }
-
     const formatDate = (dateTask) => {
         return moment(dateTask).calendar()
     }
@@ -217,8 +204,6 @@ const TaskItem = ({ task, editTask, chooseActionForCategory, deleteTask, updateC
                 </span>
             )
         }
-        // if (task.dateDown < moment())
-
     }
 
     return (

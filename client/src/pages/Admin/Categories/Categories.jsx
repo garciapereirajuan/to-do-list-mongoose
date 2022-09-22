@@ -11,7 +11,7 @@ import { indexCategoriesApi, deleteCategoryApi } from '../../../api/category'
 import { indexTasksWithoutPaginationApi } from '../../../api/task'
 import { getAccessTokenApi, verifyExpireTokenInWeb } from '../../../api/auth'
 import { updateCategoryAndTasks } from '../../../utils/categoryAndTasksManager'
-import { deleteManyCategories, deleteManyTasks } from '../../../utils/deleteManyRegisters'
+import { deleteManyTasks } from '../../../utils/deleteManyRegisters'
 
 import './Categories.scss'
 
@@ -38,6 +38,7 @@ const Categories = ({ setExpireToken, editCategoryGeneral }) => {
             .then(response => {
                 if ((response?.code !== 200 && response?.code !== 404) || !response.code) {
                     //  openNotification('error', 'Se produjo un error al cargar las categorías.')
+                    console.log('Se produjo un error al cargar las categorías.')
                     return
                 }
                 setCategories(response.categories)
@@ -166,27 +167,6 @@ const Categories = ({ setExpireToken, editCategoryGeneral }) => {
                 } else {
                     removeCategory('La categoría ha sido eliminada.')
                 }
-
-                // deleteTaskApi(token, task._id)
-                //     .then(response => {
-                //         if (/token/g.test(response.message)) {
-                //             notification['info']({
-                //                 message: 'Lo siento, debes recargar la página e intentarlo de nuevo.',
-                //                 duration: 20,
-                //             })
-                //             return
-                //         }
-                //         if (response?.code !== 200 || !response.code) {
-                //             notification['error']({ message: 'Se produjo un error al eliminar.' })
-                //             return
-                //         }
-
-                //         notification['success']({ message: response.message })
-                //         setReloadTasks(true)
-                //     })
-                //     .catch(err => {
-                //         notification['error']({ message: 'Se produjo un error inesperado.' })
-                //     })
             }
         })
     }
@@ -238,8 +218,8 @@ const Categories = ({ setExpireToken, editCategoryGeneral }) => {
 
     return (
         <Row className='categories'>
-            <Col md={6} />
-            <Col md={12}>
+            <Col sm={0} md={6} />
+            <Col sm={24} md={12}>
                 <CategoriesHeader
                     addCategory={addCategory}
                 />
@@ -253,7 +233,7 @@ const Categories = ({ setExpireToken, editCategoryGeneral }) => {
                     editTask={editTask}
                 />
             </Col>
-            <Col md={6} />
+            <Col sm={0} md={6} />
             <Modal
                 modalTitle={modalTitle}
                 isVisibleModal={isVisibleModal}

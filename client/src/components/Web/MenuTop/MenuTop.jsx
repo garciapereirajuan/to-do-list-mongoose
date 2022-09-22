@@ -45,11 +45,11 @@ const MenuTop = () => {
                             <Menu.Item key="/categories">
                                 <Link to="/categories">Categorías</Link>
                             </Menu.Item>
-                            <Menu.Item key="power-off" className='menu-top__right'>
+                            {/* <Menu.Item key="power-off" className='menu-top__right'>
                                 <Button onClick={() => logoutUser()}>
                                     <PoweroffOutlined />
                                 </Button>
-                            </Menu.Item>
+                            </Menu.Item> */}
                         </>
                     )
             }

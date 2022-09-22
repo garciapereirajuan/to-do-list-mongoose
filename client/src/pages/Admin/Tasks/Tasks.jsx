@@ -54,7 +54,7 @@ const Tasks = ({ setExpireToken }) => {
 
     useEffect(() => {
         getTasksWithoutPagination()
-
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [reloadTasks, user])
 
     const getTasks = () => {
@@ -175,7 +175,14 @@ const Tasks = ({ setExpireToken }) => {
                 }
 
                 if (task.category) {
-                    updateCategoryAndTasks(token, task._id, null, task.category, false, () => { })
+                    updateCategoryAndTasks(
+                        token,
+                        task._id,
+                        null,
+                        task.category,
+                        false,
+                        () => { }
+                    )
                     remove()
                 } else {
                     remove()
