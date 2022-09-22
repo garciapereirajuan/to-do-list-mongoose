@@ -6,7 +6,6 @@
             background-color: $background-dark-light ;
         }
     }
-
 }
 
 .ant-picker-ranges {
@@ -17,5 +16,26 @@
     a {
         color: $primary-color;
         font-weight: bold;
+    }
+}
+
+
+.ant-select-disabled {
+    span {
+        opacity: .3;
+
+    }
+
+    &.ant-select-multiple {
+        span {
+            opacity: .7;
+        }
+    }
+}
+
+
+.ant-picker-disabled {
+    div {
+        opacity: .4;
     }
 }

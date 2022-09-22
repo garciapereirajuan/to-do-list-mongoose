@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { List, Button, Checkbox } from 'antd'
-import { DeleteFilled, EditFilled, ArrowUpOutlined, ClockCircleOutlined } from '@ant-design/icons'
+import { DeleteFilled, EditFilled, ArrowUpOutlined, ClockCircleOutlined, CheckCircleOutlined } from '@ant-design/icons'
 import moment from 'moment'
 import 'moment/locale/es'
 
@@ -243,7 +243,8 @@ const TaskItem = ({ task, editTask, chooseActionForCategory, deleteTask, updateC
                             Creada: {formatDate(task.dateUp)}
                         </span>
                         <span className={`${classes}__description-date-down`}>
-                            <ClockCircleOutlined />
+                            {!task.checked && <ClockCircleOutlined />}
+                            {task.checked && <CheckCircleOutlined />}
                             {getDescriptionDateDown()}
                         </span>
 

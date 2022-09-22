@@ -10,7 +10,12 @@ import './CategoriesTree.scss'
 
 const { DirectoryTree } = Tree
 
-const CategoriesTree = ({ categories, setReloadCategories, setReloadTasks, editCategory, deleteCategory, addTask }) => {
+const CategoriesTree = (props) => {
+    const {
+        categories, setReloadCategories, setReloadTasks,
+        editCategory, deleteCategory, addTask, editTask
+    } = props
+
     const [treeCategories, setTreeCategories] = useState([])
     const [position, setPosition] = useState(0)
 
@@ -98,7 +103,7 @@ const CategoriesTree = ({ categories, setReloadCategories, setReloadTasks, editC
 
         setTreeCategories(treeCategoriesArray)
 
-    }, [categories, editCategory, deleteCategory])
+    }, [categories, editCategory, deleteCategory, addTask])
 
     const onDragEnter = (info) => {
         const pos = info.node.pos.split('-')
@@ -110,11 +115,7 @@ const CategoriesTree = ({ categories, setReloadCategories, setReloadTasks, editC
         const key = info.node.key.split('-')
         setPosition(pos[2])
 
-        if (key[1] === '0') {
-            const categoryId = key[0]
-
-            addTask(categoryId)
-        }
+        key.length === 2 && editTask(key[1])
     }
 
     const onDrop = (info) => {

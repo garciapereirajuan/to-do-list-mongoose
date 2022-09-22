@@ -1,21 +1,22 @@
 import React from 'react'
 import { Button } from 'antd'
-import { FolderAddFilled, DeleteFilled } from '@ant-design/icons'
+import { FolderAddFilled } from '@ant-design/icons'
 
 import './CategoriesHeader.scss'
 
-const CategoriesHeader = ({ addCategory, categoriesLength }) => {
+const CategoriesHeader = ({ addCategory, deleteAllCategories, categoriesLength }) => {
     return (
         <div className='categories-header'>
             <ButtonHeader
                 addCategory={addCategory}
+                deleteAllCategories={deleteAllCategories}
                 categoriesLength={categoriesLength}
             />
         </div>
     )
 }
 
-const ButtonHeader = (categoriesLength, addCategory, deleteCategory) => {
+const ButtonHeader = ({ categoriesLength, addCategory, deleteAllCategories }) => {
     const btnNew = (
         <div className='categories-header-btn'>
             <Button type='primary' onClick={addCategory}>
@@ -25,22 +26,26 @@ const ButtonHeader = (categoriesLength, addCategory, deleteCategory) => {
         </div>
     )
 
-    const btnClean = (
-        <div className='categories-header-btn'>
-            <Button type='danger' onClick={deleteCategory}>
-                <DeleteFilled />
-                Limpiar
-            </Button>
-        </div>
-    )
+    return btnNew
 
-    if (categoriesLength) {
-        return <>{btnClean} {btnNew}</>
-    }
+    // PARA EL FUTURO
 
-    if (!categoriesLength) {
-        return <>{btnNew}</>
-    }
+    // const btnClean = (
+    //     <div className='categories-header-btn'>
+    //         <Button type='danger' onClick={deleteAllCategories}>
+    //             <DeleteFilled />
+    //             Limpiar
+    //         </Button>
+    //     </div>
+    // )
+
+    // if (categoriesLength) {
+    //     return <>{btnClean} {btnNew}</>
+    // }
+
+    // if (!categoriesLength) {
+    //     return <>{btnNew}</>
+    // }
 }
 
 export default CategoriesHeader

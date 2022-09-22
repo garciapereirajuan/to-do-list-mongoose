@@ -11,7 +11,7 @@ import { indexCategoriesApi, deleteCategoryApi } from '../../../api/category'
 import { indexTasksWithoutPaginationApi } from '../../../api/task'
 import { getAccessTokenApi, verifyExpireTokenInWeb } from '../../../api/auth'
 import { updateCategoryAndTasks } from '../../../utils/categoryAndTasksManager'
-import { deleteManyTasks } from '../../../utils/deleteManyRegisters'
+import { deleteManyCategories, deleteManyTasks } from '../../../utils/deleteManyRegisters'
 
 import './Categories.scss'
 
@@ -216,21 +216,41 @@ const Categories = ({ setExpireToken, editCategoryGeneral }) => {
         )
     }
 
+    const editTask = (taskId) => {
+        const task = tasks.filter(item => item._id === taskId)[0]
+
+        setModalWidth('500px')
+        verifyExpireTokenInWeb(setExpireToken)
+        setIsVisibleModal(true)
+        setModalTitle('Actualizar tarea')
+        setModalContent(
+            <AddEditFormTask
+                task={task}
+                autoFocus={null}
+                categories={categories}
+                setIsVisibleModal={setIsVisibleModal}
+                setReloadTasks={setReloadTasks}
+                setReloadCategories={setReloadCategories}
+            />
+        )
+
+    }
+
     return (
         <Row className='categories'>
             <Col md={6} />
             <Col md={12}>
                 <CategoriesHeader
                     addCategory={addCategory}
-                    categoriesLength={categories.length}
                 />
                 <CategoriesTree
-                    categories={categories}
+                    categories={categories ? categories : []}
                     setReloadCategories={setReloadCategories}
                     setReloadTasks={setReloadTasks}
                     editCategory={editCategory}
                     deleteCategory={deleteCategory}
                     addTask={addTask}
+                    editTask={editTask}
                 />
             </Col>
             <Col md={6} />

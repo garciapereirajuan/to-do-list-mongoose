@@ -132,7 +132,7 @@ const FormTask = ({ taskData, setTaskData, categories, task, category, autoFocus
                     autoFocus={autoFocusSelect}
                     defaultOpen={autoFocusSelect}
                     disabled={category ? true : categories ? false : true}
-                    value={valueSelectCategory}
+                    value={category ? `Crearás una tarea en ${valueSelectCategory.toUpperCase()}` : valueSelectCategory}
                     onChange={e => {
                         setTaskData({ ...taskData, category: getCategoryByTitle(categories, e) })
                     }}
