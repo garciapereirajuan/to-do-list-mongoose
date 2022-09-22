@@ -10,8 +10,6 @@ import './App.scss'
 function App() {
   const { user, isLoading } = useAuth()
 
-  console.log(user)
-
   if (!user && !isLoading) {
     return (
       <div className="App">

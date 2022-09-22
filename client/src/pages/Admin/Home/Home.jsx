@@ -35,12 +35,19 @@ const Home = () => {
                     </Col>
                 </Row>
                 <Row gutter={24} className='home-admin__content__row'>
-                    <Col>
+                    <Col md={12}>
+                        <h2>¿Qué funcionalidad tiene?</h2>
+
+                        <p>Se puede hacer lo siguiente:</p>
+
+                        <iframe width="560" height="315" src="https://www.youtube.com/embed/G8EONMoC2SU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </Col>
+                    <Col md={12}>
                         <h2>¿Cómo la construí?</h2>
 
                         <p>Muy "simple", lo explico en este video:</p>
 
-                        {/* <iframe width="560" height="315" src="https://www.youtube.com/embed/NjtUkZtHj00" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> */}
+                        <iframe width="560" height="315" src="https://www.youtube.com/embed/G6HxEfz_Pz0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                     </Col>
                 </Row>
             </Col >

@@ -75,9 +75,7 @@ const update = (req, res) => {
             message(res, 404, 'No se encontró la categoría.')
             return
         }
-
-        console.log('Acá llega')
-
+        
         let tasks = category.tasks
 
         if (tasks.length !== 0) {
@@ -88,47 +86,6 @@ const update = (req, res) => {
         } else {
             tasks = []
         }
-        // let index = tasks.findIndex(element => element == taskId)
-        // let element = tasks.splice(index, index == 0 ? 1 : index)
-        // // if (element.length >= 2 && category.tasks.length == 2){
-        // //     element = element[0]
-        // // }
-        // // tasks.push(element)
-        // // console.log(tasks)
-
-        // let newTasks = []
-
-        // // tasks.map((item, index) => {
-        // //     console.log(item.length)
-        // //     return
-        // //     if (typeof item === 'object') {
-        // //     //   if (index == position){
-        // //     //     newTasks.push(taskId)
-        // //     //   }
-        // //     //   if (item != taskId) {
-        // //     //     console.log('item', item, 'taskId', taskId)
-        // //     //     newTasks.push(item)
-        // //     //   }
-        // //     // } else {
-        // //     //   item.map(subitem => {
-        // //     //     // console.log( subitem, taskId)
-        // //     //     if (subitem != taskId) {
-        // //     //       newTasks.push(subitem)
-        // //     //     }
-        // //     //   })
-        // //     }
-        // //   }) 
-
-        // tasks.map((item, index) => {
-        //     if (index == position){
-        //         newTasks.push(taskId)
-        //     }
-        //     if (item != taskId) {
-        //         newTasks.push(item)
-        //     }
-        // })     
-        
-        // console.log(newTasks)
 
         Category.findByIdAndUpdate(categoryId, { tasks }, (err, category) => {
             if (err) {
