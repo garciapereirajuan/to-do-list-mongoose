@@ -96,6 +96,9 @@ const SignUpForm = ({ setIsVisibleModal }) => {
             .then(response => {
                 let status = response.code === 200 ? 'success' : 'error'
                 openNotification(status, response.message)
+                if (response.code !== 200) {
+                    return
+                }
 
                 if (response.code === 200) {
                     setIsVisibleModal(false)

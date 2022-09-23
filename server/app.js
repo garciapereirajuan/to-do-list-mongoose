@@ -20,6 +20,7 @@ app.use((req, res, next) => {
 
 // Utils
 const { API_VERSION } = require('./config')
+const md_welcome = require('./middlewares/welcome')
 
 // Load routes
 const userRoutes = require('./routes/user')
@@ -30,6 +31,7 @@ const categoryAndTasksRoutes = require('./routes/categoryAndTasks')
 
 // Routes basic
 app.use(`/api/${API_VERSION}`, userRoutes)
+app.use(md_welcome.welcome)
 app.use(`/api/${API_VERSION}`, authRoutes)
 app.use(`/api/${API_VERSION}`, taskRoutes)
 app.use(`/api/${API_VERSION}`, categoryRoutes)

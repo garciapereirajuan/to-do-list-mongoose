@@ -4,6 +4,7 @@ import ReactLogo from '../../../assets/img/png/react-logo.png'
 import NodeJSLogo from '../../../assets/img/png/node-js-logo.png'
 import MongoDBLogo from '../../../assets/img/png/mongo-db-logo.png'
 import ExpressLogo from '../../../assets/img/png/express-logo-yellow.png'
+import moment from 'moment'
 
 import './Home.scss'
 import { useEffect } from 'react'
@@ -11,7 +12,7 @@ import { useEffect } from 'react'
 const Home = () => {
     useEffect(() => {
 
-        console.log(ReactLogo ? true : false)
+        console.log(moment('23-09-2022 00:32:02', 'DD-MM-YYYY HH:mm:ss'))
     }, [])
 
     return (
@@ -33,14 +34,18 @@ const Home = () => {
                         <p>La finalidad de esta aplicación web es demostrar mis conocimientos en backend y en frontend. Es mi primer aplicación hecha con el Stack MERN y con cualquier otro Stack.</p>
                         <p>Esto no quiere decir que estoy atado a este Stack, ni mucho menos. Me gusta y me resulta cada vez más cómodo a medida que voy usándolo, pero quiero seguir aprendiendo otras tecnologías en el futuro.</p>
                     </Col>
+                    <div className='border'></div>
                 </Row>
                 <Row gutter={24} className='home-admin__content__row'>
                     <Col md={12}>
-                        <h2>¿Qué funcionalidad tiene?</h2>
+                        {/* <h2>¿Qué se puede hacer?</h2>
 
-                        <p>Se puede hacer lo siguiente:</p>
+                        <p>No mucho, pero lo que se puede, funciona:</p> */}
+                        <h2>¿Qué funcionalidades tiene?</h2>
+                        <p>No muchas, pero las que tiene, funcionan:</p>
 
                         <iframe width="560" height="315" src="https://www.youtube.com/embed/G8EONMoC2SU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
                     </Col>
                     <Col md={12}>
                         <h2>¿Cómo la construí?</h2>

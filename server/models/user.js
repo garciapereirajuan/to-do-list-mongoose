@@ -6,6 +6,7 @@ const UserSchema = Schema({
         type: String,
         unique: true,
     },
+    initial: Boolean,
     password: String,
     sort: Object,
     tasks: [{ type: Schema.Types.ObjectId, ref: 'Task' }],

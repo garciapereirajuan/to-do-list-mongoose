@@ -2,32 +2,35 @@ const Task = require('../models/task')
 const Category = require('../models/category')
 const { message } = require('../utils')
 
-const add = (req, res) => {
+const add = (req, res, funcResolve) => {
     const { categoryId } = req.params
     const { taskId } = req.body
 
+    console.log(categoryId, taskId)
+    // return
+
     if (!categoryId || !taskId) {
-        message(res, 404, 'El Id de la categoría y de la tarea es obligatorio.')
+       res && message(res, 404, 'El Id de la categoría y de la tarea es obligatorio.')
         return
     }
 
     Task.findByIdAndUpdate(taskId, { category: categoryId }, (err, task) => {
         if (err?.name === 'CastError' || !task) {
-            message(res, 404, 'La tarea no se ha encontrado.')
+           res && message(res, 404, 'La tarea no se ha encontrado.')
             return
         }
         if (err) {
-            message(res, 500, 'Se produjo un error.', {err})
+           res && message(res, 500, 'Se produjo un error.', {err})
             return
         }
 
         Category.findOne({ _id: categoryId }, (err, category) => {
             if (err) {
-                message(res, 500, 'Se produjo un error.', {err})
+               res && message(res, 500, 'Se produjo un error.', {err})
                 return
             }
             if (!category) {
-                message(res, 404, 'La categoría no se ha encontrado.')
+               res && message(res, 404, 'La categoría no se ha encontrado.')
                 return
             }
 
@@ -36,15 +39,16 @@ const add = (req, res) => {
 
             Category.findByIdAndUpdate(categoryId, { tasks }, (err, category) => {
                 if (err) {
-                    message(res, 500, 'Se produjo un error.', {err})
+                   res && message(res, 500, 'Se produjo un error.', {err})
                     return
                 }
                 if (!category) {
-                    message(res, 404, 'La categoría no se ha encontrado.')
+                   res && message(res, 404, 'La categoría no se ha encontrado.')
                     return
                 }
                 
-                message(res, 200, `Tarea agregada a la categoría "${category.title}"`)
+                funcResolve && funcResolve()
+                res && message(res, 200, `Tarea agregada a la categoría "${category.title}"`)
             })
         })
     })

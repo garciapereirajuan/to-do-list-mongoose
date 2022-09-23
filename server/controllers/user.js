@@ -26,7 +26,8 @@ module.exports = {
             }
             user.password = hash
             user._id = new mongoose.Types.ObjectId()
-            user.sort = { dateUp: 'desc' }
+            user.sort = { orderByDateDown: "asc" }
+            user.initial = true
             
             user.save((err, userStored) => {
                 if (err?.code === 11000) {
@@ -77,6 +78,7 @@ module.exports = {
                     return
                 }
                 if (check) {
+                    req.user = userStored
                     message(res, 200, '', { 
                         tokens: {
                             accessToken: jwt.createAccessToken(userStored),
