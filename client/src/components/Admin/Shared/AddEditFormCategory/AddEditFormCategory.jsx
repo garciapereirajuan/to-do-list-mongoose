@@ -48,6 +48,16 @@ export const AddEditFormCategory = (props) => {
         }
     }, [categories])
 
+    const getTitleCapitalize = (title) => {
+        let titleTask = []
+        let titleArray = title.split('')
+        let letter = title[0].toUpperCase()
+        let rest = titleArray.splice(1)
+        titleTask.push(letter)
+        titleTask.push(rest)
+        return titleTask.flat().join('')
+    }
+
     const addCategory = () => {
         const token = getAccessTokenApi()
 
@@ -57,7 +67,7 @@ export const AddEditFormCategory = (props) => {
         }
 
         const data = user && {
-            title: categoryData.title,
+            title: getTitleCapitalize(categoryData.title),
             color: categoryData.color,
             dateUp: categoryData.dateUp ? categoryData.dateUp : new Date(),
             dateUpdate: new Date(),
@@ -110,7 +120,7 @@ export const AddEditFormCategory = (props) => {
 
         let data = user && {
             _id: categoryData._id,
-            title: categoryData.title,
+            title: getTitleCapitalize(categoryData.title),
             color: categoryData.color,
             dateUp: categoryData.dateUp ? categoryData.dateUp : new Date(),
             dateUpdate: new Date(),

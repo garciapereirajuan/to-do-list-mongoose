@@ -1,30 +1,24 @@
 import React from 'react'
 import { Routes, Route } from 'react-router-dom'
 import { Layout } from 'antd'
+import Welcome from '../../pages/Welcome'
 import Home from '../../pages/Home'
 import MenuTop from '../../components/Web/MenuTop'
 import FooterSection from '../../components/FooterSection'
-import useAuth from '../../hooks/useAuth'
 
 import './LayoutHome.scss'
 
 const LayoutHome = () => {
-    const { user, isLoading } = useAuth()
-    const { Header, Content } = Layout
-    const { pathname } = window.location
-
-    if (!user && !isLoading && pathname !== '/') {
-        window.location.href = '/'
-    }
+    const { Content } = Layout
 
     return (
         <Layout className="layout-home">
-            <Header className="layout-home__header">
-                <MenuTop />
-            </Header>
+            <MenuTop />
             <Content className="layout-home__content">
                 <Routes>
                     <Route path="/" element={<Home />} />
+                    <Route path="/login" element={<Welcome />} />
+                    <Route path="*" element={<Welcome />} />
                 </Routes>
             </Content>
             <FooterSection />

@@ -10,9 +10,10 @@ import './TasksHeader.scss'
 const { Option } = Select
 
 const sort = {
+    'Por últimas completadas': { dataComplete: 'desc' },
     'Por fecha de creación': { dateUp: 'desc' },
     'Por fecha de finalización': { orderByDateDown: 'asc' },
-    'Por categorías': { category: 'desc' },
+    'Por categorías': { orderByCategory: 'asc' },
     'Por alfabeto': { title: 'asc' },
     '{"dateUp":"desc"}': 'Por fecha de creación',
     '{"orderByDateDown":"asc"}': 'Por fecha de finalización',
@@ -62,31 +63,49 @@ const TasksHeader = ({ tasks, addTask, checked, setChecked, setReloadTasks, dele
                 </span>
             </Col>
             <Col xs={24} sm={8} md={8} className='tasks-header__select-order'>
+
                 <Select
-                    value={selectOrder}
+                    value={!checked ? selectOrder : 'Por últimas completadas'}
+                    disabled={checked}
                     placeholder='Ordenar por...'
                     onChange={(e) => setSelectOrder(e)}
                 >
-                    <Option
-                        value={'Por alfabeto'}
-                        key='Por alfabeto'>
-                        Por alfabeto
-                    </Option>
-                    <Option
-                        value={'Por categorías'}
-                        key='Por categorías'>
-                        Por categorías
-                    </Option>
-                    <Option
-                        value={'Por fecha de creación'}
-                        key='Por fecha de creación'>
-                        Por fecha de creación
-                    </Option>
-                    <Option
-                        value={'Por fecha de finalización'}
-                        key='Por fecha de finalización'>
-                        Por fecha de finalización
-                    </Option>
+                    {
+                        !checked
+                            ? (
+                                <>
+                                    <Option
+                                        value={'Por alfabeto'}
+                                        key='Por alfabeto'>
+                                        Por alfabeto
+                                    </Option>
+                                    <Option
+                                        value={'Por categorías'}
+                                        key='Por categorías'>
+                                        Por categorías
+                                    </Option>
+                                    <Option
+                                        value={'Por fecha de creación'}
+                                        key='Por fecha de creación'>
+                                        Por fecha de creación
+                                    </Option>
+                                    <Option
+                                        value={'Por fecha de finalización'}
+                                        key='Por fecha de finalización'>
+                                        Por fecha de finalización
+                                    </Option>
+                                </>
+                            )
+                            : (
+                                <Option
+                                    value='Por últimas completadas'
+                                    key='Por últimas completadas'
+                                >
+                                    Por últimas completadas
+                                </Option>
+                            )
+                    }
+
                 </Select>
             </Col>
             <Col xs={24} sm={8} md={8} className='tasks-header__btn'>

@@ -1,17 +1,15 @@
 @import "../../sass/index.scss";
 
 .layout-home {
-    &__header {
-        background: $background-dark  !important;
-    }
 
     &__content {
-        background-image: url('../../assets/img/jpg/background-v1.jpg');
+        position: relative;
         display: flex;
         height: 100%;
-        // padding-bottom: 64px;
+        margin-top: 64px !important;
+        padding-bottom: 64px;
         min-height: calc(100vh - 112px) !important;
-        position: relative;
+        background-image: url('../../assets/img/jpg/background-v1.jpg');
     }
 
     &__footer {

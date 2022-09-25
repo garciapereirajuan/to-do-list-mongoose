@@ -21,16 +21,22 @@ const MenuTop = () => {
             className="menu-top"
             mode="horizontal"
             defaultSelectedKeys={[location.pathname]}
-
         >
             {
                 !user && !isLoading
                     ? (
-                        <Menu.Item key="/">
-                            <Link to="/">
-                                Inicia sesión
-                            </Link>
-                        </Menu.Item>
+                        <>
+                            <Menu.Item key="/">
+                                <Link to="/">
+                                    Inicio
+                                </Link>
+                            </Menu.Item>
+                            <Menu.Item key="/login">
+                                <Link to="/login">
+                                    Inicia sesión
+                                </Link>
+                            </Menu.Item>
+                        </>
                     )
                     : (
                         <>
@@ -45,11 +51,11 @@ const MenuTop = () => {
                             <Menu.Item key="/categories">
                                 <Link to="/categories">Categorías</Link>
                             </Menu.Item>
-                            {/* <Menu.Item key="power-off" className='menu-top__right'>
-                                <Button onClick={() => logoutUser()}>
+                            <Menu.Item key="power-off" className='menu-top__right'>
+                                <div title='Cerrar sesión' onClick={() => logoutUser()}>
                                     <PoweroffOutlined />
-                                </Button>
-                            </Menu.Item> */}
+                                </div>
+                            </Menu.Item>
                         </>
                     )
             }

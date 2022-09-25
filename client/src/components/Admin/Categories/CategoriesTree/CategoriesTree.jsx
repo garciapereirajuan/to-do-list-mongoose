@@ -69,8 +69,10 @@ const CategoriesTree = (props) => {
             treeCategoriesArray.push({
                 title: (
                     <span className='category-title'>
-                        {category.title}
-                        <div>
+                        <div className='category-title__title'>
+                            {category.title}
+                        </div>
+                        <div className='category-title__actions'>
                             <Button
                                 type='primary'
                                 title='Crear nueva tarea'

@@ -1,6 +1,6 @@
 import { basePath, apiVersion } from './config'
 
-export const indexTasksApi = (token, page, limit, checked, userId) => {
+export const indexTasksApi = (token, page, limit, checked, userId, sort) => {
     const url = `${basePath}/${apiVersion}/tasks?page=${page}&limit=${limit}&checked=${checked}`
     const params = {
         method: 'POST',
@@ -8,7 +8,7 @@ export const indexTasksApi = (token, page, limit, checked, userId) => {
             'Content-Type': 'application/json',
             Authorization: token
         },
-        body: JSON.stringify({ userId: userId })
+        body: JSON.stringify({ userId: userId, sort: sort })
     }
 
     return fetch(url, params)

@@ -49,6 +49,12 @@
                 background-color: $background-dark;
                 opacity: .5;
 
+                span {
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                }
+
                 &.not-disabled:hover {
                     width: 160px;
                     box-shadow: 0px 9px 12px rgba(0, 0, 0, .6) !important;
@@ -62,7 +68,9 @@
             }
 
             .ant-list-item-meta-content {
-                overflow: hidden !important;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                overflow: hidden;
             }
 
             .ant-list-item-meta-title {
@@ -73,7 +81,10 @@
                 width: 700px;
 
                 h4 {
-                    overflow: hidden !important;
+
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
                 }
             }
 

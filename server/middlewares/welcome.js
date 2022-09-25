@@ -19,13 +19,11 @@ module.exports = {
                     next()
                 } 
                 if (user.initial) {
-                    console.log('Se crearon las tareas')
                     await createCategoryDevelopment(userId)
                     await createTasksDevelopment(userId)
                     next()
                 } else {
-                console.log('Entra acá')
-                next()
+                    next()
                 }
             })
         }
@@ -147,7 +145,7 @@ const createTasksDevelopment = async (user) => {
         dateDown: null,
         // dateDown: moment().subtract(10, 'days'),
         orderByDateDown: moment().add(10, 'years'),
-        category: null,
+        orderByCategory: `zzz999-${new Date().toISOString()}`
     }
 
     const data2 = { 
@@ -156,7 +154,8 @@ const createTasksDevelopment = async (user) => {
         dateUp: moment().subtract(2, 'hours'),
         dateDown: moment().add(5, 'days').add(2, 'hours').add(30, 'minutes'),
         timeDateDown: moment().add(5, 'days').add(2, 'hours').add(30, 'minutes'),
-        orderByDateDown: moment().add(5, 'days').add(2, 'hours').add(30, 'minutes')
+        orderByDateDown: moment().add(5, 'days').add(2, 'hours').add(30, 'minutes'),
+        orderByCategory: 'Salud y Ejercicio'
     }
     const data3 = { 
         ...data1, 
@@ -166,7 +165,8 @@ const createTasksDevelopment = async (user) => {
         dateDown: moment().subtract(25, 'days').subtract(2, 'hours').add(10, 'minutes'),
         timeDateDown: moment().subtract(25, 'days').subtract(2, 'hours').add(10, 'minutes'),
         dateComplete: moment().subtract(15, 'days').add(6, 'hours').add(20, 'minutes'),
-        orderByDateDown: moment().subtract(25, 'days').subtract(2, 'hours').add(10, 'minutes')
+        orderByDateDown: moment().subtract(25, 'days').subtract(2, 'hours').add(10, 'minutes'),
+        orderByCategory: `zzz999-${new Date().toISOString()}`
     }   
     const data5 = { 
         ...data1, title: 
@@ -176,7 +176,8 @@ const createTasksDevelopment = async (user) => {
         dateDown: null,
         timeDateDown: null,
         dateComplete: moment().subtract(5, 'days').add(2, 'hours').add(12, 'minutes'),
-        orderByDateDown: moment().add(10, 'years')
+        orderByDateDown: moment().add(10, 'years'),
+        orderByCategory: 'Casa'
     }
     
     const data4 = { 
@@ -185,7 +186,8 @@ const createTasksDevelopment = async (user) => {
         dateUp: moment().subtract(2, 'days').add(6, 'hours').add(13, 'minutes'),
         dateDown: moment().add(1, 'days').subtract(10, 'hours').add(9, 'minutes'),
         timeDateDown: moment().add(1, 'days').subtract(10, 'hours').add(9, 'minutes'),        
-        orderByDateDown: moment().add(1, 'days').add(1, 'hours').add(9, 'minutes'),
+        orderByDateDown: moment().add(1, 'days').subtract(10, 'hours').add(9, 'minutes'),
+        orderByCategory: 'Casa'
     }
     const data6 = { 
         ...data1, 
@@ -193,7 +195,8 @@ const createTasksDevelopment = async (user) => {
         dateUp: moment().subtract(4, 'days').add(24, 'minutes'),
         dateDown: null,
         timeDateDown: null,
-        orderByDateDown: moment().add(10, 'years')
+        orderByDateDown: moment().add(10, 'years'),
+        orderByCategory: `zzz999-${new Date().toISOString()}`
     }
     const data7 = { 
         ...data1, 
@@ -201,7 +204,8 @@ const createTasksDevelopment = async (user) => {
         dateUp: moment().subtract(1, 'days').add(4, 'hours').subtract(12, 'minutes'),
         dateDown: null,
         timeDateDown: null,
-        orderByDateDown: moment().add(10, 'years')
+        orderByDateDown: moment().add(10, 'years'),
+        orderByCategory: 'Trabajo'
     }
     const data8 = { 
         ...data1, 
@@ -209,7 +213,8 @@ const createTasksDevelopment = async (user) => {
         dateUp: moment().subtract(4, 'hours').add(2, 'minutes'),
         dateDown: moment().add(1, 'days').add(10, 'hours').add(4, 'minutes'),
         timeDateDown: moment().add(1, 'days').add(10, 'hours').add(4, 'minutes'),
-        orderByDateDown: moment().add(1, 'days').add(10, 'hours').add(4, 'minutes')
+        orderByDateDown: moment().add(1, 'days').add(10, 'hours').add(4, 'minutes'),
+        orderByCategory: 'Casa'
     }
     const data9 = { 
         ...data1, 
@@ -217,7 +222,8 @@ const createTasksDevelopment = async (user) => {
         dateUp: moment().subtract(2, 'days').add(2, 'hours').add(5, 'minutes'),
         dateDown: moment().subtract(3, 'hours').add(46, 'minutes'),
         timeDateDown: moment().subtract(3, 'hours').add(46, 'minutes'),
-        orderByDateDown: moment().subtract(3, 'hours').add(46, 'minutes')
+        orderByDateDown: moment().subtract(3, 'hours').add(46, 'minutes'),
+        orderByCategory: 'Casa'
     }
 
     let taskId = ''

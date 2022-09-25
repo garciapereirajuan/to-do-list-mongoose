@@ -64,6 +64,13 @@ const AddEditFormTask = (props) => {
         }
     }
 
+    const getTitleCategory = (category) => {
+        let element = categories.filter(item => {
+            return item._id === category
+        })
+        return element.length !== 0 ? element[0].title : category
+    }
+
     const addTask = () => {
         const { title, dateDown, timeDateDown, dateUp, dateUpdate, category } = taskData
 
@@ -82,6 +89,7 @@ const AddEditFormTask = (props) => {
             dateUpdate: dateUpdate ? dateUpdate : new Date().toISOString(),
             dateComplete: null,
             category: category ? category : null,
+            orderByCategory: category ? getTitleCategory(category) : `zzz999-${new Date().toISOString()}`
         }
 
         getCorrectDateTime(dateDown, timeDateDown, data)
@@ -132,7 +140,7 @@ const AddEditFormTask = (props) => {
 
     const updateTask = () => {
         const token = getAccessTokenApi()
-        const { dateDown, timeDateDown } = taskData
+        const { dateDown, timeDateDown, category } = taskData
         let removeCategory = false
 
         let data = {
@@ -141,6 +149,7 @@ const AddEditFormTask = (props) => {
             dateUpdate: new Date().toISOString(),
             dateDown: dateDown ? dateDown : null,
             timeDateDown: timeDateDown ? timeDateDown : null,
+            orderByCategory: getTitleCategory(category),
         }
 
         if ((dateDown !== timeDateDown) || !dateDown) {
@@ -156,6 +165,7 @@ const AddEditFormTask = (props) => {
 
         if (data.category === '0' && !oldCategoryId) {
             data.category = null
+            data.orderByCategory = `zzz999-${new Date().toISOString()}`
         }
 
         if (data.category === '0' && oldCategoryId) {
@@ -164,6 +174,7 @@ const AddEditFormTask = (props) => {
             // cuando llama a la func updateCategoryAndTasks (línea 156)...
             // para evitar errores en dicha función
 
+            data.orderByCategory = `zzz999-${new Date().toISOString()}`
             data.category = oldCategoryId
             removeCategory = true
         }

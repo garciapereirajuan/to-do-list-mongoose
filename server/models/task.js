@@ -9,6 +9,7 @@ const TaskSchema = Schema({
         ref: 'User'
     },
     orderByDateDown: Date,
+    orderByCategory: String,
     dateUp: Date,
     dateDown: Date,
     timeDateDown: Date,

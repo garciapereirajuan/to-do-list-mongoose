@@ -55,7 +55,7 @@ module.exports = {
     },
     index: (req, res) => {
         const { page = 1, limit = 8, checked = false } = req.query
-        const { userId, pagination = true } = req.body
+        const { userId, pagination = true, sort } = req.body
 
         if (pagination === false) {
             indexWithoutPagination(req, res)
@@ -75,7 +75,7 @@ module.exports = {
             const options = {
                 page,
                 limit: parseInt(limit),
-                sort: user.sort
+                sort: sort ? sort : user.sort
             }
 
             Task.paginate({ author: userId, checked: checked }, options, (err, tasks) => {

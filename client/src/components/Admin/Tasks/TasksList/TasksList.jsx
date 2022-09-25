@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { List, Button, Checkbox } from 'antd'
+import { List, Button, Checkbox, Spin } from 'antd'
+import { openNotification } from '../../../../utils/openNotification'
 import { DeleteFilled, EditFilled, ArrowUpOutlined, ClockCircleOutlined, CheckCircleOutlined } from '@ant-design/icons'
 import moment from 'moment'
 import 'moment/locale/es'
@@ -33,6 +34,13 @@ const TasksList = ({ tasks, editTask, deleteTask, updateCheckTask, categories, c
         categories, chooseActionForCategory
     ])
 
+    if (listItems.length === 0) {
+        return (
+            <div className='tasks-list__item' style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '62vh' }}>
+                <Spin size="large" />
+            </div>
+        )
+    }
     return (
         <div className='tasks-list__item'>
             <List className='List'>
@@ -105,10 +113,6 @@ const TaskItem = ({ task, editTask, chooseActionForCategory, deleteTask, updateC
                     color = item.color
                 }
             })
-        }
-
-        if (title.length > 18) {
-            title = title.split('').splice(0, 18).join('') + '...'
         }
 
         if (title === '') {

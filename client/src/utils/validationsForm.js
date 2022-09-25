@@ -3,8 +3,8 @@ import formClassManager from './formClassManager'
 export const minLength = (target, min) => {
     const { value, name } = target
 
-    formClassManager('all', 'input', 'remove', null)
-    formClassManager('all', 'wrapper', 'remove', null)
+    formClassManager(name, 'input', 'remove', null)
+    formClassManager(name, 'wrapper', 'remove', null)
 
     if (value.length >= min) {
         formClassManager(name, 'input', 'add', 'success-input')

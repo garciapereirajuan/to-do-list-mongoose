@@ -116,23 +116,34 @@
   border: 1px solid $primary-color  !important;
 }
 
-.success-input {
-  background-color: $background-success  !important;
-}
+.form-welcome {
 
-.error-input {
-  background-color: $background-error  !important;
-}
+  .ant-select-selector,
+  .ant-input-affix-wrapper,
+  .ant-input,
+  .ant-picker,
+  .ant-picker-input {
+    background-color: #fff !important;
+    color: $font-dark  !important;
+  }
 
-.success-wrapper {
-  border: 1px solid $success  !important;
-  box-shadow: 0px .1px 3px $success  !important;
-  background-color: $background-success;
+  .success-input {
+    background-color: $background-success  !important;
+  }
 
-}
+  .error-input {
+    background-color: $background-error  !important;
+  }
 
-.error-wrapper {
-  border: 1px solid $error  !important;
-  box-shadow: 0px .1px 3px $error  !important;
-  background-color: $background-error;
+  .success-wrapper {
+    border: 1px solid $success  !important;
+    box-shadow: 0px .1px 3px $success  !important;
+    background-color: $background-success;
+  }
+
+  .error-wrapper {
+    border: 1px solid $error  !important;
+    box-shadow: 0px .1px 3px $error  !important;
+    background-color: $background-error;
+  }
 }

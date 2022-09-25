@@ -82,8 +82,9 @@ module.exports = {
                     message(res, 200, '', { 
                         tokens: {
                             accessToken: jwt.createAccessToken(userStored),
-                            refreshToken: jwt.createRefreshToken(userStored)
-                        }
+                            refreshToken: jwt.createRefreshToken(userStored),
+                            initial: userStored.initial
+                        },
                     })
                 }
             })

@@ -15,6 +15,7 @@ import { deleteTaskApi, indexTasksApi, indexTasksWithoutPaginationApi, updateTas
 import { indexCategoriesApi } from '../../../api/category'
 import { updateCategoryAndTasks } from '../../../utils/categoryAndTasksManager'
 import { deleteManyTasks } from '../../../utils/deleteManyRegisters'
+import moment from 'moment'
 
 import './Tasks.scss'
 
@@ -28,6 +29,7 @@ const Tasks = ({ setExpireToken }) => {
     const [modalTitle, setModalTitle] = useState('')
     const [modalContent, setModalContent] = useState(null)
     const [modalWidth, setModalWidth] = useState('500px')
+    const [alertTasks, setAlertTasks] = useState({ finishTime: 0, warningTime: 0 })
     const [checked, setChecked] = useState(false)
 
     const { confirm } = ModalAntd
@@ -57,10 +59,53 @@ const Tasks = ({ setExpireToken }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [reloadTasks, user])
 
+    useEffect(() => {
+        navigate('/tasks?page=1')
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [checked])
+
+    useEffect(() => {
+        let { init } = queryString.parse(location.search)
+
+        if (init) {
+            setReloadCategories(true)
+            setReloadTasks(true)
+            init = false
+        }
+    }, [location, reloadCategories, reloadTasks])
+
+    useEffect(() => {
+        if (checked) {
+            return
+        }
+
+        tasksArray.forEach(item => {
+            if (item.checked) {
+                return
+            }
+            if (moment(item.dateDown).format() < moment().format()) {
+                setAlertTasks({ ...alertTasks, finishTime: alertTasks.finishTime++ })
+            }
+            if (moment(item.dateDown).subtract(24, 'hours').format() < moment().format()) {
+                setAlertTasks({ ...alertTasks, warningTime: alertTasks.warningTime++ })
+            }
+
+            if (alertTasks.warningTime === 1) {
+                openNotification('warning', 'Una o más tareas están cerca de finalizar.', 10)
+            }
+            if (alertTasks.finishTime === 1) {
+                openNotification('error', 'Una o más tareas finalizaron y no están completadas.', 10)
+            }
+        })
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [tasksArray])
+
     const getTasks = () => {
         const token = getAccessTokenApi()
+        const sort = checked ? { dateComplete: 'desc' } : null
 
-        indexTasksApi(token, page, limit, checked, user.id)
+        indexTasksApi(token, page, limit, checked, user.id, sort)
             .then(response => {
                 if ((response?.code !== 200 && response?.code !== 404) || !response.code) {
                     openNotification('error', 'Se produjo un error al cargar las tareas.')

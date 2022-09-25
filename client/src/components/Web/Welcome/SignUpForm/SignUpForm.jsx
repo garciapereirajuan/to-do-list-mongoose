@@ -27,11 +27,18 @@ const SignUpForm = ({ setIsVisibleModal }) => {
     const changeForm = (e) => {
         const { name, value, checked } = e.target
 
+        if (name === 'username') {
+            setUserData(userData => ({ ...userData, username: transformUsername(value) }))
+            return
+        }
         if (name === 'privacyPolicy') {
             setUserData(userData => ({ ...userData, privacyPolicy: checked }))
             return
         }
-        setUserData(userData => ({ ...userData, [name]: value }))
+        if (name === 'password' || name === 'repeatPassword') {
+            setUserData(userData => ({ ...userData, [name]: transformPassword(value) }))
+            return
+        }
     }
 
     const inputValidation = (e) => {
@@ -48,19 +55,16 @@ const SignUpForm = ({ setIsVisibleModal }) => {
         }
 
         if (name === 'repeatPassword') {
-            setInputsValid({ ...inputsValid, [name]: minLength(e.target, 6) })
+            formClassManager('repeatPassword', 'input', 'remove', null)
+            formClassManager('repeatPassword', 'wrapper', 'remove', null)
 
-            if (inputsValid.repeatPassword) {
-                formClassManager('all', 'input', 'remove', null)
-                formClassManager('all', 'wrapper', 'remove', null)
-
-                if (value !== userData.password) {
-                    formClassManager(name, 'input', 'add', 'error-input')
-                    formClassManager(name, 'wrapper', 'add', 'error-wrapper')
-                } else {
-                    formClassManager(name, 'input', 'add', 'success-input')
-                    formClassManager(name, 'wrapper', 'add', 'success-wrapper')
-                }
+            if (value !== userData.password) {
+                formClassManager('repeatPassword', 'input', 'add', 'error-input')
+                formClassManager('repeatPassword', 'wrapper', 'add', 'error-wrapper')
+                console.log(userData.repeatPassword, userData.password)
+            } else if (minLength(e.target, 6)) {
+                formClassManager('repeatPassword', 'input', 'add', 'success-input')
+                formClassManager('repeatPassword', 'wrapper', 'add', 'success-wrapper')
             }
         }
 
@@ -71,6 +75,7 @@ const SignUpForm = ({ setIsVisibleModal }) => {
         //     setInputsValid({ ...inputsValid, [name]: validationEmail(e.target) })
         // }
     }
+
 
     const signUp = () => {
         const { password, repeatPassword, privacyPolicy } = userData
@@ -116,7 +121,7 @@ const SignUpForm = ({ setIsVisibleModal }) => {
                 <Form.Item className='username'>
                     <Input
                         prefix={<UserOutlined />}
-                        placeholder="Nombre de usuario"
+                        placeholder="Nombre de usuario (4 caracteres o más)"
                         name="username"
                         value={userData.username}
                         onChange={inputValidation}
@@ -125,7 +130,7 @@ const SignUpForm = ({ setIsVisibleModal }) => {
                 <Form.Item className='password'>
                     <Input
                         prefix={<LockFilled />}
-                        placeholder="Contraseña"
+                        placeholder="Contraseña (6 caracteres o más)"
                         type="password"
                         name="password"
                         value={userData.password}
@@ -159,6 +164,25 @@ const SignUpForm = ({ setIsVisibleModal }) => {
             </Form>
         </div>
     )
+}
+
+const transformPassword = text => {
+    let textPassword = text.replace(/[' ']/g, '')
+    return textPassword
+}
+
+const transformUsername = text => {
+    let textUsername = text.replace(/[^0-9A-Za-z-]/g, '-').replace(/-+/g, '-')
+
+    if (/[' ']/g.test(text)) {
+        openNotification('info', 'Los espacios no se permiten, pero puedes reemplazarlos por guiones (-).')
+        return textUsername
+    }
+    if (/[^0-9A-Za-z-]/g.test(text)) {
+        openNotification('info', 'Sólo se permiten letras, números y guiones (-).')
+        return textUsername
+    }
+    return textUsername
 }
 
 export default SignUpForm
