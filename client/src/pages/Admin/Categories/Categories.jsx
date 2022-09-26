@@ -12,6 +12,7 @@ import { indexTasksWithoutPaginationApi } from '../../../api/task'
 import { getAccessTokenApi, verifyExpireTokenInWeb } from '../../../api/auth'
 import { updateCategoryAndTasks } from '../../../utils/categoryAndTasksManager'
 import { deleteManyTasks } from '../../../utils/deleteManyRegisters'
+import { Helmet } from 'react-helmet'
 
 import './Categories.scss'
 
@@ -222,32 +223,43 @@ const Categories = ({ setExpireToken, editCategoryGeneral }) => {
     }
 
     return (
-        <Row className='categories'>
-            <Col xs={0} sm={1} md={5} lg={6} />
-            <Col xs={24} sm={22} md={14} lg={12}>
-                <CategoriesHeader
-                    addCategory={addCategory}
+        <>
+            <Helmet>
+                <title>Categorías | To-Do List</title>
+                <meta
+                    name='description'
+                    content='Categorías | Aplicación web To Do List | Juan García Pereira'
+                    data-react-helmet='true'
                 />
-                <CategoriesTree
-                    categories={categories || null}
-                    setReloadCategories={setReloadCategories}
-                    setReloadTasks={setReloadTasks}
-                    editCategory={editCategory}
-                    deleteCategory={deleteCategory}
-                    addTask={addTask}
-                    editTask={editTask}
-                />
-            </Col>
-            <Col xs={0} sm={1} md={5} lg={6} />
-            <Modal
-                modalTitle={modalTitle}
-                isVisibleModal={isVisibleModal}
-                setIsVisibleModal={setIsVisibleModal}
-                width={modalWidth}
-            >
-                {modalContent}
-            </Modal>
-        </Row>
+            </Helmet>
+            <Row className='categories'>
+                <Col xs={0} sm={1} md={5} lg={6} />
+                <Col xs={24} sm={22} md={14} lg={12}>
+                    <CategoriesHeader
+                        addCategory={addCategory}
+                    />
+                    <CategoriesTree
+                        categories={categories || null}
+                        setReloadCategories={setReloadCategories}
+                        setReloadTasks={setReloadTasks}
+                        addCategory={addCategory}
+                        editCategory={editCategory}
+                        deleteCategory={deleteCategory}
+                        addTask={addTask}
+                        editTask={editTask}
+                    />
+                </Col>
+                <Col xs={0} sm={1} md={5} lg={6} />
+                <Modal
+                    modalTitle={modalTitle}
+                    isVisibleModal={isVisibleModal}
+                    setIsVisibleModal={setIsVisibleModal}
+                    width={modalWidth}
+                >
+                    {modalContent}
+                </Modal>
+            </Row>
+        </>
     )
 }
 

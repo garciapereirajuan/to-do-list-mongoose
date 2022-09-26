@@ -5,6 +5,7 @@ import LoginForm from '../../components/Web/Welcome/LoginForm'
 import SignUpForm from '../../components/Web/Welcome/SignUpForm/SignUpForm'
 import ToDoLogo from '../../assets/img/png/to-do-logo-orange.png'
 import { Row, Col, Modal as ModalAntd } from 'antd'
+import { Helmet } from 'react-helmet'
 
 import './Welcome.scss'
 import { useEffect } from 'react'
@@ -31,32 +32,42 @@ const Welcome = ({ setExpireToken }) => {
     })
 
     return (
-        <Row className="welcome">
-            <Col md={11} className='welcome__col col-login-form'>
-                {
-                    !user && !isLoading
-                        ? <LoginForm setIsVisibleModal={setIsVisibleModal} />
-                        : (<p style={{ color: 'white' }}>Otras apps...</p>)
-
-                }
-            </Col>
-            <Col md={2} />
-            <Col md={11} className='welcome__col col-img'>
-                <div>
-                    <img width={300} src={ToDoLogo} alt="Logo-to-do-list" />
-                </div>
-            </Col>
-            <Modal
-                classes='form-welcome'
-                isVisibleModal={isVisibleModal}
-                setIsVisibleModal={setIsVisibleModal}
-                modalTitle='Nuevo usuario'
-            >
-                <SignUpForm
-                    setIsVisibleModal={setIsVisibleModal}
+        <>
+            <Helmet>
+                <title>Bienvenid@ | To-Do List</title>
+                <meta
+                    name='description'
+                    content='Bienvenid@ | Aplicación web To Do List | Juan García Pereira'
+                    data-react-helmet='true'
                 />
-            </Modal>
-        </Row >
+            </Helmet>
+            <Row className="welcome">
+                <Col md={11} className='welcome__col col-login-form'>
+                    {
+                        !user && !isLoading
+                            ? <LoginForm setIsVisibleModal={setIsVisibleModal} />
+                            : (<p style={{ color: 'white' }}>Otras apps...</p>)
+
+                    }
+                </Col>
+                <Col md={2} />
+                <Col md={11} className='welcome__col col-img'>
+                    <div>
+                        <img width={300} src={ToDoLogo} alt="Logo-to-do-list" />
+                    </div>
+                </Col>
+                <Modal
+                    classes='form-welcome'
+                    isVisibleModal={isVisibleModal}
+                    setIsVisibleModal={setIsVisibleModal}
+                    modalTitle='Nuevo usuario'
+                >
+                    <SignUpForm
+                        setIsVisibleModal={setIsVisibleModal}
+                    />
+                </Modal>
+            </Row >
+        </>
     )
 }
 

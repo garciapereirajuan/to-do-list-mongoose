@@ -9,10 +9,17 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-direction: column;
             height: 62vh;
         }
 
-        &.no-data {}
+        &.no-data {
+
+            button {
+                margin-top: 20px;
+                font-size: 18px;
+            }
+        }
 
         .task {
             border-bottom: 1px solid rgba(0, 0, 0, .1);

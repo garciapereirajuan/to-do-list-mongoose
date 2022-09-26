@@ -15,6 +15,7 @@ import { deleteTaskApi, indexTasksApi, indexTasksWithoutPaginationApi, updateTas
 import { indexCategoriesApi } from '../../../api/category'
 import { updateCategoryAndTasks } from '../../../utils/categoryAndTasksManager'
 import { deleteManyTasks } from '../../../utils/deleteManyRegisters'
+import { Helmet } from 'react-helmet'
 import moment from 'moment'
 
 import './Tasks.scss'
@@ -401,43 +402,56 @@ const Tasks = ({ setExpireToken, reloadAlert, setReloadAlert }) => {
         }
     }
 
+    const titleHelmet = checked ? 'Tareas sin hacer' : 'Tareas hechas'
+
     return (
-        <Row className='tasks'>
-            <Col xs={0} sm={0} md={0} lg={3} />
-            <Col xm={24} sm={24} md={24} lg={18} >
-                <TasksHeader
-                    tasks={tasks}
-                    addTask={addTask}
-                    checked={checked}
-                    setChecked={setChecked}
-                    setReloadTasks={setReloadTasks}
-                    deleteAllTasks={deleteAllTasks}
+        <>
+            <Helmet>
+                <title>{titleHelmet} | To-Do List</title>
+                <meta
+                    name='description'
+                    content='Tareas | Aplicación web To Do List | Juan García Pereira'
+                    data-react-helmet='true'
                 />
-                <TasksList
-                    tasks={tasks ? tasks : [false]}
-                    editTask={editTask}
-                    deleteTask={deleteTask}
-                    updateCheckTask={updateCheckTask}
-                    categories={categories}
-                    chooseActionForCategory={chooseActionForCategory}
-                />
-            </Col>
-            {
-                tasks
-                    ? tasks.docs.length !== 0
-                    && <Pagination tasks={tasks} location={location} navigate={navigate} />
-                    : null
-            }
-            <Modal
-                modalTitle={modalTitle}
-                isVisibleModal={isVisibleModal}
-                setIsVisibleModal={setIsVisibleModal}
-                width={modalWidth}
-            >
-                {modalContent}
-            </Modal>
-            <Col xs={0} sm={0} md={0} lg={3} />
-        </Row>
+            </Helmet>
+            <Row className='tasks'>
+                <Col xs={0} sm={0} md={0} lg={3} />
+                <Col xm={24} sm={24} md={24} lg={18} >
+                    <TasksHeader
+                        tasks={tasks}
+                        addTask={addTask}
+                        checked={checked}
+                        setChecked={setChecked}
+                        setReloadTasks={setReloadTasks}
+                        deleteAllTasks={deleteAllTasks}
+                    />
+                    <TasksList
+                        tasks={tasks ? tasks : [false]}
+                        editTask={editTask}
+                        addTask={addTask}
+                        deleteTask={deleteTask}
+                        updateCheckTask={updateCheckTask}
+                        categories={categories}
+                        chooseActionForCategory={chooseActionForCategory}
+                    />
+                </Col>
+                {
+                    tasks
+                        ? tasks.docs.length !== 0
+                        && <Pagination tasks={tasks} location={location} navigate={navigate} />
+                        : null
+                }
+                <Modal
+                    modalTitle={modalTitle}
+                    isVisibleModal={isVisibleModal}
+                    setIsVisibleModal={setIsVisibleModal}
+                    width={modalWidth}
+                >
+                    {modalContent}
+                </Modal>
+                <Col xs={0} sm={0} md={0} lg={3} />
+            </Row>
+        </>
     )
 }
 

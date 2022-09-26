@@ -14,7 +14,7 @@ const { DirectoryTree } = Tree
 const CategoriesTree = (props) => {
     const {
         categories, setReloadCategories, setReloadTasks,
-        editCategory, deleteCategory, addTask, editTask
+        editCategory, deleteCategory, addTask, editTask, addCategory
     } = props
 
     const [treeCategories, setTreeCategories] = useState([])
@@ -163,9 +163,12 @@ const CategoriesTree = (props) => {
 
     if (!categories) {
         return (
-            <div className='categories-tree no-data'>
+            <div
+                className='categories-tree no-data'
+            >
                 <img src={NoDataLogo} alt='TO-DO Aquí no hay nada' />
-            </div>
+                <Button type='primary' onClick={addCategory}>Agrega una nueva categoría</Button>
+            </div >
         )
     }
 

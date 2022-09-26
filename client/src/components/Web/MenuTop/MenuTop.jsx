@@ -51,8 +51,12 @@ const MenuTop = () => {
                             <Menu.Item key="/categories">
                                 <Link to="/categories">Categorías</Link>
                             </Menu.Item>
-                            <Menu.Item key="power-off" className='menu-top__right'>
-                                <div title='Cerrar sesión' onClick={() => logoutUser()}>
+                            <Menu.Item
+                                key="power-off"
+                                className='menu-top__right'
+                                onClick={() => logoutUser()}
+                            >
+                                <div title='Cerrar sesión' >
                                     <PoweroffOutlined />
                                 </div>
                             </Menu.Item>

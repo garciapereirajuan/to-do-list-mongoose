@@ -7,7 +7,7 @@ import 'moment/locale/es'
 
 import './TasksList.scss'
 
-const TasksList = ({ tasks, editTask, deleteTask, updateCheckTask, categories, chooseActionForCategory }) => {
+const TasksList = ({ tasks, editTask, addTask, deleteTask, updateCheckTask, categories, chooseActionForCategory }) => {
     const [listItems, setListItems] = useState([])
     const { docs } = tasks
 
@@ -36,9 +36,12 @@ const TasksList = ({ tasks, editTask, deleteTask, updateCheckTask, categories, c
 
     if (tasks.total === 0) {
         return (
-            <div className='tasks-list__item no-data'>
+            <div
+                className='tasks-list__item no-data'
+            >
                 <img src={NoDataLogo} alt='TO-DO Aquí no hay nada' />
-            </div>
+                <Button type='primary' onClick={addTask}>Agrega una nueva tarea</Button>
+            </div >
         )
     }
 
