@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { List, Button, Checkbox, Spin } from 'antd'
-import { openNotification } from '../../../../utils/openNotification'
 import { DeleteFilled, EditFilled, ArrowUpOutlined, ClockCircleOutlined, CheckCircleOutlined } from '@ant-design/icons'
+import NoDataLogo from '../../../../assets/img/png/no-data-logo-grey-2.png'
 import moment from 'moment'
 import 'moment/locale/es'
 
@@ -34,13 +34,22 @@ const TasksList = ({ tasks, editTask, deleteTask, updateCheckTask, categories, c
         categories, chooseActionForCategory
     ])
 
+    if (tasks.total === 0) {
+        return (
+            <div className='tasks-list__item no-data'>
+                <img src={NoDataLogo} alt='TO-DO Aquí no hay nada' />
+            </div>
+        )
+    }
+
     if (listItems.length === 0) {
         return (
-            <div className='tasks-list__item' style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '62vh' }}>
+            <div className='tasks-list__item loading'>
                 <Spin size="large" />
             </div>
         )
     }
+
     return (
         <div className='tasks-list__item'>
             <List className='List'>

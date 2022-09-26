@@ -86,7 +86,7 @@ const FormTask = ({ taskData, setTaskData, categories, task, category, autoFocus
         <Form className='form-task' onFinish={task ? updateTask : addTask}>
             <Form.Item>
                 <Input
-                    autoFocus={!autoFocusSelect}
+                    autoFocus={!autoFocusSelect && true}
                     prefix={<FontSizeOutlined />}
                     placeholder='Nueva tarea'
                     value={taskData.title}

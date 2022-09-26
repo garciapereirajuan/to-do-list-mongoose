@@ -15,6 +15,7 @@ const LayoutHome = () => {
         <Layout className="layout-home">
             <MenuTop />
             <Content className="layout-home__content">
+                <div className='layout-home__content-background'></div>
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/login" element={<Welcome />} />

@@ -31,16 +31,15 @@ const Home = () => {
                     <div className='border'></div>
                 </Row>
                 <Row gutter={24} className='home-admin__content__row'>
-                    <Col md={12}>
-                        <Col md={24} className='home-admin__content__row-header'>
-                            <h2>¿Qué características tiene?</h2>
-                            <p>No muchas, pero las que tiene, funcionan:</p>
+                    <Col xs={24} sm={24} md={24} lg={12}>
+                        <Col md={24} className='home-admin__content__row-header first'>
+                            <h2>¿Qué hace?</h2>
+                            <p>No mucho, pero lo que hace, funciona:</p>
                         </Col>
                         <iframe width="560" height="315" src="https://youtube.com/embed/S3aQeCduwyY" title="TO-DO List 💻 Vista Previa 💻 React - Mongoose" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
-
                     </Col>
-                    <Col md={12}>
-                        <Col md={24} className='home-admin__content__row-header'>
+                    <Col xs={24} sm={24} md={24} lg={12}>
+                        <Col md={24} className='home-admin__content__row-header second'>
                             <h2>¿Cómo la construí?</h2>
                             <p>Muy "simple", lo explico en este video:</p>
                         </Col>

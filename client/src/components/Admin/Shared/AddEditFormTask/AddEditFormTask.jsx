@@ -179,7 +179,6 @@ const AddEditFormTask = (props) => {
             removeCategory = true
         }
 
-        console.log(task)
         task && updateTaskApi(token, task._id, data)
             .then(response => {
                 if (/token/g.test(response.message)) {

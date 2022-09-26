@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import { Routes, Route, Link, useNavigate } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 import { Layout } from 'antd'
 import MenuTop from '../../components/Web/MenuTop'
+import FooterSection from '../../components/FooterSection'
 import Home from '../../pages/Home'
 import Tasks from '../../pages/Admin/Tasks'
 import Categories from '../../pages/Admin/Categories'
@@ -12,6 +13,7 @@ import './LayoutAdmin.scss'
 
 const LayoutAdmin = () => {
     const [expireToken, setExpireToken] = useState(false)
+    const [reloadAlert, setReloadAlert] = useState(true)
     const { user } = useAuth()
     const { Header, Content, Footer } = Layout
 
@@ -25,11 +27,16 @@ const LayoutAdmin = () => {
         <Layout className="layout-admin">
             <MenuTop />
             <Content className="layout-admin__content">
+                <div className='layout-home__content-background'></div>
                 <div className="layout-admin__content-img-left">
-                    <img width={200} src={ToDoLogo} alt="Logo-to-do-list" />
+                    <div>
+                        <img width={200} src={ToDoLogo} alt="Logo-to-do-list" />
+                    </div>
                 </div>
                 <div className="layout-admin__content-img-right">
-                    <img width={200} src={ToDoLogo} alt="Logo-to-do-list" />
+                    <div>
+                        <img width={200} src={ToDoLogo} alt="Logo-to-do-list" />
+                    </div>
                 </div>
                 <Routes>
                     <Route path="/" element={
@@ -39,6 +46,8 @@ const LayoutAdmin = () => {
                     } />
                     <Route path="/tasks" element={
                         user && <Tasks
+                            reloadAlert={reloadAlert}
+                            setReloadAlert={setReloadAlert}
                             setExpireToken={setExpireToken}
                         />
                     } />
@@ -49,12 +58,14 @@ const LayoutAdmin = () => {
                     } />
                     <Route path="*" element={
                         user && <Tasks
+                            reloadAlert={reloadAlert}
+                            setReloadAlert={setReloadAlert}
                             setExpireToken={setExpireToken}
                         />
                     } />
                 </Routes>
             </Content>
-            <Footer className="layout-admin__footer">&#169; 2022 - JUAN G.P.</Footer>
+            <FooterSection />
         </Layout>
     )
 }

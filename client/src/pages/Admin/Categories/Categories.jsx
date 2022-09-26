@@ -41,6 +41,11 @@ const Categories = ({ setExpireToken, editCategoryGeneral }) => {
                     console.log('Se produjo un error al cargar las categorías.')
                     return
                 }
+                console.log(response.categories)
+                if (!response.categories) {
+                    setCategories(null)
+                    return
+                }
                 setCategories(response.categories)
             })
             .catch(err => {
@@ -218,13 +223,13 @@ const Categories = ({ setExpireToken, editCategoryGeneral }) => {
 
     return (
         <Row className='categories'>
-            <Col sm={0} md={6} />
-            <Col sm={24} md={12}>
+            <Col xs={0} sm={1} md={5} lg={6} />
+            <Col xs={24} sm={22} md={14} lg={12}>
                 <CategoriesHeader
                     addCategory={addCategory}
                 />
                 <CategoriesTree
-                    categories={categories ? categories : []}
+                    categories={categories || null}
                     setReloadCategories={setReloadCategories}
                     setReloadTasks={setReloadTasks}
                     editCategory={editCategory}
@@ -233,7 +238,7 @@ const Categories = ({ setExpireToken, editCategoryGeneral }) => {
                     editTask={editTask}
                 />
             </Col>
-            <Col sm={0} md={6} />
+            <Col xs={0} sm={1} md={5} lg={6} />
             <Modal
                 modalTitle={modalTitle}
                 isVisibleModal={isVisibleModal}

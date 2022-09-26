@@ -4,6 +4,16 @@
     &__item {
         width: 100%;
 
+        &.loading,
+        &.no-data {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 62vh;
+        }
+
+        &.no-data {}
+
         .task {
             border-bottom: 1px solid rgba(0, 0, 0, .1);
             min-height: 100px;

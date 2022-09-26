@@ -8,7 +8,7 @@ import AddEditFormTask from '../../../components/Admin/Shared/AddEditFormTask'
 import AddEditFormCategory from '../../../components/Admin/Shared/AddEditFormCategory'
 import Pagination from '../../../components/Admin/Pagination'
 import TasksHeader from '../../../components/Admin/Tasks/TasksHeader'
-import { Row, Col, Button, Modal as ModalAntd } from 'antd'
+import { Row, Col, Button, Modal as ModalAntd, notification } from 'antd'
 import { openNotification } from '../../../utils/openNotification'
 import { getAccessTokenApi, verifyExpireTokenInWeb } from '../../../api/auth'
 import { deleteTaskApi, indexTasksApi, indexTasksWithoutPaginationApi, updateTaskApi } from '../../../api/task'
@@ -19,7 +19,7 @@ import moment from 'moment'
 
 import './Tasks.scss'
 
-const Tasks = ({ setExpireToken }) => {
+const Tasks = ({ setExpireToken, reloadAlert, setReloadAlert }) => {
     const [tasks, setTasks] = useState(null)
     const [tasksArray, setTasksArray] = useState([])
     const [reloadTasks, setReloadTasks] = useState(false)
@@ -74,32 +74,42 @@ const Tasks = ({ setExpireToken }) => {
         }
     }, [location, reloadCategories, reloadTasks])
 
-    useEffect(() => {
+    const showAlert = (tasks) => {
+        setReloadAlert(false)
+
         if (checked) {
             return
         }
 
-        tasksArray.forEach(item => {
+        tasks.forEach(item => {
             if (item.checked) {
                 return
             }
             if (moment(item.dateDown).format() < moment().format()) {
                 setAlertTasks({ ...alertTasks, finishTime: alertTasks.finishTime++ })
+                if (alertTasks.finishTime === 1) {
+                    notification.info({
+                        message: 'Alerta de finalización',
+                        description: 'Tienes tareas finalizadas sin completar.',
+                        duration: 30,
+                        placement: 'bottomRight',
+                    })
+                }
+                return
             }
             if (moment(item.dateDown).subtract(24, 'hours').format() < moment().format()) {
                 setAlertTasks({ ...alertTasks, warningTime: alertTasks.warningTime++ })
-            }
-
-            if (alertTasks.warningTime === 1) {
-                openNotification('warning', 'Una o más tareas están cerca de finalizar.', 10)
-            }
-            if (alertTasks.finishTime === 1) {
-                openNotification('error', 'Una o más tareas finalizaron y no están completadas.', 10)
+                if (alertTasks.warningTime === 1) {
+                    notification.info({
+                        message: 'Alerta de finalización',
+                        description: 'Tienes tareas que finalizan en menos de 24 horas.',
+                        duration: 30,
+                        placement: 'bottomRight',
+                    })
+                }
             }
         })
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [tasksArray])
+    }
 
     const getTasks = () => {
         const token = getAccessTokenApi()
@@ -148,6 +158,8 @@ const Tasks = ({ setExpireToken }) => {
                     return
                 }
                 setTasksArray(response.tasks)
+                console.log(reloadAlert)
+                reloadAlert && showAlert(response.tasks)
             })
             .catch(err => {
                 console.log('Error al cargar las tareas: ' + JSON.stringify(err))
@@ -391,8 +403,8 @@ const Tasks = ({ setExpireToken }) => {
 
     return (
         <Row className='tasks'>
-            <Col sm={0} md={4} />
-            <Col sm={24} md={16} >
+            <Col xs={0} sm={0} md={0} lg={3} />
+            <Col xm={24} sm={24} md={24} lg={18} >
                 <TasksHeader
                     tasks={tasks}
                     addTask={addTask}
@@ -402,7 +414,7 @@ const Tasks = ({ setExpireToken }) => {
                     deleteAllTasks={deleteAllTasks}
                 />
                 <TasksList
-                    tasks={tasks ? tasks : []}
+                    tasks={tasks ? tasks : [false]}
                     editTask={editTask}
                     deleteTask={deleteTask}
                     updateCheckTask={updateCheckTask}
@@ -424,7 +436,7 @@ const Tasks = ({ setExpireToken }) => {
             >
                 {modalContent}
             </Modal>
-            <Col sm={0} md={4} />
+            <Col xs={0} sm={0} md={0} lg={3} />
         </Row>
     )
 }

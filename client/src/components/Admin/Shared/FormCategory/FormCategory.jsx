@@ -92,8 +92,9 @@ const FormCategory = (props) => {
 
     return (
         <Form className='form-category' onFinish={category ? editCategory : addCategory} >
-            <Form.Item>
+            <Form.Item autoFocus={true}>
                 <Input
+                    autoFocus={true}
                     prefix={<FontSizeOutlined />}
                     placeholder='Nombre de la categoría'
                     value={categoryData.title}

@@ -1,3 +1,29 @@
 @import '../../sass/index.scss';
 
-.footer-section {}
+.footer-section {
+    display: flex;
+    height: 30px;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    right: 0;
+    background-color: $background-dark  !important;
+    color: #fff !important;
+    font-weight: bold;
+    z-index: 2;
+
+    &__social {
+        display: flex;
+        width: 100px;
+        justify-content: space-between;
+        margin-left: 20px;
+
+        a {
+            color: $font-light;
+
+            &:hover {
+                color: rgba($primary-color-light, .4)
+            }
+        }
+    }
+}

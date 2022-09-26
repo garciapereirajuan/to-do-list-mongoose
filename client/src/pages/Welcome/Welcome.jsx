@@ -17,6 +17,7 @@ const Welcome = ({ setExpireToken }) => {
         isVisibleModal && ModalAntd.info({
             centered: true,
             title: 'Registro de usuario',
+            autoFocusButton: 'ok',
             content: (
                 <>
                     <p>Al ser una aplicación de prueba, podrás registrarte simplemente con un nombre de usuario. La contraseña se guarda encriptada y si la olvidas no habrá forma de recuperarla.</p>
@@ -31,7 +32,7 @@ const Welcome = ({ setExpireToken }) => {
 
     return (
         <Row className="welcome">
-            <Col md={16} className='welcome__col col-login-form'>
+            <Col md={11} className='welcome__col col-login-form'>
                 {
                     !user && !isLoading
                         ? <LoginForm setIsVisibleModal={setIsVisibleModal} />
@@ -39,8 +40,11 @@ const Welcome = ({ setExpireToken }) => {
 
                 }
             </Col>
-            <Col md={8} className='welcome__col col-img'>
-                <img width={300} src={ToDoLogo} alt="Logo-to-do-list" />
+            <Col md={2} />
+            <Col md={11} className='welcome__col col-img'>
+                <div>
+                    <img width={300} src={ToDoLogo} alt="Logo-to-do-list" />
+                </div>
             </Col>
             <Modal
                 classes='form-welcome'
@@ -52,17 +56,6 @@ const Welcome = ({ setExpireToken }) => {
                     setIsVisibleModal={setIsVisibleModal}
                 />
             </Modal>
-            {/* <ModalAntd
-                title='Nuevo usuario'
-                centered
-                visible={isVisibleModal}
-                onCancel={() => setIsVisibleModal(false)}
-                footer={false}
-            >
-                <SignUpForm
-                    setIsVisibleModal={setIsVisibleModal}
-                />
-            </ModalAntd> */}
         </Row >
     )
 }

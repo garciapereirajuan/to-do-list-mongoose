@@ -2,6 +2,14 @@
 
 .categories-tree {
 
+    &.loading,
+    &.no-data {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 56.5vh;
+    }
+
     .ant-tree-block-node,
     .categories-tree .ant-tree-treenode span {
         background: transparent !important;

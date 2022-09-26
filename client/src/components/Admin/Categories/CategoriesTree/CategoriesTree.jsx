@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Tree } from 'antd'
+import { Button, Spin, Tree } from 'antd'
 import { openNotification } from '../../../../utils/openNotification'
 import { EditFilled, DeleteFilled, CheckCircleFilled, FileAddFilled } from '@ant-design/icons'
 import { getAccessTokenApi } from '../../../../api/auth'
 import { positionCategoryAndTasksApi } from '../../../../api/categoryAndTasks'
 import { updateCategoryAndTasks } from '../../../../utils/categoryAndTasksManager'
+import NoDataLogo from '../../../../assets/img/png/no-data-logo-grey-2.png'
 
 import './CategoriesTree.scss'
 
@@ -158,6 +159,28 @@ const CategoriesTree = (props) => {
         }
 
         updateCategoryAndTasks(token, taskId, newCategoryId, oldCategoryId, true, finish)
+    }
+
+    if (!categories) {
+        return (
+            <div className='categories-tree no-data'>
+                <img src={NoDataLogo} alt='TO-DO Aquí no hay nada' />
+            </div>
+        )
+    }
+
+    console.log(categories)
+
+    if (categories?.length === 0) {
+        return (
+            <div className='categories-tree loading'>
+                <Spin size="large" />
+            </div>
+        )
+    }
+
+    if (categories[0] === false) {
+        return
     }
 
     return (
