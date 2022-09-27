@@ -6,9 +6,6 @@ const add = (req, res, funcResolve) => {
     const { categoryId } = req.params
     const { taskId } = req.body
 
-    console.log(categoryId, taskId)
-    // return
-
     if (!categoryId || !taskId) {
        res && message(res, 404, 'El Id de la categoría y de la tarea es obligatorio.')
         return
@@ -59,13 +56,11 @@ const update = (req, res) => {
     const { taskId, position } = req.body
 
     if (position === null) {
-        console.log('Position es null')
         changeCategory(req, res)
         return
     }
 
     if (!position) {
-        console.log('error !position', position)
         // message(res, 404, 'Error!!!!')
         return
     }
@@ -135,7 +130,6 @@ const changeCategory = (req, res) => {
         let tasks = category.tasks
         let index = tasks.findIndex(item => item == taskId)
 
-        // tasks.splice(index, index === 0 ? 1 : index)
         tasks = tasks.toString().replace(tasks[index], '').split(',').filter(Boolean)
 
         if (index === -1) {
@@ -168,9 +162,6 @@ const changeCategory = (req, res) => {
         })
     })
 }
-
-
-
 module.exports = {
     add,
     update

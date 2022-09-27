@@ -10,7 +10,6 @@ const mongoose = require('mongoose')
 module.exports = {
     welcome: (req, res, next) => {
         const { userId } = req.body
-        console.log(userId)
         
         if (userId) {
             User.findByIdAndUpdate(userId, { initial: false }, async (err, user) => {
@@ -115,16 +114,16 @@ const createTasksDevelopment = async (user) => {
 
                         console.log('Tareas creada correctamente.', { task: taskStored })
 
-                        // console.log(author)
+
                         Category.find({ author, title: categoryName }, (err, category) => {
                             if (err || category.length === 0 || categoryName === null) {
                                 resolve()
                                 return
                             }
-                            // console.log(category)
+
                             const req = { body: { taskId: taskStored._id }, params: { categoryId: category[0]._id }}
                             const res = false
-                            // console.log(req)
+
                             const funcResolve = () => {
                                 resolve()
                             }
@@ -143,7 +142,6 @@ const createTasksDevelopment = async (user) => {
         dateUp: moment().subtract(10, 'minutes'),
         dateUpdate: moment().subtract(10, 'minutes'),
         dateDown: null,
-        // dateDown: moment().subtract(10, 'days'),
         orderByDateDown: moment().add(10, 'years'),
         orderByCategory: `zzz999-${new Date().toISOString()}`
     }

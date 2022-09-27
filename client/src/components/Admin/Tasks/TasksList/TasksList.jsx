@@ -7,7 +7,7 @@ import 'moment/locale/es'
 
 import './TasksList.scss'
 
-const TasksList = ({ tasks, editTask, addTask, deleteTask, updateCheckTask, categories, chooseActionForCategory }) => {
+const TasksList = ({ tasks, editTask, addTask, deleteTask, updateCheckTask, categories, chooseActionForCategory, checked }) => {
     const [listItems, setListItems] = useState([])
     const { docs } = tasks
 
@@ -40,7 +40,7 @@ const TasksList = ({ tasks, editTask, addTask, deleteTask, updateCheckTask, cate
                 className='tasks-list__item no-data'
             >
                 <img src={NoDataLogo} alt='TO-DO Aquí no hay nada' />
-                <Button type='primary' onClick={addTask}>Agrega una nueva tarea</Button>
+                {!checked && <Button type='primary' onClick={addTask}>Agrega una nueva tarea</Button>}
             </div >
         )
     }
@@ -232,7 +232,7 @@ const TaskItem = ({ task, editTask, chooseActionForCategory, deleteTask, updateC
                 checked={checkedTask}
                 onChange={(e) => {
                     setCheckedTask(e.target.checked)
-                    setTimeout(() => { updateCheckTask(e, task) }, 500)
+                    setTimeout(() => { updateCheckTask(e, task) }, 100)
                 }}
             />
             <List.Item.Meta

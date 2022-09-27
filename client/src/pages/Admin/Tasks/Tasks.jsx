@@ -402,7 +402,7 @@ const Tasks = ({ setExpireToken, reloadAlert, setReloadAlert }) => {
         }
     }
 
-    const titleHelmet = checked ? 'Tareas sin hacer' : 'Tareas hechas'
+    const titleHelmet = checked ? 'Tareas hechas' : 'Tareas sin hacer'
 
     return (
         <>
@@ -426,13 +426,14 @@ const Tasks = ({ setExpireToken, reloadAlert, setReloadAlert }) => {
                         deleteAllTasks={deleteAllTasks}
                     />
                     <TasksList
-                        tasks={tasks ? tasks : [false]}
+                        tasks={tasks ? tasks : []}
                         editTask={editTask}
                         addTask={addTask}
                         deleteTask={deleteTask}
                         updateCheckTask={updateCheckTask}
                         categories={categories}
                         chooseActionForCategory={chooseActionForCategory}
+                        checked={checked}
                     />
                 </Col>
                 {

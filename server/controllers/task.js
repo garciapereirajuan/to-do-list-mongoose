@@ -156,7 +156,6 @@ module.exports = {
 }
 
 const indexWithoutPagination = (req, res) => {
-    // const { checked = false } = req.query
     const { userId } = req.body
 
     User.findOne({ _id: userId }, (err, user) => {
@@ -184,8 +183,4 @@ const indexWithoutPagination = (req, res) => {
         })
     })
 }
-
-
-
-// createTasksDevelopment('63247aad2e89489e9ca9ab16')
 
