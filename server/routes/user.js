@@ -1,7 +1,6 @@
 const express = require('express')
 const router = express.Router()
 const UserController = require('../controllers/user')
-const md_welcome = require('../middlewares/welcome')
 const md_auth = require('../middlewares/authenticated')
 
 router.route('/user')

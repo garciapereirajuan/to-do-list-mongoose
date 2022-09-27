@@ -34,15 +34,15 @@ const LayoutAdmin = () => {
 
         user && showUserApi(token, user.id)
             .then(response => {
+                if (!response?.user.initial) {
+                    return
+                }
                 if (response?.code !== 200) {
                     openNotification('error', 'Lo siento, se produjo un error, por favor recarga la página.', 30)
                     openNotification('info', 'Si sigues viendo este cartel, ¿podrías comunicarmelo?. Muchas gracias 🙃', 30)
                     console.log('Error al encontrar el usuario', response)
-                }
-                if (!response?.user.initial) {
                     return
                 }
-
                 const styleModal = {
                     letterSpacing: '2px'
                 }

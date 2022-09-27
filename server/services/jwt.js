@@ -1,7 +1,7 @@
 const jwt = require('jwt-simple')
 const moment = require('moment')
 
-const SECRET_KEY = 'ckhn923nd9gJ56n2c5v18whsdfwg90X62bv6kbg8K'
+const SECRET_KEY = 'ckhn923nd9gJ56ncv8wh4kbg90X62bv6kbg8K' //IMPORTANTE - cambiar
 
 exports.createAccessToken = (user) => {
     const payload = {

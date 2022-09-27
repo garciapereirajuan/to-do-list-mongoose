@@ -38,8 +38,8 @@ const Tasks = ({ setExpireToken, reloadAlert, setReloadAlert, welcomeFinish, set
     const location = useLocation()
     const navigate = useNavigate()
     const { page = 1 } = queryString.parse(location.search)
-    const limit = 6
-    // const limit = (window.innerHeight / 110) - 1.5
+    // const limit = 6
+    const limit = (window.innerHeight / 110)
 
     useEffect(() => {
         verifyExpireTokenInWeb(setExpireToken)
