@@ -66,7 +66,7 @@ export const updateCategoryAndTasks = (token, taskId, newCategoryId, oldCategory
                         }
                         if (response?.code === 200 && !newCategoryId) {
                             if (typeof taskId === 'object') {
-                                console.log('Entra acá porque es array')
+                                // console.log('Entra acá porque es array')
                                 res(response)
                                 return
                             }

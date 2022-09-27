@@ -1,14 +1,14 @@
 const jwt = require('jwt-simple')
 const moment = require('moment')
 
-const SECRET_KEY = 'ckhn923nd9gJ56ncv8wh4kbg90X62bv6kbg8K'
+const SECRET_KEY = 'ckhn923nd9gJ56n2c5v18whsdfwg90X62bv6kbg8K'
 
 exports.createAccessToken = (user) => {
     const payload = {
         id: user._id,
         username: user.username,
         createToken: moment().unix(),
-        exp: moment().add(3, 'hours').unix(),
+        exp: moment().add(6, 'hours').unix(),
     }
 
     return jwt.encode(payload, SECRET_KEY)

@@ -172,8 +172,6 @@ const CategoriesTree = (props) => {
         )
     }
 
-    console.log(categories)
-
     if (categories?.length === 0) {
         return (
             <div className='categories-tree loading'>

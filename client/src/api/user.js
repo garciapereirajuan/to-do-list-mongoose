@@ -11,7 +11,7 @@ export const createUserApi = (userData) => {
     }
 
     return fetch(url, params) 
-        .then(response => {console.log(response); return response.json()})
+        .then(response => response.json())
         .then(result => result)
         .catch(err => err)
 }

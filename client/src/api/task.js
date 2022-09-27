@@ -35,7 +35,6 @@ export const indexTasksWithoutPaginationApi = (token, userId) => {
 }
 
 export const createTaskApi = (token, taskData) => {
-    console.log(taskData)
     const url = `${basePath}/${apiVersion}/task`
     const params = {
         method: 'POST',

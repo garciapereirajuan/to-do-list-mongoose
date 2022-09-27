@@ -160,7 +160,6 @@ const Tasks = ({ setExpireToken, reloadAlert, setReloadAlert, welcomeFinish, set
                     return
                 }
                 setTasksArray(response.tasks)
-                console.log(reloadAlert)
                 reloadAlert && showAlert(response.tasks)
             })
             .catch(err => {
