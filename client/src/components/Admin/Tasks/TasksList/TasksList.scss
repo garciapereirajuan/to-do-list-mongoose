@@ -1,6 +1,7 @@
 @import '../../../../sass/index.scss';
 
 .tasks-list {
+
     &__item {
         width: 100%;
 
@@ -10,7 +11,7 @@
             align-items: center;
             justify-content: center;
             flex-direction: column;
-            height: 62vh;
+            height: 67vh;
         }
 
         &.no-data {
@@ -57,6 +58,7 @@
             border-radius: 4px;
             position: relative;
             background-color: $background-dark-light;
+            box-shadow: 0px 0px 6px #000;
 
             &__btn-category {
                 width: 150px;

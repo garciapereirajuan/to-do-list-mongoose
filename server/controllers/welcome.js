@@ -5,31 +5,27 @@ const { add } = require('../controllers/categoryAndTasks')
 const CategoryController = require('../controllers/category')
 const TaskController = require('../controllers/task')
 const moment = require('moment')
-const mongoose = require('mongoose')
 
-module.exports = {
-    // welcome: (req, res, next) => {
-    //     const { userId } = req.body
+const welcome = async (req, res) => {
+    const { id } = req.params
+
+    User.findByIdAndUpdate(id, { initial: false }, async (err, user) => {
+        if (err || !user) {
+            console.log('Ocurrió un error en el controlador Welcome' , {err})
+            return
+        } 
+        if (user.initial) {
+            await createCategoryDevelopment(id)
+            await createTasksDevelopment(id)
         
-    //     if (userId) {
-    //         User.findByIdAndUpdate(userId, { initial: false }, async (err, user) => {
-    //             if (err || !user) {
-    //                 console.log('Ocurrió un error en el MD Welcome' , {err})
-    //                 next()
-    //             } 
-    //             if (user.initial) {
-    //                 await createCategoryDevelopment(userId)
-    //                 await createTasksDevelopment(userId)
-    //                 next()
-    //             } else {
-    //                 next()
-    //             }
-    //         })
-    //     }
-    //     if (!userId) {
-    //         next()
-    //     }
-    // }
+            res.status(200).send({ code: 200, message: 'Finish' })
+            return
+        }
+        if (!user.initial) {
+            res.status(200).send({ code: 204, message: 'No se requiere ninguna acción'})
+            return
+        }
+    })
 }
 
 const createCategoryDevelopment = (user) => {
@@ -235,5 +231,7 @@ const createTasksDevelopment = async (user) => {
     taskId = await createTask(data5, 'Casa')
     taskId = await createTask(data9, 'Casa')
     taskId = await createTask(data7, 'Trabajo')
-        
+    return 'finish'      
 }
+
+module.exports = { welcome }

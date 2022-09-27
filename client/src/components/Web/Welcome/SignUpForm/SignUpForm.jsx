@@ -8,7 +8,7 @@ import { minLength } from '../../../../utils/validationsForm'
 
 import "./SignUpForm.scss"
 
-const SignUpForm = ({ setIsVisibleModal }) => {
+const SignUpForm = ({ setIsVisibleModal, openLegacy }) => {
     const [userData, setUserData] = useState({})
     const [inputsValid, setInputsValid] = useState({
         username: false,
@@ -61,7 +61,7 @@ const SignUpForm = ({ setIsVisibleModal }) => {
             if (value !== userData.password) {
                 formClassManager('repeatPassword', 'input', 'add', 'error-input')
                 formClassManager('repeatPassword', 'wrapper', 'add', 'error-wrapper')
-                console.log(userData.repeatPassword, userData.password)
+
             } else if (minLength(e.target, 6)) {
                 formClassManager('repeatPassword', 'input', 'add', 'success-input')
                 formClassManager('repeatPassword', 'wrapper', 'add', 'success-wrapper')
@@ -152,9 +152,8 @@ const SignUpForm = ({ setIsVisibleModal }) => {
                         name='privacyPolicy'
                         checked={userData.privacyPolicy}
                         onChange={inputValidation}
-                    >
-                        He leído y acepto la política de privacidad
-                    </Checkbox>
+                    />
+                    He leído y acepto la <Button onClick={() => openLegacy()}>política de privacidad</Button>
                 </Form.Item>
                 <Form.Item className='submit'>
                     <Button type="primary" htmlType="submit" className='btn-submit'>

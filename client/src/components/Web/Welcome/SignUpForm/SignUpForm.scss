@@ -7,9 +7,27 @@
     border-radius: 10px;
     font-size: 1.1em;
 
-    .ant-checkbox-wrapper {
-        span {
-            color: $font-light;
+    .privacyPolicy {
+        .ant-checkbox-wrapper {
+            margin-right: 4px;
         }
+
+        .ant-form-item-control-input-content {
+            display: flex;
+        }
+
+        button {
+            margin-left: 4px;
+            height: max-content;
+            width: max-content;
+            padding: 0;
+            background-color: transparent;
+            border: none;
+            color: $primary-color-light;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        color: $font-light;
     }
 }

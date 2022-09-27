@@ -24,6 +24,7 @@ const md_welcome = require('./middlewares/welcome')
 
 // Load routes
 const userRoutes = require('./routes/user')
+const welcomeRoutes = require('./routes/welcome')
 const authRoutes = require('./routes/auth')
 const taskRoutes = require('./routes/task')
 const categoryRoutes = require('./routes/category')
@@ -31,7 +32,8 @@ const categoryAndTasksRoutes = require('./routes/categoryAndTasks')
 
 // Routes basic
 app.use(`/api/${API_VERSION}`, userRoutes)
-app.use(md_welcome.welcome)
+app.use(`/api/${API_VERSION}`, welcomeRoutes)
+// app.use(md_welcome.welcome)
 app.use(`/api/${API_VERSION}`, authRoutes)
 app.use(`/api/${API_VERSION}`, taskRoutes)
 app.use(`/api/${API_VERSION}`, categoryRoutes)

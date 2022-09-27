@@ -3,7 +3,7 @@ import { Row, Col, Switch, Button, Select } from 'antd'
 import useAuth from '../../../../hooks/useAuth'
 import { getAccessTokenApi } from '../../../../api/auth'
 import { showUserApi, updateUserApi } from '../../../../api/user'
-import { DeleteFilled, FileAddFilled } from '@ant-design/icons'
+import { DeleteFilled, FileAddFilled, CaretDownOutlined, CaretUpOutlined } from '@ant-design/icons'
 
 import './TasksHeader.scss'
 
@@ -11,11 +11,13 @@ const { Option } = Select
 
 const sort = {
     'Por últimas completadas': { dataComplete: 'desc' },
-    'Por fecha de creación': { dateUp: 'desc' },
+    'Por las más nuevas': { dateUp: 'desc' },
+    'Por las más antiguas': { dateUp: 'asc' },
     'Por fecha de finalización': { orderByDateDown: 'asc' },
     'Por categorías': { orderByCategory: 'asc' },
     'Por alfabeto': { title: 'asc' },
-    '{"dateUp":"desc"}': 'Por fecha de creación',
+    '{"dateUp":"desc"}': 'Por las más nuevas',
+    '{"dateUp":"asc"}': 'Por las más antiguas',
     '{"orderByDateDown":"asc"}': 'Por fecha de finalización',
     '{"category":"desc"}': 'Por categorías',
     '{"title":"asc"}': 'Por alfabeto',
@@ -75,6 +77,16 @@ const TasksHeader = ({ tasks, addTask, checked, setChecked, setReloadTasks, dele
                             ? (
                                 <>
                                     <Option
+                                        value={'Por las más nuevas'}
+                                        key='Por las más nuevas'>
+                                        Por las más nuevas <CaretUpOutlined />
+                                    </Option>
+                                    <Option
+                                        value={'Por las más antiguas'}
+                                        key='Por las más antiguas'>
+                                        Por las más antiguas <CaretDownOutlined />
+                                    </Option>
+                                    <Option
                                         value={'Por alfabeto'}
                                         key='Por alfabeto'>
                                         Por alfabeto
@@ -83,11 +95,6 @@ const TasksHeader = ({ tasks, addTask, checked, setChecked, setReloadTasks, dele
                                         value={'Por categorías'}
                                         key='Por categorías'>
                                         Por categorías
-                                    </Option>
-                                    <Option
-                                        value={'Por fecha de creación'}
-                                        key='Por fecha de creación'>
-                                        Por fecha de creación
                                     </Option>
                                     <Option
                                         value={'Por fecha de finalización'}
@@ -105,7 +112,6 @@ const TasksHeader = ({ tasks, addTask, checked, setChecked, setReloadTasks, dele
                                 </Option>
                             )
                     }
-
                 </Select>
             </Col>
             <Col xs={24} sm={8} md={8} className='tasks-header__btn'>

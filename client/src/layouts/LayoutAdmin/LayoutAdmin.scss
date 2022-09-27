@@ -1,6 +1,7 @@
 @import '../../sass/index.scss';
 
 .layout-admin {
+    // min-width: 700px !important;
 
     &__content {
         position: relative;
@@ -21,7 +22,7 @@
             background-position: center;
             animation-name: bg-opacity;
             animation-duration: 2.5s;
-            opacity: .4;
+            opacity: .6;
         }
 
         @keyframes bg-opacity {
@@ -30,7 +31,7 @@
             }
 
             100% {
-                opacity: .4;
+                opacity: .6;
             }
         }
 

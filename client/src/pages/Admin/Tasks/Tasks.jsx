@@ -20,7 +20,7 @@ import moment from 'moment'
 
 import './Tasks.scss'
 
-const Tasks = ({ setExpireToken, reloadAlert, setReloadAlert }) => {
+const Tasks = ({ setExpireToken, reloadAlert, setReloadAlert, welcomeFinish, setWelcomeFinish }) => {
     const [tasks, setTasks] = useState(null)
     const [tasksArray, setTasksArray] = useState([])
     const [reloadTasks, setReloadTasks] = useState(false)
@@ -48,17 +48,18 @@ const Tasks = ({ setExpireToken, reloadAlert, setReloadAlert }) => {
     useEffect(() => {
         getTasks()
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [limit, page, reloadTasks, checked])
+    }, [limit, page, reloadTasks, checked, welcomeFinish])
 
     useEffect(() => {
         getCategories()
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [reloadCategories])
+    }, [reloadCategories, welcomeFinish])
 
     useEffect(() => {
         getTasksWithoutPagination()
+        setWelcomeFinish(false)
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [reloadTasks, user])
+    }, [reloadTasks, user, welcomeFinish])
 
     useEffect(() => {
         navigate('/tasks?page=1')

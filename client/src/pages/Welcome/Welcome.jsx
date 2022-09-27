@@ -27,9 +27,23 @@ const Welcome = ({ setExpireToken }) => {
                 </>
             ),
             okText: 'De acuerdo',
-
         })
     })
+
+    const openLegacy = () => {
+        ModalAntd.info({
+            centered: true,
+            title: 'Política de privacidad',
+            autoFocusButton: 'ok',
+            content: (
+                <>
+                    <p>Esta aplicación no requiere ningún tipo de información personal, y sólo almacena las Tareas y Categorías que generará el usuario, con el fin de cumplir con el propósito para lo que fue creada.</p>
+                    <p>Fin de la Política de Privacidad.</p>
+                </>
+            ),
+            okText: 'De acuerdo',
+        })
+    }
 
     return (
         <>
@@ -64,6 +78,7 @@ const Welcome = ({ setExpireToken }) => {
                 >
                     <SignUpForm
                         setIsVisibleModal={setIsVisibleModal}
+                        openLegacy={openLegacy}
                     />
                 </Modal>
             </Row >

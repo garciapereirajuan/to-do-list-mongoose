@@ -248,7 +248,6 @@ const TaskItem = ({ task, editTask, chooseActionForCategory, deleteTask, updateC
                             {task.checked && <CheckCircleOutlined />}
                             {getDescriptionDateDown()}
                         </span>
-
                     </>
                 }
             />
