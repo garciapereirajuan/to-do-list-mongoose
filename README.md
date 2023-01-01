@@ -15,3 +15,7 @@ To-Do-List creado con ReactJS, NodeJS, ExpressJS y MongooseJS
 * **Cambiar URL** en index.js en el método mongoose.connect() para enlazar la base.  
 
 > yarn dev
+
+## Licencia
+
+> MIT
