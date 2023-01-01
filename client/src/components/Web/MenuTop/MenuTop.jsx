@@ -1,11 +1,11 @@
-import { Link } from 'react-router-dom'
-import { useLocation } from 'react-router-dom'
-import { Menu, Button } from 'antd'
+import { useEffect } from 'react'
+import { Link, useLocation } from 'react-router-dom'
+import { Menu } from 'antd'
 import useAuth from '../../../hooks/useAuth'
 import { logout } from '../../../api/auth'
+import { PoweroffOutlined } from '@ant-design/icons'
 
 import './MenuTop.scss'
-import { PoweroffOutlined } from '@ant-design/icons'
 
 const MenuTop = ({ blocked }) => {
     const { user, isLoading } = useAuth()

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import { Layout, Modal as ModalAntd } from 'antd'
-import { openNotification } from '../../utils/openNotification'
 import { welcomeApi } from '../../api/welcome'
 import { getAccessTokenApi } from '../../api/auth'
 import { showUserApi } from '../../api/user'
@@ -21,7 +20,7 @@ const LayoutAdmin = () => {
     const [welcomeFinish, setWelcomeFinish] = useState(false)
     const [reloadAlert, setReloadAlert] = useState(true)
     const { user } = useAuth()
-    const { Header, Content, Footer } = Layout
+    const { Content } = Layout
 
     useEffect(() => {
         if (expireToken) {
@@ -38,8 +37,9 @@ const LayoutAdmin = () => {
                     return
                 }
                 if (response?.code !== 200) {
-                    openNotification('error', 'Lo siento, se produjo un error, por favor recarga la página.', 30)
-                    openNotification('info', 'Si sigues viendo este cartel, ¿podrías comunicarmelo?. Muchas gracias 🙃', 30)
+                    // openNotification('error', 'Lo siento, se produjo un error, por favor recarga la página.', 30)
+                    // openNotification('info', 'Si sigues viendo este cartel, ¿podrías comunicarmelo?. Muchas gracias 🙃', 30)
+                    window.location.reload()
                     console.log('Error al encontrar el usuario', response)
                     return
                 }
@@ -129,6 +129,8 @@ const LayoutAdmin = () => {
                             reloadAlert={reloadAlert}
                             setReloadAlert={setReloadAlert}
                             setExpireToken={setExpireToken}
+                            welcomeFinish={welcomeFinish}
+                            setWelcomeFinish={setWelcomeFinish}
                         />
                     } />
                 </Routes>

@@ -17,11 +17,12 @@ const LayoutHome = () => {
             setBlocked(true)
 
             ModalAntd.info({
-                title: 'Lo siento',
+                title: 'Lo siento...',
                 content: (
                     <>
-                        <p>Esta página no está lista para Smartphones o Tablets pequeñas. Por el momento sólo puedes acceder desde una pantalla más grande. Pero puedes ver la página de inicio.</p>
-                        <p>Hasta luego.</p>
+                        <p>Esta página aún no está lista para Smartphones o Tablets pequeñas. Por el momento sólo puedes acceder desde una pantalla más grande. Sin embargo, puedes seguir mirando la página de inicio. <p>Hasta luego.</p></p>
+                        <p style={{ fontSize: '10px' }}>Subida el 27 de Septiembre de 2022.</p>
+
                     </>
                 ),
                 centered: true,

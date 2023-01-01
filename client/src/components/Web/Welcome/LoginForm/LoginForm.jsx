@@ -25,7 +25,12 @@ const LoginForm = ({ setIsVisibleModal }) => {
             return
         }
 
-        loginUserApi(userData)
+        const data = {
+            ...userData,
+            username: transformUsername(username)
+        }
+
+        loginUserApi(data)
             .then(response => {
                 if (response?.code !== 200 && response?.code !== 404) {
                     openNotification('error', 'Se produjo un error al iniciar sesión.')
@@ -43,13 +48,14 @@ const LoginForm = ({ setIsVisibleModal }) => {
                     localStorage.setItem(REFRESH_TOKEN, refreshToken)
 
                     const welcome = () => {
-                        openNotification('success', '¡Hola ' + userData.username + '!')
+                        openNotification('success', '¡Hola ' + data.username + '!')
                     }
 
                     if (response.tokens.initial) {
                         ModalAntd.info({
-                            title: `¡Hola ${userData.username}!`,
+                            title: `¡Hola ${data.username}!`,
                             content: <p>Creé algunas tareas predefinidas para cada nuevo usuario. De está forma podrás ver como funciona esta aplicación más rápidamente.</p>,
+                            centered: true,
                             okText: 'De acuerdo',
                             onOk() {
                                 welcome()
@@ -120,6 +126,11 @@ const LoginForm = ({ setIsVisibleModal }) => {
             </Form>
         </div >
     )
+}
+
+const transformUsername = text => {
+    let textUsername = text.split('').filter(item => !/[-A-Za-z0-9]/.test(item) ? '' : item).join('')
+    return textUsername
 }
 
 export default LoginForm

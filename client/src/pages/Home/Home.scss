@@ -21,12 +21,23 @@
         letter-spacing: 2px;
     }
 
+    .border {
+        width: 90%;
+        height: 2px;
+        // background-color: rgba($background-dark-light, .7);
+        border-radius: 4px;
+        box-shadow: 0px 6px 8px rgba($background-dark-light, .8),
+            0px 8px 16px rgba($background-dark-light, .8);
+    }
+
     &__content {
         height: 100%;
         min-height: calc(100vh - 178px) !important;
         width: 100%;
 
-        &__row {
+        &__row-about,
+        &__row-videos,
+        &__row-button {
             display: flex;
             justify-content: center;
             align-items: center;
@@ -42,21 +53,11 @@
             }
         }
 
-        &__row:first-child {
+        &__row-about {
             margin-bottom: 30px;
-
-            .border {
-                width: 90%;
-                height: 2px;
-                // background-color: rgba($background-dark-light, .7);
-                border-radius: 4px;
-                box-shadow: 0px 6px 8px rgba($background-dark-light, .8),
-                    0px 8px 16px rgba($background-dark-light, .8);
-            }
-
         }
 
-        &__row:last-child {
+        &__row-videos {
             div {
                 text-align: center;
                 // background: red !important;
@@ -83,6 +84,43 @@
             @media (max-width: 800px) {
                 iframe {
                     width: 99%;
+                }
+            }
+        }
+
+        &__row-button {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+
+            div {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding-left: 30px;
+                padding-right: 30px;
+
+                .btn-login,
+                .btn-personal-web {
+                    width: 280px;
+                    height: 40px;
+                    font-size: 20px;
+                }
+
+                @media (max-width: 600px) {
+
+                    .btn-login,
+                    .btn-personal-web {
+                        width: 100%;
+                    }
+                }
+
+                @media (max-width: 768px) {
+                    .btn-personal-web {
+                        // margin-top: 20px;
+                    }
                 }
             }
         }

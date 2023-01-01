@@ -120,7 +120,8 @@ const Tasks = ({ setExpireToken, reloadAlert, setReloadAlert, welcomeFinish, set
         indexTasksApi(token, page, limit, checked, user.id, sort)
             .then(response => {
                 if ((response?.code !== 200 && response?.code !== 404) || !response.code) {
-                    openNotification('error', 'Se produjo un error al cargar las tareas.')
+                    // openNotification('error', 'Se produjo un error al cargar las tareas.')
+                    console.log('error', 'Se produjo un error al cargar las tareas.')
                     return
                 }
                 setTasks(response.tasks)
@@ -137,7 +138,8 @@ const Tasks = ({ setExpireToken, reloadAlert, setReloadAlert, welcomeFinish, set
         indexCategoriesApi(token, user.id)
             .then(response => {
                 if ((response?.code !== 200 && response?.code !== 404) || !response.code) {
-                    openNotification('error', 'Se produjo un error al cargar las categorías.')
+                    // openNotification('error', 'Se produjo un error al cargar las categorías.')
+                    console.log('error', 'Se produjo un error al cargar las categorías.')
                     return
                 }
 
